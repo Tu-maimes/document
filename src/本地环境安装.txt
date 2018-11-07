@@ -1,0 +1,19 @@
+1. mysql的客户端
+		Navicat Premium  解压即安装
+
+2.jdk的安装
+		
+		
+3. maven的安装
+		解压maven.zip
+		
+		
+4.安装MySQL
+	参考文档：https://blog.csdn.net/hetongun/article/details/77367638
+	密码：WSysstech.com
+	
+5.hadoop环境的安装
+	参考文档：https://blog.csdn.net/qq_36269293/article/details/80491662
+	
+6.scala的安装
+	参考文档：https://blog.csdn.net/free356/article/details/72911898
