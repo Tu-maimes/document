@@ -1,5 +1,2 @@
 1.对于SparkSql的数据倾斜优化方案通过设置Shuffle的并行度来提高计算效率,默认的大小为200
 			spark.sql.shuffle.partitions
-			
-			
-			hffghfg
