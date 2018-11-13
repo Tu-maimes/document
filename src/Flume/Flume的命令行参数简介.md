@@ -1,10 +1,10 @@
 ---
 title: Flume的命令行参数简介
 tags: 作者:汪帅
-grammar_cjkRuby: true
 ---
+[toc!]
 
-## 指令
+# 指令
 
 | 指令        | 描述                        |
 | ----------- | --------------------------- |
@@ -18,7 +18,9 @@ grammar_cjkRuby: true
 
  - [flume介绍](http://www.51niux.com/?id=196)
 
-## Sink组
+# Sink组
 
  1. 组间负载均衡
  2. 组内故障转移
+
+## 如何设置Channel的大小
