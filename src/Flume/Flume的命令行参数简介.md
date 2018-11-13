@@ -17,3 +17,8 @@ grammar_cjkRuby: true
 ## 全局参数
 
  - [flume介绍](http://www.51niux.com/?id=196)
+
+## Sink组
+
+ 1. 组间负载均衡
+ 2. 组内故障转移
