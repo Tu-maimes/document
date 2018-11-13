@@ -15,3 +15,7 @@ grammar_cjkRuby: true
 | version     |显示Flume的版本信息|
 
 ## 全局参数
+
+ - [flume介绍](http://www.51niux.com/?id=196)
+
+
