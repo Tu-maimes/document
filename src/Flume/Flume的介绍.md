@@ -98,3 +98,12 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 
  - Flume  Channel：
 
+|Channel类型|说明
+|---|---|
+|MemoryChannel|Event数据存储在内存中|
+|JDBCChannel|Event数据存储在持久化存储中，当前FlumeChannel内置支持Derby|
+|FileChannel|Event数据存储在磁盘文件中|
+|SpillableMemoryChannel|Event数据存储在内存中和磁盘上，当内存队列满了，会持久化到磁盘文件（当前试验性的，不建议生产环境使用）|
+|PseudoTransactionChannel|测试用途|
+|CustomChannel|自定义Channel实现|
+
