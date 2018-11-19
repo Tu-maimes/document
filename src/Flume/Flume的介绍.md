@@ -18,4 +18,4 @@ grammar_cjkRuby: true
  - 数据流模型
 
 		Flume事件被定义为具有字节有效载荷和一组可选字符串属性的数据流单元。 Flume代理是一个（JVM）进程，它承载事件从外部源流向下一个目标（跳）的组件。Flume以agent为最小的独立运行单位。一个agent就是一个JVM。单agent由Source、Sink和Channel三大组件构成。
-		![enter description here](./images/结构图.jpg)
+		![enter description here](./images/结构图.jpg)![enter description here](./attachments/结构图.html)
