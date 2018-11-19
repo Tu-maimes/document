@@ -224,28 +224,43 @@ export JAVA_HOME=/usr/java/jdk
 # example.conf: A single-node Flume configuration
 
 # Name the components on this agent
-a1.sources = r1     #定义sources源的名称
-a1.sinks = k1       #定义存储介质的名称
-a1.channels = c1    #定义channels通道的名称
+a1.sources = r1     
+#定义sources源的名称
+a1.sinks = k1       
+#定义存储介质的名称
+a1.channels = c1    
+#定义channels通道的名称
 
 # Describe/configure the source
-a1.sources.r1.type = netcat     #source类型，监控某个端口，将流经端口的每一个文本行数据作为Event输入
-a1.sources.r1.bind = localhost   #监听IP地址
-a1.sources.r1.port = 6666       #监听端口
+a1.sources.r1.type = netcat    
+#source类型，监控某个端口，将流经端口的每一个文本行数据作为Event输入
+a1.sources.r1.bind = localhost   
+#监听IP地址
+a1.sources.r1.port = 6666       
+#监听端口
 
 # Describe the sink
-a1.sinks.k1.type = logger       #Sink类型是logger，也就是数据是日志类型
+a1.sinks.k1.type = logger       
+#Sink类型是logger，也就是数据是日志类型
 
 # Use a channel which buffers events in memory
-a1.channels.c1.type = memory     #channel通道c1类型是内存类型，也就是event数据存储在内存中，然后发送events
-a1.channels.c1.capacity = 1000   #存储在通道c1中的事件的最大数量
-a1.channels.c1.transactionCapacity = 100   #channel将从一个channel获得的最大事件数量或每次传输给予一个sink的事件数量
+a1.channels.c1.type = memory    
+#channel通道c1类型是内存类型，也就是event数据存储在内存中，然后发送events
+a1.channels.c1.capacity = 1000   
+#存储在通道c1中的事件的最大数量
+a1.channels.c1.transactionCapacity = 100   
+#channel将从一个channel获得的最大事件数量或每次传输给予一个sink的事件数量
 
 # Bind the source and sink to the channel
-a1.sources.r1.channels = c1    #选择从channels通道c1来发送events
-a1.sinks.k1.channel = c1       #选择从channels通道c1来接收events
+a1.sources.r1.channels = c1    
+#选择从channels通道c1来发送events
+a1.sinks.k1.channel = c1      
+#选择从channels通道c1来接收events
 ```
-==注意 #ec1d0e==: 在设置sink的tpye类型是logger时必须配置log4j,并且让其生效。
+
+ 6. Flume不写日志：
 
 ![2.1 Flume的log4j未生效](https://www.github.com/Tu-maimes/document/raw/master/小书匠/log4j未生效.jpg)
 解决方案：
+ - 在flume的安装下启动，包含Flume配置文件的conf目录。
+ - 在执行Flume脚本时的命令行参数时 -c 指定Flume的配置文件的目录,此目录指定一次即永久生效。
