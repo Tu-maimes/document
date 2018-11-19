@@ -77,3 +77,5 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
  - sink processor：
 
 多个sink 可以构成一个sink group，sink processor 可以通过组中所有sink实现负载均衡，也可以在一个sink失败时转移到另一个。
+
+1.4Flume组件的说明
