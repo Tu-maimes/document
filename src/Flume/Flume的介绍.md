@@ -508,3 +508,78 @@ agent_foo.sources.avro-collection-source.port = 10000
 #...
 ```
 在这里，我们将weblog代理的avro-forward-sink链接到hdfs代理的avro-collection-source。 这将导致来自外部应用服务器源的事件最终被存储在HDFS中。
+
+ 5. Fan out flow
+
+Flume支持从一个source流向多个信道。删除有复制和复用两种模式。在复制流程中，事件被发送到所有配置的通道。在多路复用的情况下，事件只被发送到合格channel的一个子集。为了扇区流出，需要为指定源指定一个channels列表和一个faning it out策略。这是通过添加可以复制或复用的通道“selector（筛选器）”来完成的。然后进一步指定选择规则，如果它是一个多路复用器。如果您不指定选择器，则默认情况下它是复制：
+
+``` vim
+# List the sources, sinks and channels for the agent
+<Agent>.sources = <Source1>
+<Agent>.sinks = <Sink1> <Sink2>
+<Agent>.channels = <Channel1> <Channel2>
+
+# set list of channels for source (separated by space)
+<Agent>.sources.<Source1>.channels = <Channel1> <Channel2>
+
+# set channel for sinks
+<Agent>.sinks.<Sink1>.channel = <Channel1>
+<Agent>.sinks.<Sink2>.channel = <Channel2>
+
+<Agent>.sources.<Source1>.selector.type = replicating
+```
+多路复用选择还有一组属性来分流。 这要求指定一个事件属性到一个通道集的映射。选择器检查事件头中的每个配置的属性。 如果它匹配指定的值，则该事件被发送到映射到该值的所有通道。如果没有匹配，则将事件发送到配置为默认值的一组通道：
+
+``` pf
+# Mapping for multiplexing selector
+<Agent>.sources.<Source1>.selector.type = multiplexing
+<Agent>.sources.<Source1>.selector.header = <someHeader>
+<Agent>.sources.<Source1>.selector.mapping.<Value1> = <Channel1>
+<Agent>.sources.<Source1>.selector.mapping.<Value2> = <Channel1> <Channel2>
+<Agent>.sources.<Source1>.selector.mapping.<Value3> = <Channel2>
+#...
+
+<Agent>.sources.<Source1>.selector.default = <Channel2>
+```
+映射允许重叠每个值的通道。以下示例具有复用到两个路径的单个流。 名为agent_foo的代理具有一个avro源和两个链接到两个接收器的通道：
+
+``` nix
+# list the sources, sinks and channels in the agent
+agent_foo.sources = avro-AppSrv-source1
+agent_foo.sinks = hdfs-Cluster1-sink1 avro-forward-sink2
+agent_foo.channels = mem-channel-1 file-channel-2
+
+# set channels for source
+agent_foo.sources.avro-AppSrv-source1.channels = mem-channel-1 file-channel-2
+
+# set channel for sinks
+agent_foo.sinks.hdfs-Cluster1-sink1.channel = mem-channel-1
+agent_foo.sinks.avro-forward-sink2.channel = file-channel-2
+
+# channel selector configuration
+agent_foo.sources.avro-AppSrv-source1.selector.type = multiplexing
+agent_foo.sources.avro-AppSrv-source1.selector.header = State
+agent_foo.sources.avro-AppSrv-source1.selector.mapping.CA = mem-channel-1
+agent_foo.sources.avro-AppSrv-source1.selector.mapping.AZ = file-channel-2
+agent_foo.sources.avro-AppSrv-source1.selector.mapping.NY = mem-channel-1 file-channel-2
+agent_foo.sources.avro-AppSrv-source1.selector.default = mem-channel-1
+```
+上面是选择器检查名为“State”的标题。 如果值是“CA”，那么它发送到mem-channel-1，如果它的“AZ”则转到文件通道-2或者如果它的“NY”那么两者。 如果“状态”标题没有设置或不匹配任何三个，那么它将转到被指定为“默认”的mem-channel-1。
+
+
+#选择器还支持可选通道。 要为标题指定可选通道，配置参数“optional”用于以下方式：
+
+``` armasm
+# channel selector configuration
+agent_foo.sources.avro-AppSrv-source1.selector.type = multiplexing
+agent_foo.sources.avro-AppSrv-source1.selector.header = State
+agent_foo.sources.avro-AppSrv-source1.selector.mapping.CA = mem-channel-1
+agent_foo.sources.avro-AppSrv-source1.selector.mapping.AZ = file-channel-2
+agent_foo.sources.avro-AppSrv-source1.selector.mapping.NY = mem-channel-1 file-channel-2
+agent_foo.sources.avro-AppSrv-source1.selector.optional.CA = mem-channel-1 file-channel-2
+agent_foo.sources.avro-AppSrv-source1.selector.mapping.AZ = file-channel-2
+agent_foo.sources.avro-AppSrv-source1.selector.default = mem-channel-1
+```
+选择器将首先尝试写入所需的通道，并且==如果这些通道中的一个通道不能传输事件，则传输将失败==。传输重新再所有通道上进行。一旦所有必需的频道都没有消费了这些event，==那么选择器将尝试写入可选的通道==。任何可选渠道去消费这些event发生==故障简单地被忽略，而不是重试==。
+
+如果可选通道和特定报头所需通道之间存在重叠，则认为该通道是必需的，而通道故障将导致重试整组所需的通道。
