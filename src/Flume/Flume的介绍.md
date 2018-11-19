@@ -78,4 +78,23 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 
 多个sink 可以构成一个sink group，sink processor 可以通过组中所有sink实现负载均衡，也可以在一个sink失败时转移到另一个。
 
-1.4Flume组件的说明
+### 1.4Flume组件的说明
+
+ - Flume Source:
+
+|Source类型|说明|
+|---|---|
+|Avro Source|支持Avro协议（实际上是Avro RPC），内置支持|    
+|Thrift Source|支持Thrift协议，内置支持 |   
+|Exec Source|基于Unix的command在标准输出上生产数据 |   
+|JMS Source|从JMS系统（消息、主题）中读取数据，ActiveMQ已经测试过  |  
+|Spooling Directory Source|监控指定目录内数据变更  |  
+|Twitter 1% firehose Source|通过API持续下载Twitter数据，试验性质   | 
+|Netcat Source|监控某个端口，将流经端口的每一个文本行数据作为Event输入 |   
+|Sequence Generator Source|序列生成器数据源，生产序列数据   | 
+|Syslog Sources|读取syslog数据，产生Event，支持UDP和TCP两种协议    |
+|HTTP Source|基于HTTP POST或GET方式的数据源，支持JSON、BLOB表示形式   | 
+|Legacy Sources|兼容老的Flume OG中Source（0.9.x版本）|
+
+ - Flume  Channel：
+
