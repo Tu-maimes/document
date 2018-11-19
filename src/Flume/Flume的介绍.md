@@ -63,6 +63,8 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 
 从Client收集数据，传递给Channel。Source 负责接收event或通过特殊机制产生event，并将events批量的放到一个或多个Channel，包含==event驱动 #ec1d0e==和==轮询 #ec1d0e==两种类型。必须至少和一个channel关联。
  - Channel:
+
+连接 sources 和 sinks ，这个有点像一个队列，Channel有多种方式：有MemoryChannel, JDBC Channel, MemoryRecoverChannel, FileChannel。MemoryChannel可以实现高速的吞吐，但是==无法保证数据的完整 #ec1d0e==。MemoryRecoverChannel在官方文档的建议上已经建义使用FileChannel来替换。FileChannel保证数据的完整性与一致性。在具体配置FileChannel时，建议FileChannel设置的目录和程序日志文件保存的目录设成不同的磁盘，以便提高效率。中转Event的一个临时存储,保存有source组件传递过来的Event,当sink成功的将event发送到下一个channel或最终目的,event从Channel移除，不同的channel提供的持久化水平是不一样的。
  - Sink:
  - Iterator:
  - channel selector：
