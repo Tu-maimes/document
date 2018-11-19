@@ -284,3 +284,9 @@ flume-ng agent -c conf -f /etc/flume/conf/flume-conf.properties.template -n agen
 
  9. 设置Flume的agent的环境变量：
 
+``` javascript
+a1.sources.r1.type = netcat
+a1.sources.r1.bind = 0.0.0.0
+a1.sources.r1.port = ${NC_PORT}   
+#主要是这里引用了一个变量，注意：它目前仅适用于数值，不适用于按键。
+```
