@@ -393,3 +393,6 @@ sources/sinks/clients）。 第二层agent上的这个source将接收到的事�
 
 ![多路复用模式](https://www.github.com/Tu-maimes/document/raw/master/小书匠/多路复用.jpg)
 
+上面的例子显示了一个来自代理“foo”的信息源，将信息流分成三个不同的channel。这fan out可以复制或复用。 在复制流程的情况下，每个事件被发送到所有三个通道。对于复用情况，事件的属性与预先配置的值相匹配时，将事件传递给可用通道的子集。例如，如果一个名为“txnType”的事件属性被设置为“customer”，那么它应该转到channel1和channel3，如果它是“vendor”，那么它应该转到channel2，否则通道3。 映射可以在agent的配置文件中设置。
+
+这种模式，有两种方式，一种是用来复制，另一种是用来分流。配置文件中指定selector的type的值为replication:复制。配置文件中指定selector的type的值为Multiplexing:分流。
