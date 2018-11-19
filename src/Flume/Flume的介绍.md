@@ -397,7 +397,7 @@ sources/sinks/clients）。 第二层agent上的这个source将接收到的事�
 
 这种模式，有两种方式，一种是用来复制，另一种是用来分流。配置文件中指定selector的type的值为replication:复制。配置文件中指定selector的type的值为Multiplexing:分流。
 
-### Configuration
+### 5.5Configuration
 
  1. 定义流程
 
