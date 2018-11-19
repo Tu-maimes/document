@@ -153,14 +153,22 @@ export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$FLUME_HOME/bin:$PATH
 # source /etc/profile
 # java -version
 
-java version "1.8.0_74"
-Java(TM) SE Runtime Environment (build 1.8.0_74-b02)
-Java HotSpot(TM) 64-Bit Server VM (build 25.74-b02, mixed mode)
+openjdk version "1.8.0_191"
+OpenJDK Runtime Environment (build 1.8.0_191-b12)
+OpenJDK 64-Bit Server VM (build 25.191-b12, mixed mode)
 
 
 #查看Flume的版本
 
 # flume-ng version
+
+
+Flume 1.5.2.2.6.5.0-292
+Source code repository: https://git-wip-us.apache.org/repos/asf/flume.git
+Revision: 2f89159520e7c477abd961d4e8b3b9e50597f1c9
+Compiled by jenkins on Fri May 11 07:52:15 UTC 2018
+From source with checksum b50e3a2d9ed95bb61cd587feaa12b813
+
 
 ```
 
