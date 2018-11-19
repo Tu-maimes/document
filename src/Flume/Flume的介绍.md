@@ -48,3 +48,4 @@ Flume使用事务方式来保证事件的可靠传送。 sources和sinks分别�
 
 ### 1.3Flume名词的解释
 
+ - Event:
