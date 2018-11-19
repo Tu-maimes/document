@@ -246,3 +246,6 @@ a1.sources.r1.channels = c1    #选择从channels通道c1来发送events
 a1.sinks.k1.channel = c1       #选择从channels通道c1来接收events
 ```
 ==注意 #ec1d0e==: 在设置sink的tpye类型是logger时必须配置log4j,并且让其生效。
+
+![2.1 Flume的log4j未生效](https://www.github.com/Tu-maimes/document/raw/master/小书匠/log4j未生效.jpg)
+解决方案：
