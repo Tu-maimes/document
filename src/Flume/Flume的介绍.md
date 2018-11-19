@@ -396,3 +396,115 @@ sources/sinks/clients）。 第二层agent上的这个source将接收到的事�
 上面的例子显示了一个来自代理“foo”的信息源，将信息流分成三个不同的channel。这fan out可以复制或复用。 在复制流程的情况下，每个事件被发送到所有三个通道。对于复用情况，事件的属性与预先配置的值相匹配时，将事件传递给可用通道的子集。例如，如果一个名为“txnType”的事件属性被设置为“customer”，那么它应该转到channel1和channel3，如果它是“vendor”，那么它应该转到channel2，否则通道3。 映射可以在agent的配置文件中设置。
 
 这种模式，有两种方式，一种是用来复制，另一种是用来分流。配置文件中指定selector的type的值为replication:复制。配置文件中指定selector的type的值为Multiplexing:分流。
+
+### Configuration
+
+ 1. 定义流程
+
+要在一个agent中定义流程，需要通过一个channel将source和sink连接起来，需要给一个agent列出sources,sink和channels，然后将source和sink指向一个channel。一个source实例可以指定多个通道，但一个接收器实例只能指定一个通道。 格式如下：
+
+``` vim
+# list the sources, sinks and channels for the agent
+<Agent>.sources = <Source>
+<Agent>.sinks = <Sink><
+Agent>.channels = <Channel1> <Channel2>
+
+# set channel for source
+<Agent>.sources.<Source>.channels = <Channel1> <Channel2> ...
+
+# set channel for sink
+<Agent>.sinks.<Sink>.channel = <Channel1>
+```
+
+ 2. 配置单个组件
+
+需要为Flume的每个组件设置属性“type”来理解它需要的对象类型。每个source，sink和channel类型都有其自己的一组属性，以使其按预期运行。所有这些都需要根据需要设置。
+	
+
+``` nix
+agent_foo.sources = avro-AppSrv-source
+agent_foo.sinks = hdfs-Cluster1-sink
+agent_foo.channels = mem-channel-1
+# set channel for sources, sinks
+# properties of avro-AppSrv-source
+
+agent_foo.sources.avro-AppSrv-source.type = avro
+agent_foo.sources.avro-AppSrv-source.bind = localhost
+agent_foo.sources.avro-AppSrv-source.port = 10000
+
+# properties of mem-channel-1
+agent_foo.channels.mem-channel-1.type = memory
+agent_foo.channels.mem-channel-1.capacity = 1000
+agent_foo.channels.mem-channel-1.transactionCapacity = 100
+
+# properties of hdfs-Cluster1-sinka
+gent_foo.sinks.hdfs-Cluster1-sink.type = hdfs
+agent_foo.sinks.hdfs-Cluster1-sink.hdfs.path = hdfs://namenode/flume/webdata
+#...
+```
+
+ 3. 在一个agent中添加多个流
+
+
+ 一个Flume代理可以包含多个独立的flows。 可以在配置中列出多个source，sink和channel。然后，可以将sources和sinks链接到相应的channels以设置两个不同的流。例如，如果需要在agent中设置两个流程，一个从外部avro客户端到外部HDFS，另一个从尾部输出到avro接收器，则可以使用以下配置：
+ 
+
+``` nix
+ # list the sources, sinks and channels in the agent
+agent_foo.sources = avro-AppSrv-source1 exec-tail-source2
+agent_foo.sinks = hdfs-Cluster1-sink1 avro-forward-sink2
+agent_foo.channels = mem-channel-1 file-channel-2
+
+# flow #1 configuration
+agent_foo.sources.avro-AppSrv-source1.channels = mem-channel-1
+agent_foo.sinks.hdfs-Cluster1-sink1.channel = mem-channel-1
+
+# flow #2 configuration
+agent_foo.sources.exec-tail-source2.channels = file-channel-2
+agent_foo.sinks.avro-forward-sink2.channel = file-channel-2
+```
+
+ 4. 配置多个agent flow
+
+要设置一个多层流，需要一个avro/thrift sink第一跳指向avro/thrift source为下一跳。这将导致第一个Flume agent将事件转发到下一个Flume agent。例如，如果定期使用avro客户端向本地Flume agent发送文件（每个事件一个文件），那么这个本地agent可以将其转发给另一个已安装存储的agent。
+
+
+Weblog代理配置：
+
+``` nix
+# list sources, sinks and channels in the agent
+agent_foo.sources = avro-AppSrv-source
+agent_foo.sinks = avro-forward-sinka
+gent_foo.channels = file-channel
+
+# define the flowa
+gent_foo.sources.avro-AppSrv-source.channels = file-channel
+agent_foo.sinks.avro-forward-sink.channel = file-channel
+
+# avro sink properties
+agent_foo.sinks.avro-forward-sink.type = avro
+agent_foo.sinks.avro-forward-sink.hostname = 10.1.1.100
+agent_foo.sinks.avro-forward-sink.port = 10000
+
+# configure other pieces#...
+```
+HDFS代理配置：
+
+``` nix
+# list sources, sinks and channels in the agent
+agent_foo.sources = avro-collection-source
+agent_foo.sinks = hdfs-sink
+agent_foo.channels = mem-channel
+
+# define the flow
+agent_foo.sources.avro-collection-source.channels = mem-channel
+agent_foo.sinks.hdfs-sink.channel = mem-channel
+
+# avro source properties
+agent_foo.sources.avro-collection-source.type = avro
+agent_foo.sources.avro-collection-source.bind = 10.1.1.100
+agent_foo.sources.avro-collection-source.port = 10000
+# configure other pieces
+#...
+```
+在这里，我们将weblog代理的avro-forward-sink链接到hdfs代理的avro-collection-source。 这将导致来自外部应用服务器源的事件最终被存储在HDFS中。
