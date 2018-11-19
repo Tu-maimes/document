@@ -4,7 +4,6 @@ tags: 作者:汪帅
 grammar_cjkRuby: true
 ---
 
-[toc!]
 
 ## 一、Flume的介绍
 
@@ -152,7 +151,59 @@ export FLUME_HOME=/home/flume/flume
 export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$FLUME_HOME/bin:$PATH
 
 # source /etc/profile
+# java -version
+
+java version "1.8.0_74"
+Java(TM) SE Runtime Environment (build 1.8.0_74-b02)
+Java HotSpot(TM) 64-Bit Server VM (build 25.74-b02, mixed mode)
 
 
+#查看Flume的版本
+
+# flume-ng version
 
 ```
+
+ 3. 修改flume-env.sh的JAVA_HOME
+
+``` javascript
+
+# export JAVA_HOME=/usr/lib/jvm/java-8-oracle
+export JAVA_HOME=/usr/java/jdk
+```
+
+ 4. Flume-ng的命令行参数
+
+|commands|说明|
+|---|---|
+|    help    |帮助显示这个帮助文本|
+|    agent   |代理运行Flume代理|
+|    avro-client  |运行一个avro Flume客户端|
+|    version    |版本显示Flume版本信息|
+|全局 options：|说明|
+|    --conf,-c <conf>      |使用<conf>目录中的配置|
+|    --classpath,-C <cp>   |附加类路径|
+|    --dryrun,-d           |实际上不启动Flume，只是打印命令|
+|    --plugins-path <dirs>  |以冒号分隔的plugins.d目录列表。请参阅用户指南中的plugins.d部分以获取更多详细信息。默认:$FLUME_HOME/plugins.d|
+|    -Dproperty=value      |设置Java系统属性值|
+|    -Xproperty=value      |设置一个Java -X选项|
+|agent options：|说明|
+|    --name,-n <name>     |这个agent的名字（必填）|
+|    --conf-file,-f <file>   |指定一个配置文件（如果缺少-z则需要）|
+|    --zkConnString,-z <str>  |指定要使用的ZooKeeper连接（如果缺少-f，则需要）|
+|    --zkBasePath,-p <path>   |在ZooKeeper中为代理配置指定基本路径|
+|    --no-reload-conf    |如果更改，不要重新加载配置文件|
+|    --help,-h    |显示帮助文本|
+|avro-client options:|说明|
+|    --rpcProps,-P <file>   |带有服务器连接参数的RPC客户端属性文件|
+|    --host,-H <host>       |将要发送events(事件）的主机名|
+|    --port,-p <port>       |avro源的端口|
+|    --dirname <dir>        |流到avro源流到的目标目录|
+|    --filename,-F <file>   |文本文件流到avro源（默认：标准输入）|
+|    --headerFile,-R <file>  |包含事件标题作为每个新行上的键/值对的文件|
+|    --help,-h    |显示帮助文本|
+
+**==注意 #ec1d0e==**:
+
+ 1. 如果指定了<conf>目录，则始终将其包含在类路径中。
+ 2. --rpcProps或者--host和--port都必须指定。
