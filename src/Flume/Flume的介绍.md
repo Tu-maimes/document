@@ -66,6 +66,14 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 
 连接 sources 和 sinks ，这个有点像一个队列，Channel有多种方式：有MemoryChannel, JDBC Channel, MemoryRecoverChannel, FileChannel。MemoryChannel可以实现高速的吞吐，但是==无法保证数据的完整 #ec1d0e==。MemoryRecoverChannel在官方文档的建议上已经建义使用FileChannel来替换。FileChannel保证数据的完整性与一致性。在具体配置FileChannel时，建议FileChannel设置的目录和程序日志文件保存的目录设成不同的磁盘，以便提高效率。中转Event的一个临时存储,保存有source组件传递过来的Event,当sink成功的将event发送到下一个channel或最终目的,event从Channel移除，不同的channel提供的持久化水平是不一样的。
  - Sink:
+
+从Channel收集数据，运行在一个独立线程，Sink在设置存储数据时，可以向文件系统中，数据库中，hadoop中储数据，在日志数据较少时，可以将数据存储在文件系中，并且设定一定的时间间隔保存数据。在日志数据较多时，可以将相应的日志数据存储到Hadoop中，便于日后进行相应的数据分析。负责将event传输到下一跳或最终目的，成功后将event从channel移除，必须作用一个确切的channel。
  - Iterator:
+
+作用于Source，按照预设的顺序在必要地方装饰和过滤events。
  - channel selector：
+
+允许Source基于预设的标准，从所有channel中，选择一个或者多个channel。
  - sink processor：
+
+多个sink 可以构成一个sink group，sink processor 可以通过组中所有sink实现负载均衡，也可以在一个sink失败时转移到另一个。
