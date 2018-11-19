@@ -268,9 +268,16 @@ flume-ng agent -c conf -f /etc/flume/conf/flume-conf.properties.template -n agen
 
 ```
 
- 7. Flume不写日志：
+ 7.打开终端进行测试
+
+``` javascript
+# telnet localhost 6666 
+```
+
+ 8. Flume不写日志：
 
 ![2.1 Flume的log4j未生效](https://www.github.com/Tu-maimes/document/raw/master/小书匠/log4j未生效.jpg)
 解决方案：
  - 在flume的安装下启动，包含Flume配置文件的conf目录。
  - 在执行Flume脚本时的命令行参数时 -c 指定Flume的配置文件的目录。
+
