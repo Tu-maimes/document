@@ -25,4 +25,4 @@ grammar_cjkRuby: true
 		
 
  - 复杂流结构模型
-	![1.2 Flume的复杂流数据结构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/复杂的流.jpg)
+				![1.2 Flume的复杂流数据结构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/复杂的流.jpg)
