@@ -289,4 +289,6 @@ a1.sources.r1.type = netcat
 a1.sources.r1.bind = 0.0.0.0
 a1.sources.r1.port = ${NC_PORT}   
 #主要是这里引用了一个变量，注意：它目前仅适用于数值，不适用于按键。
+
+$ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name a1 -Dflume.root.logger=INFO,console -DpropertiesImplementation=org.apache.flume.node.EnvVarResolverProperties
 ```
