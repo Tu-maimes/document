@@ -29,7 +29,8 @@ Flume的数据流由事件(Event)贯穿始终。事件是Flume的基本数据单
  - 复杂流结构模型
 
 
-![1.2 Flume复杂流结构模型](https://www.github.com/Tu-maimes/document/raw/master/小书匠/复杂的流.jpg)
+![1.2 Flume复杂流结构模型](https://www.github.com/Tu-maimes/document/raw/master/小书匠/多路复杂.jpg)
+
 	
   Flume允许用户在到达最终目的地之前通过多个代理程序建立多跳流。 它还允许扇入(fan-in)和扇出（fan-out）流，上下文路由和备份路由（故障转移），以用于失败的跳数。
     ==注意==：同一个Source可以将数据存储到多个Channel,实际上是Replication。一个sink只能从一个Channel中读取数据Channel和Sink是一一对应的。==一个Channel只能对应一个Sink，一个Sink也只能对应一个Channel。==
@@ -213,5 +214,35 @@ export JAVA_HOME=/usr/java/jdk
 
 **==注意 #ec1d0e==**:
 
- 1. 如果指定了<conf>目录，则始终将其包含在类路径中。
- 2. --rpcProps或者--host和--port都必须指定。
+ - 如果指定了<conf>目录，则==始终将其包含在类路径==中。
+ - --rpcProps或者--host和--port都必须指定。
+
+
+
+ 5.测试官方例子
+``` javascript
+# example.conf: A single-node Flume configuration
+
+# Name the components on this agent
+a1.sources = r1     #定义sources源的名称
+a1.sinks = k1       #定义存储介质的名称
+a1.channels = c1    #定义channels通道的名称
+
+# Describe/configure the source
+a1.sources.r1.type = netcat     #source类型，监控某个端口，将流经端口的每一个文本行数据作为Event输入
+a1.sources.r1.bind = localhost   #监听IP地址
+a1.sources.r1.port = 6666       #监听端口
+
+# Describe the sink
+a1.sinks.k1.type = logger       #Sink类型是logger，也就是数据是日志类型
+
+# Use a channel which buffers events in memory
+a1.channels.c1.type = memory     #channel通道c1类型是内存类型，也就是event数据存储在内存中，然后发送events
+a1.channels.c1.capacity = 1000   #存储在通道c1中的事件的最大数量
+a1.channels.c1.transactionCapacity = 100   #channel将从一个channel获得的最大事件数量或每次传输给予一个sink的事件数量
+
+# Bind the source and sink to the channel
+a1.sources.r1.channels = c1    #选择从channels通道c1来发送events
+a1.sinks.k1.channel = c1       #选择从channels通道c1来接收events
+```
+==注意 #ec1d0e==: 在设置sink的tpye类型是logger时必须配置log4j,并且让其生效。
