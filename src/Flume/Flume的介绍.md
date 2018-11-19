@@ -108,3 +108,51 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 |CustomChannel|自定义Channel实现|
 
  - Flume Sink
+
+|Sink类型|说明
+|---|---|
+|HDFS Sink|数据写入HDFS|
+|Logger Sink |数据写入日志文件|
+|Avro Sink|数据被转换成Avro Event，然后发送到配置的RPC端口上|
+|Thrift Sink |数据被转换成Thrift Event，然后发送到配置的RPC端口上|
+|IRC Sink |数据在IRC上进行回放|
+|File Roll Sink |存储数据到本地文件系统|
+|Null Sink|丢弃到所有数据|
+|HBase Sink  |数据写入HBase数据库|
+|Morphline Solr Sink  |数据发送到Solr搜索服务器（集群）|
+|ElasticSearch Sink|数据发送到Elastic Search搜索服务器（集群）|
+|Kite Dataset Sink |写数据到Kite Dataset，试验性质的|
+|Custom Sink |自定义Sink实现|
+
+
+
+## 二、Flume的安装
+
+ 1. 安装Flume
+``` javascript
+# useradd flume
+
+# wget mirrors.hust.edu.cn/apache/flume/1.8.0/apache-flume-1.8.0-bin.tar.gz
+# tar zxf apache-flume-1.8.0-bin.tar.gz -C /home/flume/
+# ln -s /home/flume/apache-flume-1.8.0-bin /home/flume/flume
+```
+
+ 2. 配置环境变量
+ 
+
+``` javascript
+# vim /etc/profile
+
+#添加Flume java path到profile
+
+####flume java path####
+export JAVA_HOME=/usr/java/jdk
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JAVA_HOME/jre/lib
+export FLUME_HOME=/home/flume/flume
+export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$FLUME_HOME/bin:$PATH
+
+# source /etc/profile
+
+
+
+```
