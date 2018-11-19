@@ -258,7 +258,17 @@ a1.sinks.k1.channel = c1
 #选择从channels通道c1来接收events
 ```
 
- 6. Flume不写日志：
+ 6. 启动Flume进程：
+
+``` javascript
+flume-ng agent -c conf -f /etc/flume/conf/flume-conf.properties.template -n agent
+
+#配置此参数不生效可能与log4j2.xml有关,官网默认是log4j.properties
+#-Dflume.root.logger=INFO,console
+
+```
+
+ 7. Flume不写日志：
 
 ![2.1 Flume的log4j未生效](https://www.github.com/Tu-maimes/document/raw/master/小书匠/log4j未生效.jpg)
 解决方案：
