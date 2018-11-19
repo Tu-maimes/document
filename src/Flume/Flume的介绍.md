@@ -49,8 +49,16 @@ Flume使用事务方式来保证事件的可靠传送。 sources和sinks分别�
 ### 1.3Flume名词的解释
 
  - Event:
+
+Event是Flume数据传输的基本单元。Flume以事件的形式将数据从源头传送到最终的目的。Event由可选的header和载有数据的一个byte array 构成。可以是日志记录、 avro 对象等
+
  - Client:
+
+Client 是一个将原始log包装成events并且发送他们到一个或多个agent的实体目的是从数据源系统中解耦Flume，==在flume的拓扑结构中不是必须的 #eb1130==。Client实例：flume log4j Appender，可以使用Client SDK（org.apache.flume.api)定制特定的Client。生产数据，运行在一个独立的线程。
  - Agent:
+
+ 使用JVM 运行Flume。每台机器运行一个agent，但是可以在一个agent中包含多个sources和sinks。一个Agent包含 source ，channel，sink 和其他组件。它利用这些组件将events从一个节点传输到另一个节点或最终目的地，agent是flume流的基础部分。flume为这些组件提供了配置，声明周期管理，监控支持。
+ 
  - Source:
  - Channel:
  - Sink:
