@@ -268,14 +268,13 @@ flume-ng agent -c conf -f /etc/flume/conf/flume-conf.properties.template -n agen
 
 ```
 
- 7.打开终端进行测试
+ 7. 打开终端进行测试
 
 ``` javascript
 # telnet localhost 6666 
 # tail -f /var/log/flume/flume.log
 ```
-
- 8. Flume不写日志：
+8. Flume不写日志：
 
 ![2.1 Flume的log4j未生效](https://www.github.com/Tu-maimes/document/raw/master/小书匠/log4j未生效.jpg)
 解决方案：
@@ -292,3 +291,6 @@ a1.sources.r1.port = ${NC_PORT}
 
 $ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name a1 -Dflume.root.logger=INFO,console -DpropertiesImplementation=org.apache.flume.node.EnvVarResolverProperties
 ```
+
+>1. 通过设置propertiesImplementation = org.apache.flume.node.EnvVarResolverProperties，可以通过代理调用上的Java系统属性启用此功能。
+>2. 环境变量可以用其他方式配置，包括在conf/flume-env.sh中设置。
