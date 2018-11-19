@@ -107,3 +107,4 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 |PseudoTransactionChannel|测试用途|
 |CustomChannel|自定义Channel实现|
 
+ - Flume Sink
