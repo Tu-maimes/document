@@ -294,3 +294,68 @@ $ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name
 
 >1. 通过设置propertiesImplementation = org.apache.flume.node.EnvVarResolverProperties，可以通过代理调用上的Java系统属性启用此功能。
 >2. 环境变量可以用其他方式配置，包括在conf/flume-env.sh中设置。
+
+## 三、记录原始数据
+
+ 记录流经摄取管道的原始数据流在许多生产环境中==不是期望的行为==，因为这可能导致==泄漏敏感数据或安全相关配置==，诸如secret keys，到Flume日志文件。 默认情况下，Flume不会记录这些信息。 另一方面，如果数据管道被破坏，Flume将尝试提供调试问题的线索。
+ 
+调试事件流水线问题的一种方法是设置一个连接到Logger Sink的额外的Memory Channel，它将输出所有事件数据到Flume日志。 但是在某些情况下，这种方法是不够的。
+
+#为了启用事件和配置相关数据的日志记录，除了log4j属性之外，还必须设置一些Java系统属性。
+
+#要启用配置相关的日志记录，请设置Java系统属性-Dorg.apache.flume.log.printconfig = true。 这可以通过命令行传递，也可以通过在flume-env.sh中的JAVA_OPTS变量中设置。
+
+#要启用数据记录，请按照上述相同的方式设置Java系统属性-Dorg.apache.flume.log.rawdata = true。 对于大多数组件，log4j日志记录级别还必须设置为DEBUG或TRACE，以使特定于事件的日志记录显示在Flume日志中。
+
+#以下是启用配置日志记录和原始数据日志记录的示例，同时还将Log4j日志级别设置为DEBUG以进行控制台输出：
+
+``` stylus
+$ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name a1 -Dflume.root.logger=DEBUG,console -Dorg.apache.flume.log.printconfig=true -Dorg.apache.flume.log.rawdata=true -DpropertiesImplementation=org.apache.flume.node.EnvVarResolverProperties
+```
+
+## 四、安装第三方插件
+
+ Flume有一个完全基于插件的架构。 虽然Flume带有许多开箱即用的源，通道，接收器，序列化器等，但存在许多与Flume分开发布的实现。
+尽管通过在Flume-env.sh文件中将其jar包添加到==FLUME_CLASSPATH #ec1d0e==变量中可以包含自定义的Flume组件，但Flume现在支持一个名为==plugins.d #ec1d0e==的特殊目录，该目录自动获取以特定格式打包的插件。 这样可以更轻松地管理插件打包问题，以及简化几类问题的调试和故障排除，尤其是库依赖性冲突。
+
+ 1. plugins.d目录
+
+>  plugins.d目录位于$ FLUME_HOME/plugins.d。启动时，flume-ng start脚本在plugins.d目录中查找符合以下格式的插件，并在启动java时将它们包含在适当的路径中。
+
+ 2. 插件的目录设计
+
+
+
+plugins.d中的每个插件（子目录）最多可以有三个子目录：
+``` crystal
+lib - 插件的jar（s）
+libext - 插件的依赖jar（s）
+native - 任何所需的本机库，如.so文件
+```
+
+plugins.d目录中的两个插件的示例：
+
+``` crystal
+plugins.d/
+plugins.d/custom-source-1/
+plugins.d/custom-source-1/lib/my-source.jar
+plugins.d/custom-source-1/libext/spring-core-2.5.6.jar
+plugins.d/custom-source-2/
+plugins.d/custom-source-2/lib/custom.jar
+plugins.d/custom-source-2/native/gettext.so
+```
+
+## 五、数据的获取
+
+  Flume支持从外部获取数据的多种机制。
+  
+
+ 1. RPC
+
+包含在Flume发行版中的Avro客户端可以使用avro RPC机制将给定的文件发送到Flume Avro源代码：
+
+``` lsl
+$ bin/flume-ng avro-client -H localhost -p 41414 -F /usr/logs/log.10
+```
+上面的命令会将/usr/logs/log.10的内容发送到监听端口的Flume源。
+
