@@ -693,5 +693,17 @@ Ganglia的度量参数列表：
 
 #### 2. Ambari代理Flume运行
 
- 1. 登录Ambari并验证服务是否正在运行。
+ 1. 登录Ambari并验证服务是否正在运行。点击Flume服务; “摘要”页面显示总体状态。单击“配置”选项卡以编辑Flume配置。
 
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/Pic1.jpg)
+ 2.使用配置组启动具有不同配置的Flume代理。大多数情况下，Flume流程很复杂，不同的代理程序在Flume主机上运行。从Ambari Web界面，您可以将主机划分为不同的配置组。每个配置组都可以与Flume代理的特定配置文件相关联。本节介绍如何为Flume代理创建配置组。在Flume Configs页面上，==默认组包含所有Flume主机，此默认组中的所有主机都运行相同的Flume代理==。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542685332548.png)
+
+
+
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542685510916.png)
+![enter description here](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542685676371.png)
