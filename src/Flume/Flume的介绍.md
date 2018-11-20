@@ -704,6 +704,3 @@ Ganglia的度量参数列表：
 
 
 
-
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542685510916.png)
-![enter description here](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542685676371.png)
