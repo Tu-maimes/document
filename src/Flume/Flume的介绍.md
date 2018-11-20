@@ -730,6 +730,6 @@ Ganglia的度量参数列表：
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691906987.png)
 
-#### 拓展
+#### 3. 拓展
 
-[Flume的代理](http://cleverowl.uk/2015/09/30/ingesting-files-with-apache-flume/)
+ [Flume的代理](http://cleverowl.uk/2015/09/30/ingesting-files-with-apache-flume/)
