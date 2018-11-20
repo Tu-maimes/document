@@ -3,10 +3,10 @@ title: Flume的介绍
 tags: 作者:汪帅
 grammar_cjkRuby: true
 grammar_mindmap: true
-renderNumberedHeading: false
+renderNumberedHeading: true
 ---
 
-[toc!?theme=gray&depth=4]
+[toc!]
 
 
 
