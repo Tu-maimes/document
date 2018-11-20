@@ -704,4 +704,10 @@ Ganglia的度量参数列表：
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542685332548.png)
 
  3. 要创建配置组，请单击“管理配置组” - > +。键入新组的名称和说明。单击确定。
+
+
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542690016261.png)
+
+ 4. 选择新组（在此示例中为“guzhi”），然后单击空主机名框下的+。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542690509946.png)
