@@ -687,6 +687,11 @@ Ganglia的度量参数列表：
 ### 4.4flume对接Ambari-metrics
 
 
+ 1. Ambari自定义Flume的度量
 
 [深入Ambari Metrics 机制分析](https://blog.csdn.net/u014297175/article/details/67639567)
+
+ 2. Ambari代理Flume运行
+
+
 
