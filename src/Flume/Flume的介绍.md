@@ -729,3 +729,7 @@ Ganglia的度量参数列表：
  8. 重启Flume后,在“摘要”页面上，您现在可以看到不同配置组中的主机运行不同的Flume代理。
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691906987.png)
+
+#### 拓展
+
+[Flume的代理](http://cleverowl.uk/2015/09/30/ingesting-files-with-apache-flume/)
