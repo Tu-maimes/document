@@ -6,7 +6,7 @@ grammar_mindmap: true
 renderNumberedHeading: true
 ---
 
-[toc!]
+[toc]
 
 
 
@@ -771,9 +771,9 @@ Ganglia的度量参数列表：
  
  
 
-## Flume的规划
+# Flume的规划
 
-### 规划部署Flume
+## 规划部署Flume
 
  1. 修复时间
 
