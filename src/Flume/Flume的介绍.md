@@ -149,6 +149,8 @@ source可以通过处理器-拦截器-选择器路由写入多个channel，chann
 sink运行器运行一个sink组，sink组可含有一个或多个sink，如果组中只存在一个sink，那么没有组将更有效率，sink运行器仅仅是一个询问sink组来处理下一批事件的线程，每个sink组有一个sink处理器，处理器选择组中的sink之一去处理下一个事件集合，每个sink只能从一个channel获取数据，尽管多个sink可以从同一个channel获取数据，选定的sink从channel中接收事件，并将事件写入到下一阶段或最终目的地。 Sink组可实现负载均衡与容错机制。
 
 ![Sink组](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542695337929.png)
+
+因为每个Avro Sink对Avro Source保持持续开放的连接，拥有写入到相同Agent的多个Sink会增加更多的socket连接，且在多层时Agent上占据更多的资源，对相同Agent增加大量Sink之前必须谨慎考虑。
 ## 二、Flume的安装
 
 ### 2.1 Flume的安装
@@ -753,6 +755,6 @@ Ganglia的度量参数列表：
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691906987.png)
 
-#### 4.4.3 拓展
+#### 4.4.3 命令行实现
 
  [Flume的代理](http://cleverowl.uk/2015/09/30/ingesting-files-with-apache-flume/)
