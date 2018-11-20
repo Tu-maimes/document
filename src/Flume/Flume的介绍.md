@@ -715,3 +715,12 @@ Ganglia的度量参数列表：
  5. 选择要包含在配置组中的主机。单击保存。
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542690629191.png)
+
+ 6. Configs页面有两个部分：Flume代理配置的“flume.conf”和flume-env.sh文件的“Advanced flume-env”。展开“flume.conf”，默认情况下，它只包含一个注释行：＃Flume agent config。将代理配置添加到此字段。单击“保存”，然后重新启动Flume服务（单击“重新启动”）以使更改生效。。例如，从组列表中选择guzhi，单击flume.conf部分中的+，然后添加Flume代理配置详细信息。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691001380.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691483274.png)
+
+ 7.展开Advanced flume-env部分，单击+，然后根据需要更改flume-env值。您可以更新内存参数或将自定义JAR文件添加到类路径。
+
