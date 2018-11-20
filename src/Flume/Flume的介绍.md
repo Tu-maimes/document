@@ -8,11 +8,9 @@ renderNumberedHeading: true
 
 [toc]
 
+## Flume的介绍
 
-
-# Flume的介绍
-
-## 什么是Flume
+### 什么是Flume
 
  可以理解flume是日志收集系统，Flume是Cloudera提供的一个高可用的，高可靠的，分布式的海量日志采集、聚合和传输的系统，Flume支持在日志系统中定制各类数据发送方，用于收集数据；同时，Flume提供对数据进行简单处理，并写到各种数据接受（可定制）的能力。
 当前Flume有两个版本Flume 0.9X版本的统称Flume-og，Flume1.X版本的统称Flume-ng。由于Flume-ng经过重大重构，与Flume-og有很大不同，使用时请注意区分，经过架构重构后，Flume NG更像是一个轻量级的小工具，适应各种方式的日志收集，并支持failover和负载均衡。改动的另一原因是将 Flume 纳入 apache 旗下，cloudera Flume 改名为 Apache Flume。
@@ -20,7 +18,7 @@ Apache Flume是一个分布式，可靠且可用的系统，用于高效地收�
 
  
 
-## Flume的结构
+### Flume的结构
 
  - 数据流模型
 
@@ -53,7 +51,7 @@ Flume使用事务方式来保证事件的可靠传送。 sources和sinks分别�
 
 事件在Channel中进行，管理从故障恢复。 Flume支持由本地文件系统支持的持久文件通道。 还有一个内存通道，它将事件简单地存储在内存队列中，这个速度更快，但是当代理进程死亡时仍然留在内存通道中的任何事件都不能被恢复。
 
-## Flume名词的解释
+### Flume名词的解释
 
  - Event:
 
@@ -85,7 +83,8 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 
 多个sink 可以构成一个sink group，sink processor 可以通过组中所有sink实现负载均衡，也可以在一个sink失败时转移到另一个。
 
-## Flume内部原理
+### Flume内部原理
+
 每个flume agent包含三个主要组件：source、channel、sink。 
 source是从一些其他产生数据的应用中接收数据的活跃组件，有自己产生数据的source，不过这些source通常用于测试目的，source可以监听一个或者多个网络端口，用于接收数据或者可以从本地文件系统读取数据，每个source必须至少连接一个channel，基于一些标准，一个source可以写入几个channel，复制事件到所有或某些channel。 
 一般来说，channel是被动组件（虽然它们可以为了清理或者垃圾回收运行自己的线程），缓冲agent已经接收，但尚未写出到另一个agent或者存储系统的数据，channel的行为像==队列==，source写入到它们，sink从它们中读取，多个source可以安全地写入到相同channel，并且多个sink可以从相同的channel进行读取，可是一个sink只能从一个channel读取，如果多个sink从相同的channel读取，它可以保证只有一个sink将会从channel读取一个指定特定的事件， 
@@ -94,9 +93,9 @@ sink连续轮询各自的channel来读取和删除事件，sink将事件推送�
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542695097364.png)
 
 
-## Flume组件的说明
+### Flume组件的说明
 
-### Flume Source
+#### Flume Source
 
 |Source类型|说明|
 |---|---|
@@ -112,7 +111,7 @@ sink连续轮询各自的channel来读取和删除事件，sink将事件推送�
 |HTTP Source|基于HTTP POST或GET方式的数据源，支持JSON、BLOB表示形式   | 
 |Legacy Sources|兼容老的Flume OG中Source（0.9.x版本）|
 
-### Flume Channel
+#### Flume Channel
 
 |Channel类型|说明
 |---|---|
@@ -123,7 +122,7 @@ sink连续轮询各自的channel来读取和删除事件，sink将事件推送�
 |PseudoTransactionChannel|测试用途|
 |CustomChannel|自定义Channel实现|
 
-### Flume Sink
+#### Flume Sink
 
 |Sink类型|说明
 |---|---|
@@ -140,7 +139,7 @@ sink连续轮询各自的channel来读取和删除事件，sink将事件推送�
 |Kite Dataset Sink |写数据到Kite Dataset，试验性质的|
 |Custom Sink |自定义Sink实现|
 
-### 拦截器与选择器
+#### 拦截器与选择器
 
 flume本身不限制agent中source、channel和sink的数量，因此flume source可以接收事件，并可以通过配置将事件复制到多个目的地，这使得source通过==channel处理器、拦截器和channel选择器==，写入数据到channel成为可能 每个source都有自己的channel处理器，每次source将数据写入channel，它是通过委派该任务到其channel处理器来完成的，然后，channel处理器将这些事件传到一个或多个source配置的拦截器中， 拦截器是一段代码，可以基于某些它完成的处理来读取事件和修改或删除事件，基于某些标准，如正则表达式，拦截器可以用来删除事件，为事件添加新报头或移除现有的报头等，每个source可以配置成使用多个拦截器，按照配置中定义的顺序被调用，将拦截器的结果传递给链的下一个单元，这就是所谓的责任链的设计模式，一旦拦截器处理完事件，拦截器链返回的事件列表传递到channel列表，即通过channel选择器为每个事件选择channel。 
 source可以通过处理器-拦截器-选择器路由写入多个channel，channel选择器的决定每个事件必须写入到source附带的哪个channel的组件。因此拦截器可以用来插入或删除事件中的数据，这样channel选择器可以应用一些条件在这些事件上，来决定事件必须写入哪些channel，channel选择器可以对事件应用任意过滤条件，来决定每个事件必须写入哪些channel，以及哪些channel是必须的或可选的。 
@@ -150,7 +149,7 @@ source可以通过处理器-拦截器-选择器路由写入多个channel，chann
 
 
 
-### Sink组
+#### Sink组
 
 sink运行器运行一个sink组，sink组可含有一个或多个sink，如果组中只存在一个sink，那么没有组将更有效率，sink运行器仅仅是一个询问sink组来处理下一批事件的线程，每个sink组有一个sink处理器，处理器选择组中的sink之一去处理下一个事件集合，每个sink只能从一个channel获取数据，尽管多个sink可以从同一个channel获取数据，选定的sink从channel中接收事件，并将事件写入到下一阶段或最终目的地。
 
@@ -161,9 +160,10 @@ sink运行器运行一个sink组，sink组可含有一个或多个sink，如果�
 ![负载均衡与故障转移](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542701156156.png)
  
 因为每个Avro Sink对Avro Source保持持续开放的连接，拥有写入到相同Agent的多个Sink会增加更多的socket连接，且在多层时Agent上占据更多的资源，对相同Agent增加大量Sink之前必须谨慎考虑。
-# Flume的安装
 
 ## Flume的安装
+
+### Flume的安装
 
  1. 安装Flume
 ``` javascript
@@ -332,7 +332,7 @@ $ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name
 >1. 通过设置propertiesImplementation = org.apache.flume.node.EnvVarResolverProperties，可以通过代理调用上的Java系统属性启用此功能。
 >2. 环境变量可以用其他方式配置，包括在conf/flume-env.sh中设置。
 
-## 记录原始数据
+### 记录原始数据
 
  记录流经摄取管道的原始数据流在许多生产环境中==不是期望的行为==，因为这可能导致==泄漏敏感数据或安全相关配置==，诸如secret keys，到Flume日志文件。 默认情况下，Flume不会记录这些信息。 另一方面，如果数据管道被破坏，Flume将尝试提供调试问题的线索。
  
@@ -350,7 +350,7 @@ $ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name
 $ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name a1 -Dflume.root.logger=DEBUG,console -Dorg.apache.flume.log.printconfig=true -Dorg.apache.flume.log.rawdata=true -DpropertiesImplementation=org.apache.flume.node.EnvVarResolverProperties
 ```
 
-## 安装第三方插件
+### 安装第三方插件
 
  Flume有一个完全基于插件的架构。 虽然Flume带有许多开箱即用的源，通道，接收器，序列化器等，但存在许多与Flume分开发布的实现。
 尽管通过在Flume-env.sh文件中将其jar包添加到==FLUME_CLASSPATH #ec1d0e==变量中可以包含自定义的Flume组件，但Flume现在支持一个名为==plugins.d #ec1d0e==的特殊目录，该目录自动获取以特定格式打包的插件。 这样可以更轻松地管理插件打包问题，以及简化几类问题的调试和故障排除，尤其是库依赖性冲突。
@@ -382,9 +382,9 @@ plugins.d/custom-source-2/lib/custom.jar
 plugins.d/custom-source-2/native/gettext.so
 ```
 
-# 数据的获取
+## 数据的获取
 
-## Flume支持从外部获取数据的多种机制
+### Flume支持从外部获取数据的多种机制
 
   
  1. RPC
@@ -408,13 +408,13 @@ $ bin/flume-ng avro-client -H localhost -p 41414 -F /usr/logs/log.10
 Flume支持以下机制从常见的日志流类型中读取数据，例如：Avro、Thrift、Syslog、Netcat。
 
 
-## 设置多个agent模式
+### 设置多个agent模式
 
 为了使数据在多个代理或跳跃之间流动，前一个代理的接收器和当前跳跃的来源必须是指向源的主机名（或IP地址）和端口的接收器。
 
 ![多agent模式](https://www.github.com/Tu-maimes/document/raw/master/小书匠/多个agent.jpg)
 
-## 多agent合并模式
+### 多agent合并模式
 
 
  日志收集中非常常见的情况是大量的日志生成客户端将数据发送到连接到存储子系统的少数consumer agents。 例如，从数百个Web服务器收集的日志发送给十几个写入HDFS集群的agents。
@@ -424,7 +424,7 @@ Flume支持以下机制从常见的日志流类型中读取数据，例如：Avr
 这可以在Flume中通过配置多个第一层agents和一个avro sink来实现，所有代理都指向单一agent的一个avro source（在这种情况下，您也可以使用thrift 
 sources/sinks/clients）。 第二层agent上的这个source将接收到的事件整合到单个通道中，由通道传送到最终目的地。
 
-## 多路复用模式
+### 多路复用模式
 
  Flume支持将事件流复用到一个或多个目的地。 这是通过定义一个流复用器来实现的，该复用器可以复制或选择性地将一个事件路由到一个或多个通道。
 
@@ -434,7 +434,7 @@ sources/sinks/clients）。 第二层agent上的这个source将接收到的事�
 
 这种模式，有两种方式，一种是用来复制，另一种是用来分流。配置文件中指定selector的type的值为replication:复制。配置文件中指定selector的type的值为Multiplexing:分流。
 
-## Configuration
+### Configuration
 
  1. 定义流程
 
@@ -623,7 +623,7 @@ agent_foo.sources.avro-AppSrv-source1.selector.default = mem-channel-1
 
 请注意，如果标题没有任何所需的频道，则该事件将被写入默认频道，并将尝试写入该标题的可选频道。 如果没有指定所需的通道，则指定可选通道仍然会将事件写入默认通道。 如果没有频道被指定为默认频道，并且没有要求，则选择器将尝试将事件写入到可选频道。 在这种情况下，任何失败都会被忽略。
 
-# Flume的度量报告
+## Flume的度量报告
 
 
 Flume有一个度量框架,可以通过Java Management Extensions(JMX) 、HTTP、Ganglia服务器来展示度量。对于每一个组件，有多个展现的度量。不管使用哪种度量方式都是通过JMX展现。由于JMX可以用来启动或停止Java应用程序，所以不允许通过JMX访问远程计算机。默认情况下该功能是禁用，出于安全考虑最好不要启用这个功能。
@@ -771,9 +771,9 @@ Ganglia的度量参数列表：
  
  
 
-# Flume的规划
+## Flume的规划
 
-## 规划部署Flume
+### 规划部署Flume
 
  1. 修复时间
 
