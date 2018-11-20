@@ -597,3 +597,17 @@ Flume有一个度量框架,可以通过Java Management Extensions(JMX) 、HTTP�
 
  1. HTTP报告度量
 
+实现HTTP的方式，当启动Agent时传递  -Dflume.monitoring.type=http -Dflume.monitoring.port=5653参数给Agent：
+
+``` stylus
+ flume-ng agent -c conf -f /etc/flume/conf/flume-conf.properties.template -n agent -Dflume.monitoring.type=http -Dflume.monitoring.port=5653
+
+```
+这将使得Flume在5653端口上启动一个HTTP服务器。访问/metric界面,将返回如下JSON格式的度量(用来访问指标的URL是http://192.168.102.115:5653/metrics)
+==备注:当前的机器IP是192.168.102.115==
+
+JSON格式的数据类型:
+{
+"type.component1" : {"metric1":"value1","metric2":"value2"},
+"type.component2" : {"metric3":"value3","metric4":"value4"},
+}
