@@ -590,3 +590,10 @@ agent_foo.sources.avro-AppSrv-source1.selector.default = mem-channel-1
 
 ## 四、Flume的度量报告
 
+
+Flume有一个度量框架,可以通过Java Management Extensions(JMX) 、HTTP、Ganglia服务器来展示度量。对于每一个组件，有多个展现的度量。不管使用哪种度量方式都是通过JMX展现。由于JMX可以用来启动或停止Java应用程序，所以不允许通过JMX访问远程计算机。默认情况下该功能是禁用，出于安全考虑最好不要启用这个功能。
+
+### Flume自带的度量报告
+
+ 1. HTTP报告度量
+
