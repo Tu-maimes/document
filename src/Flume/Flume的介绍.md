@@ -5,7 +5,7 @@ grammar_cjkRuby: true
 ---
 
 
-## 一、Flume的介绍
+## 1、Flume的介绍
 
 ### 1.1 什么是Flume
 
@@ -155,7 +155,7 @@ sink运行器运行一个sink组，sink组可含有一个或多个sink，如果�
 ![负载均衡与故障转移](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542701156156.png)
  
 因为每个Avro Sink对Avro Source保持持续开放的连接，拥有写入到相同Agent的多个Sink会增加更多的socket连接，且在多层时Agent上占据更多的资源，对相同Agent增加大量Sink之前必须谨慎考虑。
-## 二、Flume的安装
+## 2、Flume的安装
 
 ### 2.1 Flume的安装
 
@@ -376,7 +376,7 @@ plugins.d/custom-source-2/lib/custom.jar
 plugins.d/custom-source-2/native/gettext.so
 ```
 
-## 三、数据的获取
+## 3、数据的获取
 
 ### 3.1 Flume支持从外部获取数据的多种机制。
 
@@ -617,7 +617,7 @@ agent_foo.sources.avro-AppSrv-source1.selector.default = mem-channel-1
 
 请注意，如果标题没有任何所需的频道，则该事件将被写入默认频道，并将尝试写入该标题的可选频道。 如果没有指定所需的通道，则指定可选通道仍然会将事件写入默认通道。 如果没有频道被指定为默认频道，并且没有要求，则选择器将尝试将事件写入到可选频道。 在这种情况下，任何失败都会被忽略。
 
-## 四、Flume的度量报告
+## 4、Flume的度量报告
 
 
 Flume有一个度量框架,可以通过Java Management Extensions(JMX) 、HTTP、Ganglia服务器来展示度量。对于每一个组件，有多个展现的度量。不管使用哪种度量方式都是通过JMX展现。由于JMX可以用来启动或停止Java应用程序，所以不允许通过JMX访问远程计算机。默认情况下该功能是禁用，出于安全考虑最好不要启用这个功能。
