@@ -81,7 +81,7 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 ### 1.4Flume内部原理
 每个flume agent包含三个主要组件：source、channel、sink。 
 source是从一些其他产生数据的应用中接收数据的活跃组件，有自己产生数据的source，不过这些source通常用于测试目的，source可以监听一个或者多个网络端口，用于接收数据或者可以从本地文件系统读取数据，每个source必须至少连接一个channel，基于一些标准，一个source可以写入几个channel，复制事件到所有或某些channel。 
-一般来说，channel是被动组件（虽然它们可以为了清理或者垃圾回收运行自己的线程），缓冲agent已经接收，但尚未写出到另一个agent或者存储系统的数据，channel的行为像队列，source写入到它们，sink从它们中读取，多个source可以安全地写入到相同channel，并且多个sink可以从相同的channel进行读取，可是一个sink只能从一个channel读取，如果多个sink从相同的channel读取，它可以保证只有一个sink将会从channel读取一个指定特定的事件， 
+一般来说，channel是被动组件（虽然它们可以为了清理或者垃圾回收运行自己的线程），缓冲agent已经接收，但尚未写出到另一个agent或者存储系统的数据，channel的行为像==队列==，source写入到它们，sink从它们中读取，多个source可以安全地写入到相同channel，并且多个sink可以从相同的channel进行读取，可是一个sink只能从一个channel读取，如果多个sink从相同的channel读取，它可以保证只有一个sink将会从channel读取一个指定特定的事件， 
 sink连续轮询各自的channel来读取和删除事件，sink将事件推送到下一阶段，或者最终目的地。一旦在下一阶段或其目的地中数据是安全的，sink通过事务提交通知channel，可以从channel中删除这些事件。 
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542695097364.png)
@@ -135,9 +135,7 @@ sink连续轮询各自的channel来读取和删除事件，sink将事件推送�
 
 #### 1.5.4拦截器与选择器
 
-flume本身不限制agent中source、channel和sink的数量，因此flume source可以接收事件，并可以通过配置将事件复制到多个目的地，这使得source通过channel处理器、拦截器和channel选择器，写入数据到channel成为可能 
-每个source都有自己的channel处理器，每次source将数据写入channel，它是通过委派该任务到其channel处理器来完成的，然后，channel处理器将这些事件传到一个或多个source配置的拦截器中， 
-拦截器是一段代码，可以基于某些它完成的处理来读取事件和修改或删除事件，基于某些标准，如正则表达式，拦截器可以用来删除事件，为事件添加新报头或移除现有的报头等，每个source可以配置成使用多个拦截器，按照配置中定义的顺序被调用，将拦截器的结果传递给链的下一个单元，这就是所谓的责任链的设计模式，一旦拦截器处理完事件，拦截器链返回的事件列表传递到channel列表，即通过channel选择器为每个事件选择channel。 
+flume本身不限制agent中source、channel和sink的数量，因此flume source可以接收事件，并可以通过配置将事件复制到多个目的地，这使得source通过==channel处理器、拦截器和channel选择器==，写入数据到channel成为可能 每个source都有自己的channel处理器，每次source将数据写入channel，它是通过委派该任务到其channel处理器来完成的，然后，channel处理器将这些事件传到一个或多个source配置的拦截器中， 拦截器是一段代码，可以基于某些它完成的处理来读取事件和修改或删除事件，基于某些标准，如正则表达式，拦截器可以用来删除事件，为事件添加新报头或移除现有的报头等，每个source可以配置成使用多个拦截器，按照配置中定义的顺序被调用，将拦截器的结果传递给链的下一个单元，这就是所谓的责任链的设计模式，一旦拦截器处理完事件，拦截器链返回的事件列表传递到channel列表，即通过channel选择器为每个事件选择channel。 
 source可以通过处理器-拦截器-选择器路由写入多个channel，channel选择器的决定每个事件必须写入到source附带的哪个channel的组件。因此拦截器可以用来插入或删除事件中的数据，这样channel选择器可以应用一些条件在这些事件上，来决定事件必须写入哪些channel，channel选择器可以对事件应用任意过滤条件，来决定每个事件必须写入哪些channel，以及哪些channel是必须的或可选的。 
 写入到必需的channel失败将会导致channel处理器抛出channelexception,表明source必须重新重试该事件，而未能写入可选channel失败仅仅忽略它，一旦写出事件，处理器会对source指示成功状态，可能发送确认给发送该事件的系统，并继续接受更多的事件。
 
@@ -711,11 +709,11 @@ Ganglia的度量参数列表：
 ### 4.4flume对接Ambari-metrics
 
 
-#### 1. Ambari自定义Flume的度量
+#### 4.4.1 Ambari自定义Flume的度量
 
 [深入Ambari Metrics 机制分析](https://blog.csdn.net/u014297175/article/details/67639567)
 
-#### 2. Ambari代理Flume运行
+#### 4.4.2Ambari代理Flume运行
 
  1. 登录Ambari并验证服务是否正在运行。点击Flume服务; “摘要”页面显示总体状态。单击“配置”选项卡以编辑Flume配置。
 
@@ -754,6 +752,6 @@ Ganglia的度量参数列表：
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691906987.png)
 
-#### 3. 拓展
+#### 4.4.3 拓展
 
  [Flume的代理](http://cleverowl.uk/2015/09/30/ingesting-files-with-apache-flume/)
