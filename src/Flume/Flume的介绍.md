@@ -6,7 +6,7 @@ grammar_mindmap: true
 renderNumberedHeading: true
 ---
 
-[toc!]
+[toc]
 
 
 
