@@ -711,3 +711,6 @@ Ganglia的度量参数列表：
  4. 选择新组（在此示例中为“guzhi”），然后单击空主机名框下的+。
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542690509946.png)
+
+ 5. 选择要包含在配置组中的主机。单击保存。
+
