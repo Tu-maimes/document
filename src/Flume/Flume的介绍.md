@@ -349,7 +349,7 @@ plugins.d/custom-source-2/native/gettext.so
 
 ## 三、数据的获取
 
-### 5.1 Flume支持从外部获取数据的多种机制。
+### 3.1 Flume支持从外部获取数据的多种机制。
 
   
  1. RPC
@@ -373,13 +373,13 @@ $ bin/flume-ng avro-client -H localhost -p 41414 -F /usr/logs/log.10
 Flume支持以下机制从常见的日志流类型中读取数据，例如：Avro、Thrift、Syslog、Netcat。
 
 
-### 5.2设置多个agent模式
+### 3.2设置多个agent模式
 
 为了使数据在多个代理或跳跃之间流动，前一个代理的接收器和当前跳跃的来源必须是指向源的主机名（或IP地址）和端口的接收器。
 
 ![多agent模式](https://www.github.com/Tu-maimes/document/raw/master/小书匠/多个agent.jpg)
 
-### 5.3多agent合并模式
+### 3.3多agent合并模式
 
 
  日志收集中非常常见的情况是大量的日志生成客户端将数据发送到连接到存储子系统的少数consumer agents。 例如，从数百个Web服务器收集的日志发送给十几个写入HDFS集群的agents。
@@ -389,7 +389,7 @@ Flume支持以下机制从常见的日志流类型中读取数据，例如：Avr
 这可以在Flume中通过配置多个第一层agents和一个avro sink来实现，所有代理都指向单一agent的一个avro source（在这种情况下，您也可以使用thrift 
 sources/sinks/clients）。 第二层agent上的这个source将接收到的事件整合到单个通道中，由通道传送到最终目的地。
 
-### 5.4 多路复用模式
+### 3.4 多路复用模式
 
  Flume支持将事件流复用到一个或多个目的地。 这是通过定义一个流复用器来实现的，该复用器可以复制或选择性地将一个事件路由到一个或多个通道。
 
@@ -399,7 +399,7 @@ sources/sinks/clients）。 第二层agent上的这个source将接收到的事�
 
 这种模式，有两种方式，一种是用来复制，另一种是用来分流。配置文件中指定selector的type的值为replication:复制。配置文件中指定selector的type的值为Multiplexing:分流。
 
-### 5.5Configuration
+### 3.5Configuration
 
  1. 定义流程
 
