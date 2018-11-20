@@ -3,9 +3,11 @@ title: Flume的介绍
 tags: 作者:汪帅
 grammar_cjkRuby: true
 grammar_mindmap: true
-renderNumberedHeading: true
+renderNumberedHeading: false
 ---
-[toc!]
+
+[toc!?theme=gray&depth=4]
+
 
 
 # Flume的介绍
@@ -94,7 +96,7 @@ sink连续轮询各自的channel来读取和删除事件，sink将事件推送�
 
 ## Flume组件的说明
 
-### Flume Source:
+### Flume Source
 
 |Source类型|说明|
 |---|---|
@@ -110,7 +112,7 @@ sink连续轮询各自的channel来读取和删除事件，sink将事件推送�
 |HTTP Source|基于HTTP POST或GET方式的数据源，支持JSON、BLOB表示形式   | 
 |Legacy Sources|兼容老的Flume OG中Source（0.9.x版本）|
 
-### Flume Channel：
+### Flume Channel
 
 |Channel类型|说明
 |---|---|
