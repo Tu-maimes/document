@@ -683,3 +683,6 @@ Ganglia的度量参数列表：
 ### 4.3自定义报告度量
 
 例如Source、Sink、Channel的自定义组件，可以使用SourceCounter、SinkCounter、ChannelCounter类直接向Flume框架展现度量,这些类提供了更新Source、Sink、Channel以前度量的方法。其他组件，例如拦截器、序列化器等，也可以展现度量，但是没有便捷的类可以直接这个实现，因为每个组件可能展现看起来不一样的度量。这些组件可以使用MonitoredCounterGroup类直接向JMX报告度量。自定义组件应该创建一个继承自该类的counter类，对于不同的度量有一个公共的获取方法。为了增加、更新、增量这些度量值，counter类可以提供一些方法，供自定义来实现使用。
+
+### Flume在Ambari度量的使用教程
+
