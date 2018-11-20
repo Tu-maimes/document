@@ -5,9 +5,7 @@ grammar_cjkRuby: true
 grammar_mindmap: true
 renderNumberedHeading: true
 ---
-
-
-[toc!?direction=lr]
+[toc!]
 
 
 # Flume的介绍
