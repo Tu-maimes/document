@@ -84,23 +84,12 @@ source是从一些其他产生数据的应用中接收数据的活跃组件，�
 一般来说，channel是被动组件（虽然它们可以为了清理或者垃圾回收运行自己的线程），缓冲agent已经接收，但尚未写出到另一个agent或者存储系统的数据，channel的行为像队列，source写入到它们，sink从它们中读取，多个source可以安全地写入到相同channel，并且多个sink可以从相同的channel进行读取，可是一个sink只能从一个channel读取，如果多个sink从相同的channel读取，它可以保证只有一个sink将会从channel读取一个指定特定的事件， 
 sink连续轮询各自的channel来读取和删除事件，sink将事件推送到下一阶段，或者最终目的地。一旦在下一阶段或其目的地中数据是安全的，sink通过事务提交通知channel，可以从channel中删除这些事件。 
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542693948434.png)
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542695097364.png)
 
-flume本身不限制agent中source、channel和sink的数量，因此flume source可以接收事件，并可以通过配置将事件复制到多个目的地，这使得source通过channel处理器、拦截器和channel选择器，写入数据到channel成为可能 
-每个source都有自己的channel处理器，每次source将数据写入channel，它是通过委派该任务到其channel处理器来完成的，然后，channel处理器将这些事件传到一个或多个source配置的拦截器中， 
-拦截器是一段代码，可以基于某些它完成的处理来读取事件和修改或删除事件，基于某些标准，如正则表达式，拦截器可以用来删除事件，为事件添加新报头或移除现有的报头等，每个source可以配置成使用多个拦截器，按照配置中定义的顺序被调用，将拦截器的结果传递给链的下一个单元，这就是所谓的责任链的设计模式，一旦拦截器处理完事件，拦截器链返回的事件列表传递到channel列表，即通过channel选择器为每个事件选择channel。 
-source可以通过处理器-拦截器-选择器路由写入多个channel，channel选择器的决定每个事件必须写入到source附带的哪个channel的组件。因此拦截器可以用来插入或删除事件中的数据，这样channel选择器可以应用一些条件在这些事件上，来决定事件必须写入哪些channel，channel选择器可以对事件应用任意过滤条件，来决定每个事件必须写入哪些channel，以及哪些channel是必须的或可选的。 
-写入到必需的channel失败将会导致channel处理器抛出channelexception,表明source必须重新重试该事件，而未能写入可选channel失败仅仅忽略它，一旦写出事件，处理器会对source指示成功状态，可能发送确认给发送该事件的系统，并继续接受更多的事件。
-
-![流数据在Flume内部的流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542694033989.png)
-
-sink运行器运行一个sink组，sink组可含有一个或多个sink，如果组中只存在一个sink，那么没有组将更有效率，sink运行器仅仅是一个询问sink组来处理下一批事件的线程，每个sink组有一个sink处理器，处理器选择组中的sink之一去处理下一个事件集合，每个sink只能从一个channel获取数据，尽管多个sink可以从同一个channel获取数据，选定的sink从channel中接收事件，并将事件写入到下一阶段或最终目的地。 
-
-![Sink组](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542694151160.png)
 
 ### 1.5Flume组件的说明
 
- - Flume Source:
+#### 1.5.1 Flume Source:
 
 |Source类型|说明|
 |---|---|
@@ -116,7 +105,7 @@ sink运行器运行一个sink组，sink组可含有一个或多个sink，如果�
 |HTTP Source|基于HTTP POST或GET方式的数据源，支持JSON、BLOB表示形式   | 
 |Legacy Sources|兼容老的Flume OG中Source（0.9.x版本）|
 
- - Flume  Channel：
+#### 1.5.2 Flume Channel：
 
 |Channel类型|说明
 |---|---|
@@ -127,7 +116,7 @@ sink运行器运行一个sink组，sink组可含有一个或多个sink，如果�
 |PseudoTransactionChannel|测试用途|
 |CustomChannel|自定义Channel实现|
 
- - Flume Sink
+#### 1.5.3Flume Sink
 
 |Sink类型|说明
 |---|---|
@@ -144,8 +133,23 @@ sink运行器运行一个sink组，sink组可含有一个或多个sink，如果�
 |Kite Dataset Sink |写数据到Kite Dataset，试验性质的|
 |Custom Sink |自定义Sink实现|
 
+#### 1.5.4拦截器与选择器
+
+flume本身不限制agent中source、channel和sink的数量，因此flume source可以接收事件，并可以通过配置将事件复制到多个目的地，这使得source通过channel处理器、拦截器和channel选择器，写入数据到channel成为可能 
+每个source都有自己的channel处理器，每次source将数据写入channel，它是通过委派该任务到其channel处理器来完成的，然后，channel处理器将这些事件传到一个或多个source配置的拦截器中， 
+拦截器是一段代码，可以基于某些它完成的处理来读取事件和修改或删除事件，基于某些标准，如正则表达式，拦截器可以用来删除事件，为事件添加新报头或移除现有的报头等，每个source可以配置成使用多个拦截器，按照配置中定义的顺序被调用，将拦截器的结果传递给链的下一个单元，这就是所谓的责任链的设计模式，一旦拦截器处理完事件，拦截器链返回的事件列表传递到channel列表，即通过channel选择器为每个事件选择channel。 
+source可以通过处理器-拦截器-选择器路由写入多个channel，channel选择器的决定每个事件必须写入到source附带的哪个channel的组件。因此拦截器可以用来插入或删除事件中的数据，这样channel选择器可以应用一些条件在这些事件上，来决定事件必须写入哪些channel，channel选择器可以对事件应用任意过滤条件，来决定每个事件必须写入哪些channel，以及哪些channel是必须的或可选的。 
+写入到必需的channel失败将会导致channel处理器抛出channelexception,表明source必须重新重试该事件，而未能写入可选channel失败仅仅忽略它，一旦写出事件，处理器会对source指示成功状态，可能发送确认给发送该事件的系统，并继续接受更多的事件。
+
+![数据流在Flume内部的流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542695180767.png)
 
 
+
+#### 1.5.5Sink组
+
+sink运行器运行一个sink组，sink组可含有一个或多个sink，如果组中只存在一个sink，那么没有组将更有效率，sink运行器仅仅是一个询问sink组来处理下一批事件的线程，每个sink组有一个sink处理器，处理器选择组中的sink之一去处理下一个事件集合，每个sink只能从一个channel获取数据，尽管多个sink可以从同一个channel获取数据，选定的sink从channel中接收事件，并将事件写入到下一阶段或最终目的地。 
+
+![Sink组](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542695337929.png)
 ## 二、Flume的安装
 
 ### 2.1Flume的安装
