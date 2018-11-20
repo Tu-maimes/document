@@ -593,11 +593,15 @@ agent_foo.sources.avro-AppSrv-source1.selector.default = mem-channel-1
 
 Flume有一个度量框架,可以通过Java Management Extensions(JMX) 、HTTP、Ganglia服务器来展示度量。对于每一个组件，有多个展现的度量。不管使用哪种度量方式都是通过JMX展现。由于JMX可以用来启动或停止Java应用程序，所以不允许通过JMX访问远程计算机。默认情况下该功能是禁用，出于安全考虑最好不要启用这个功能。
 
-### Flume自带的度量报告
+### 4.1Flume自带的度量报告
 
  1. HTTP报告度量
 
 实现HTTP的方式，当启动Agent时传递  -Dflume.monitoring.type=http -Dflume.monitoring.port=5653参数给Agent：
+|属性名称|	默认值|	描述|
+|---|---|---|
+type	|–	|组件类型名必须是http|
+port	|41414|	启动服务器的端口。|
 
 ``` stylus
  flume-ng agent -c conf -f /etc/flume/conf/flume-conf.properties.template -n agent -Dflume.monitoring.type=http -Dflume.monitoring.port=5653
@@ -605,9 +609,77 @@ Flume有一个度量框架,可以通过Java Management Extensions(JMX) 、HTTP�
 ```
 这将使得Flume在5653端口上启动一个HTTP服务器。访问/metric界面,将返回如下JSON格式的度量(用来访问指标的URL是http://192.168.102.115:5653/metrics)
 ==备注:当前的机器IP是192.168.102.115==
-
 JSON格式的数据类型:
 {
 "type.component1" : {"metric1":"value1","metric2":"value2"},
 "type.component2" : {"metric3":"value3","metric4":"value4"},
 }
+
+ 2.Ganglia度量报告
+
+Flume也可以发送度量信息给Ganglia（Ganglia是一个开源的集群性能检测项目）,用来监控Flume。在任何时候只能启动一个Ganglia或HTTP监控。Flume周期性的向Ganglia报告度量——默认情况是一分钟一次，但是该值可以进行配置用来更频繁地报告度量。为了启用Ganglia报告，用下面的命令行启动Flume：
+
+Ganglia的度量参数列表：
+ |属性名称|	默认值|	描述|
+|---|---|---|
+|type|	–	|组件类型名必须是ganglia|
+|hosts|	–	|主机名的逗号分隔列表:Ganglia服务器的端口|
+|pollFrequency|	60	|时间，以秒为单位，从连续报告到Ganglia服务器|
+|isGanglia3	|false|	Ganglia服务器版本是3。默认情况下，Flume以Ganglia 3.1格式发送|
+``` stylus
+ flume-ng agent -c conf -f etc/flume/conf/flume-conf.properties.template --name agent  -Dflume.monitoring.type=ganglia -Dflume.monitoring.hosts=192.168.102.120:8655 -Dflume.monitoring.pollFrequency=30 -Dflume.monitoring.isGanglia3=ture
+```
+
+###  4.2度量的含义
+
+ 1. Source度量
+
+|度量|描述|
+|---|---|
+|OpenConnectionCount|目前与客户端或sink保持连接的总数量(目前只有avro source展现该度量)|
+|Type|对于Source,该指标总是返回SOURCE|				
+|AppendBatchAcceptedCount|成功提交到channel的批次的总数量|
+|AppendBatchReceivedCount|接收到事件批次的总数量|
+|EventAcceptedCount|成功写出到channel的事件总数量，且source返回success给创建事件的sink或RPC客户端系统|
+|AppendReceivedCount|每批只有一个事件的事件总数量(与RPC调用中的一个append调用相等)|
+|StopTime|source停止时自Epoch以来的毫秒值时间|
+|StartTime|source启动时自Epoch以来的毫秒值时间|
+|EventReceivedCount|目前为止source已经接收到的事件总数量|
+|AppendAcceptedCount|单独传入的事件到Channel且成功返回的事件总数量|
+
+ 2. Channel度量
+
+|度量|描述|
+|---|---|
+|EventPutSuccessCount|成功写入channel且提交的事件总数量|
+|ChannelFillPercentage|channel满时的百分比|
+|Type|对于Channel该指标总是返回Channel|
+|StopTime|channel停止时自Epoch以来的毫秒值时间|
+|EventPutAttemptCount|Source尝试写入Channe的事件总数量|
+|ChannelSize|目前channel中事件的总数量|
+|StartTime|channel启动时自Epoch以来的毫秒值时间|
+|EventTakeSuccessCount|sink成功读取的事件的总数量|
+|ChannelCapacity|channel的容量|
+|EventTakeAttemptCount|sink尝试从channel拉取事件的总数量。这不意味着每次事件都被返回，因为sink拉取的时候channel可能没有任何数据|
+
+ 3. Sink度量
+
+|度量|描述|
+|---|---|
+|Type|:|对于Sink该指标总是返回Sink|
+|ConnectionClosedCount|下一阶段或存储系统关闭的连接数量(如在HDFS中关闭一个文件)|
+|EventDrainSuccessCount|sink成功写出到存储的事件总数量|
+|KafkaEventSendTimer|| 
+|BatchCompleteCount|与最大批量尺寸相等的批量的数量|
+|ConnectionFailedCount|下一阶段或存储系统由于错误关闭的连接数量（如HDFS上一个新创建的文件因为超时而关闭）|
+|EventDrainAttemptCount|sink尝试写出到存储的事件总数量|
+|ConnectionCreatedCount|下一个阶段或存储系统创建的连接数量（如HDFS创建一个新文件）|
+|BatchEmptyCount|空的批量的数量，如果数量很大表示souce写数据比sink清理数据慢速度慢很多|
+|StopTime|	|
+|RollbackCount||
+|StartTime||
+|BatchUnderflowCount|比sink配置使用的最大批量尺寸更小的批量的数量，如果该值很高也表示sink比souce更快|
+
+### 4.3自定义报告度量
+
+例如Source、Sink、Channel的自定义组件，可以使用SourceCounter、SinkCounter、ChannelCounter类直接向Flume框架展现度量,这些类提供了更新Source、Sink、Channel以前度量的方法。其他组件，例如拦截器、序列化器等，也可以展现度量，但是没有便捷的类可以直接这个实现，因为每个组件可能展现看起来不一样的度量。这些组件可以使用MonitoredCounterGroup类直接向JMX报告度量。自定义组件应该创建一个继承自该类的counter类，对于不同的度量有一个公共的获取方法。为了增加、更新、增量这些度量值，counter类可以提供一些方法，供自定义来实现使用。
