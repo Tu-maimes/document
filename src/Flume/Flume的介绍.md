@@ -724,3 +724,8 @@ Ganglia的度量参数列表：
 
  7.展开Advanced flume-env部分，单击+，然后根据需要更改flume-env值。您可以更新内存参数或将自定义JAR文件添加到类路径。
 
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691721791.png)
+
+ 8. 重启Flume后,在“摘要”页面上，您现在可以看到不同配置组中的主机运行不同的Flume代理。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691906987.png)
