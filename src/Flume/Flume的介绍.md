@@ -714,3 +714,4 @@ Ganglia的度量参数列表：
 
  5. 选择要包含在配置组中的主机。单击保存。
 
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542690629191.png)
