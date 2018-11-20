@@ -128,6 +128,8 @@ Client 是一个将原始log包装成events并且发送他们到一个或多个a
 
 ## 二、Flume的安装
 
+### 2.1Flume的安装
+
  1. 安装Flume
 ``` javascript
 # useradd flume
@@ -295,7 +297,7 @@ $ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name
 >1. 通过设置propertiesImplementation = org.apache.flume.node.EnvVarResolverProperties，可以通过代理调用上的Java系统属性启用此功能。
 >2. 环境变量可以用其他方式配置，包括在conf/flume-env.sh中设置。
 
-## 三、记录原始数据
+### 2.2记录原始数据
 
  记录流经摄取管道的原始数据流在许多生产环境中==不是期望的行为==，因为这可能导致==泄漏敏感数据或安全相关配置==，诸如secret keys，到Flume日志文件。 默认情况下，Flume不会记录这些信息。 另一方面，如果数据管道被破坏，Flume将尝试提供调试问题的线索。
  
@@ -313,7 +315,7 @@ $ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name
 $ NC_PORT=6666 bin/flume-ng agent --conf conf --conf-file conf/flume-conf --name a1 -Dflume.root.logger=DEBUG,console -Dorg.apache.flume.log.printconfig=true -Dorg.apache.flume.log.rawdata=true -DpropertiesImplementation=org.apache.flume.node.EnvVarResolverProperties
 ```
 
-## 四、安装第三方插件
+### 2.3安装第三方插件
 
  Flume有一个完全基于插件的架构。 虽然Flume带有许多开箱即用的源，通道，接收器，序列化器等，但存在许多与Flume分开发布的实现。
 尽管通过在Flume-env.sh文件中将其jar包添加到==FLUME_CLASSPATH #ec1d0e==变量中可以包含自定义的Flume组件，但Flume现在支持一个名为==plugins.d #ec1d0e==的特殊目录，该目录自动获取以特定格式打包的插件。 这样可以更轻松地管理插件打包问题，以及简化几类问题的调试和故障排除，尤其是库依赖性冲突。
@@ -345,7 +347,7 @@ plugins.d/custom-source-2/lib/custom.jar
 plugins.d/custom-source-2/native/gettext.so
 ```
 
-## 五、数据的获取
+## 三、数据的获取
 
 ### 5.1 Flume支持从外部获取数据的多种机制。
 
