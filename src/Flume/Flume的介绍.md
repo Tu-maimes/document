@@ -6,6 +6,12 @@ grammar_mindmap: true
 renderNumberedHeading: true
 ---
 
+[toc!?direction=lr]
+
+
+----------
+
+
 ## Flume的介绍
 
 ### 什么是Flume
