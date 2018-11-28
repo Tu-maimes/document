@@ -774,5 +774,19 @@ mysql> flush privileges;
 [root@master java]# scp -r jdk1.8.0_152 root@slave02:/usr/java
 ```
 
+先卸载
+
+``` crmsh
+ [root@master .ssh]# yum erase ambari-server
+```
+
+再安装，这个命令同时安装了PostgreSQL:
+
+``` crmsh
+[root@master .ssh]# yum install ambari-server
+
+输入y之后：
+```
+
 
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
