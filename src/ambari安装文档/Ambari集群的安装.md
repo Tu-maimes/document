@@ -495,4 +495,142 @@ cp /var/www/html/HDP-GPL/centos7/2.6.5.0-292/hdp-gpl.gpl.repo
 ```
 编辑刚拷贝的文件文件：
 
+ambari.repo文件
+
+``` ini
+#VERSION_NUMBER=2.6.2.0-155
+[ambari-2.6.2.0]
+name=ambari Version - ambari-2.6.2.0
+baseurl=http://192.168.3.100/ambari/centos7/2.6.2.0-155/
+gpgcheck=0
+gpgkey=http://192.168.3.100/ambari/centos7/2.6.2.0-155/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins
+enabled=1
+priority=1
+```
+hdp.repo文件
+
+``` ini
+#VERSION_NUMBER=2.6.5.0-292
+[HDP-2.6.5.0]
+name=HDP Version - HDP-2.6.5.0
+baseurl=http://192.168.3.100/HDP/centos7/2.6.5.0-292/
+gpgcheck=0
+gpgkey=http://192.168.3.100/HDP/centos7/2.6.5.0-292/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins
+enabled=1
+priority=1
+
+
+[HDP-UTILS-1.1.0.22]
+name=HDP-UTILS Version - HDP-UTILS-1.1.0.22
+baseurl=http://192.168.3.100/HDP-UTILS/centos7/1.1.0.22
+gpgcheck=0
+gpgkey=http://192.168.3.100/HDP-UTILS/centos7/1.1.0.22/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins
+enabled=1
+priority=1
+```
+hdp-gpl.gpl.repo文件
+
+``` x86asm
+#VERSION_NUMBER=2.6.5.0-292
+[HDP-GPL-2.6.5.0]
+name=HDP-GPL Version - HDP-GPL-2.6.5.0
+baseurl=http://192.168.3.100/HDP-GPL/centos7/2.6.5.0-292
+gpgcheck=0
+gpgkey=http://192.168.3.100/HDP-GPL/centos7/2.6.5.0-292/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins
+enabled=1
+priority=1
+```
+配置CentOS-Base.repo为aliyun的yum源
+
+``` tcl
+# CentOS-Base.repo
+#
+# The mirror system uses the connecting IP address of the client and the
+# update status of each mirror to pick mirrors that are updated to and
+# geographically close to the client.  You should use this for CentOS updates
+# unless you are manually picking other mirrors.
+#
+# If the mirrorlist= does not work for you, as a fall back you can try the 
+# remarked out baseurl= line instead.
+#
+#
+ 
+[base]
+name=CentOS-$releasever - Base - mirrors.aliyun.com
+failovermethod=priority
+baseurl=http://mirrors.aliyun.com/centos/$releasever/os/$basearch/
+        http://mirrors.aliyuncs.com/centos/$releasever/os/$basearch/
+        http://mirrors.cloud.aliyuncs.com/centos/$releasever/os/$basearch/
+gpgcheck=1
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
+ 
+#released updates 
+[updates]
+name=CentOS-$releasever - Updates - mirrors.aliyun.com
+failovermethod=priority
+baseurl=http://mirrors.aliyun.com/centos/$releasever/updates/$basearch/
+        http://mirrors.aliyuncs.com/centos/$releasever/updates/$basearch/
+        http://mirrors.cloud.aliyuncs.com/centos/$releasever/updates/$basearch/
+gpgcheck=1
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
+ 
+#additional packages that may be useful
+[extras]
+name=CentOS-$releasever - Extras - mirrors.aliyun.com
+failovermethod=priority
+baseurl=http://mirrors.aliyun.com/centos/$releasever/extras/$basearch/
+        http://mirrors.aliyuncs.com/centos/$releasever/extras/$basearch/
+        http://mirrors.cloud.aliyuncs.com/centos/$releasever/extras/$basearch/
+gpgcheck=1
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
+ 
+#additional packages that extend functionality of existing packages
+[centosplus]
+name=CentOS-$releasever - Plus - mirrors.aliyun.com
+failovermethod=priority
+baseurl=http://mirrors.aliyun.com/centos/$releasever/centosplus/$basearch/
+        http://mirrors.aliyuncs.com/centos/$releasever/centosplus/$basearch/
+        http://mirrors.cloud.aliyuncs.com/centos/$releasever/centosplus/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
+ 
+#contrib - packages by Centos Users
+[contrib]
+name=CentOS-$releasever - Contrib - mirrors.aliyun.com
+failovermethod=priority
+baseurl=http://mirrors.aliyun.com/centos/$releasever/contrib/$basearch/
+        http://mirrors.aliyuncs.com/centos/$releasever/contrib/$basearch/
+        http://mirrors.cloud.aliyuncs.com/centos/$releasever/contrib/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=http://mirrors.aliyun.com/centos/RPM-GPG-KEY-CentOS-7
+```
+
+CentOS-Media.repo文件
+
+``` shell
+# CentOS-Media.repo
+#
+#  This repo can be used with mounted DVD media, verify the mount point for
+#  CentOS-7.  You can use this repo and yum to install items directly off the
+#  DVD ISO that we release.
+#
+# To use this repo, put in your DVD and use it with the other repos too:
+#  yum --enablerepo=c7-media [command]
+#  
+# or for ONLY the media repo, do this:
+#
+#  yum --disablerepo=\* --enablerepo=c7-media [command]
+
+[c7-media]
+name=CentOS-$releasever - Media
+baseurl=http:///192.168.3.100/CentOS/
+gpgcheck=1
+enabled=0
+gpgkey=http:///192.168.3.100/CentOS/RPM-GPG-KEY-CentOS-7
+```
+
+
+
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
