@@ -769,6 +769,10 @@ mysql> flush privileges;
 ```
 把jdk-8u152-linux-x64.tar.gz复制到/usr/java目录下面，并解压：`[root@master java]# tar -zvxf jdk-8u152-linux-x64.tar.gz` 
 
+``` crmsh
+[root@master java]# scp -r /jdk1.8.0_152 root@slave01:/usr/java
+[root@master java]# scp -r jdk1.8.0_152 root@slave02:/usr/java
+```
 
 
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
