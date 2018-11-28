@@ -115,6 +115,7 @@ Localization和software部分不需要进行任何设置，其中需要注意的
 swap：4096M，标准分区格式创建。
 /：剩余所有空间，采用lvm卷组格式创建。
 规划后界面如下，点击done完成分区规划，在弹出对话框中点击“accept changs”：
+
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385348782.png)
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385379701.png)
