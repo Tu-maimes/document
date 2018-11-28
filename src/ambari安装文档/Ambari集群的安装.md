@@ -2,6 +2,8 @@
 title: Ambari集群的安装
 tags: 作者:汪帅
 grammar_cjkRuby: true
+grammar_mindmap: true
+renderNumberedHeading: true
 ---
 
 
@@ -158,6 +160,61 @@ swap：4096M，标准分区格式创建。
 好了，至此，CentOS7操作系统安装成功了。
 
 
+## 安装Ambari集群
+
+### 基础环境的搭建
+
+以下操作均用root用户操作。
+
+ 1. 网络配置设置hostname(所有节点)
+`vi /etc/sysconfig/network`修改hostname：
+NETWORKING=yes
+HOSTNAME=master(每个节点设置自己的名字)
+`service network restart`   重启网络服务生效。
+`reboot`重启所有机器
+ 2. 配置ip与hostname的映射关系
+
+``` nginx
+vi /etc/hosts
+
+
+192.168.3.100 master
+192.168.3.101 slaver01
+192.168.3.102 slaver02
+```
+
+==注意==：这里需要将每台机器的ip及主机名对应关系都写进去，本机(本地的Windows系统C:\Windows\System32\drivers\etc\hosts)的也要写进去，否则启动Agent的时候会提示hostname解析错误。
+
+
+
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
 
+ 3. 打通SSH，设置ssh无密码登陆（所有节点）
 
+在所有节点上执行 `ssh-keygen -t rsa`   一路回车，生成无密码的密钥对。
+
+将公钥添加到认证文件中：`cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys`文件
+
+并设置authorized_keys的访问权限：
+`chmod 600 ~/.ssh/authorized_keys`
+scp文件到所有datenode节点：
+`scp ~/.ssh/authorized_keys root@slaver01:~/.ssh/`
+`scp ~/.ssh/authorized_keys root@slaver02:~/.ssh/`
+
+测试：在主节点上ssh slaver02，正常情况下，不需要密码就能直接登陆进去了。
+
+ 4. 设置文件打开数量和用户最大进程数
+	
+	查看文件打开数量        `ulimit -a` 
+	查看用户最大进程数      `ulimit -u`
+	
+
+``` stata
+vi /etc/security/limits.conf 
+
+	增加以下内容：
+	* soft nofile 65535
+	* hard nofile 65535
+	* soft nproc 32000
+	* hard nproc 32000 
+```
