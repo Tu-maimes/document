@@ -632,5 +632,104 @@ gpgkey=http:///192.168.3.100/CentOS/RPM-GPG-KEY-CentOS-7
 ```
 将这几个文件拷贝到各个机器的对应目录下。
 
+#### 安装MySQL（为了后续装Ambari）
+
+##### 驱动包存放目录
+
+驱动包存放位置：==mysql-connector-java-5.1.45-bin.jar
+/usr/share/java==
+
+##### 上传安装包并安装
+
+ MySQL安装包
+
+mysql-5.7.21-1.el6.x86_64.rpm-bundle.tar
+
+添加用户：
+
+``` shell
+groupadd mysql
+useradd -r -g mysql -s /bin/false mysql
+#查找以前是否安装有mysql
+rpm -qa | grep mysql
+```
+如果出现mysql的相关文件，说明已经安装，如：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543391336325.png)
+
+删除命令： rpm -e --nodeps 包名
+如果存在CentOS自带的mysql-libs相关jar包，卸载命令：
+
+``` maxima
+rpm -ev --nodeps mysql-libs*
+```
+查找旧版本mysql的目录，并且删除旧版本mysql的文件和库：
+
+``` crmsh
+[root@master yum.repos.d]# find / -name mysql
+```
+删除对应的文件夹。
+
+
+
+``` stylus
+
+解压安装
+
+#cd /opt/msq
+#tar -xvf mysql-5.7.21-1.el6.x86_64.rpm-bundle.tar -C /opt/mysql
+#cd /opt/mysql
+mysql-community-libs-5.7.21-1.el6.x86_64.rpm
+mysql-community-devel-5.7.21-1.el6.x86_64.rpm
+mysql-community-server-5.7.21-1.el6.x86_64.rpm
+mysql-community-test-5.7.21-1.el6.x86_64.rpm
+mysql-community-embedded-5.7.21-1.el6.x86_64.rpm
+mysql-community-client-5.7.21-1.el6.x86_64.rpm
+mysql-community-libs-compat-5.7.21-1.el6.x86_64.rpm
+mysql-community-common-5.7.21-1.el6.x86_64.rpm
+mysql-community-embedded-devel-5.7.21-1.el6.x86_64.rpm
+
+#rpm -ivh mysql-community-common-5.7.21-1.el6.x86_64.rpm
+#rpm -ivh mysql-community-libs-5.7.21-1.el6.x86_64.rpm
+#rpm -ivh mysql-community-libs-compat-5.7.21-1.el6.x86_64.rpm
+#rpm -ivh mysql-community-client-5.7.21-1.el6.x86_64.rpm
+#rpm -ivh mysql-community-server-5.7.21-1.el6.x86_64.rpm
+#rpm -ivh mysql-community-devel-5.7.21-1.el6.x86_64.rpm
+
+#service mysqld start
+```
+
+使用netstat 命令查看mysql是否启动成功
+
+``` crmsh
+[root@master html]# netstat -nat
+```
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543392714810.png)
+
+mysql默认端口号为3306，以上信息中出现3306端口号，则启动成功
+
+设置root密码
+
+``` vim
+vi /etc/my.cnf
+
+添加：skip-grant-tables
+```
+保存后重启MySQL服务：`service mysqld restart`，然后重新登录。
+
+登录：mysql -u root -p，初次登录密码为空，直接回车： 
+修改密码，用户密码是在名为mysql的database下面：依次执行以下指令：
+
+``` shell
+mysql> use mysql
+mysql> update user set password_expired='N' where user='root';  
+mysql> update user set authentication_string=password('root') where user='root';
+mysql> flush privileges;
+```
+
+修改root用户的密码为root
+
+
 
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
