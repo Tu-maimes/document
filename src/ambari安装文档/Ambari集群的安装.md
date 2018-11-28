@@ -166,13 +166,15 @@ swap：4096M，标准分区格式创建。
 
 以下操作均用root用户操作。
 
- 1. 网络配置设置hostname(所有节点)
+#### 网络配置设置hostname(所有节点)
+
 `vi /etc/sysconfig/network`修改hostname：
 NETWORKING=yes
 HOSTNAME=master(每个节点设置自己的名字)
 `service network restart`   重启网络服务生效。
 `reboot`重启所有机器
- 2. 配置ip与hostname的映射关系
+
+#### 配置ip与hostname的映射关系
 
 ``` nginx
 vi /etc/hosts
@@ -185,11 +187,7 @@ vi /etc/hosts
 
 ==注意==：这里需要将每台机器的ip及主机名对应关系都写进去，本机(本地的Windows系统C:\Windows\System32\drivers\etc\hosts)的也要写进去，否则启动Agent的时候会提示hostname解析错误。
 
-
-
-WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
-
- 3. 打通SSH，设置ssh无密码登陆（所有节点）
+#### 打通SSH，设置ssh无密码登陆（所有节点）
 
 在所有节点上执行 `ssh-keygen -t rsa`   一路回车，生成无密码的密钥对。
 
@@ -203,7 +201,8 @@ scp文件到所有datenode节点：
 
 测试：在主节点上ssh slaver02，正常情况下，不需要密码就能直接登陆进去了。
 
- 4. 设置文件打开数量和用户最大进程数
+#### 设置文件打开数量和用户最大进程数
+
 	
 	查看文件打开数量        `ulimit -a` 
 	查看用户最大进程数      `ulimit -u`
@@ -218,3 +217,263 @@ vi /etc/security/limits.conf
 	* soft nproc 32000
 	* hard nproc 32000 
 ```
+
+####  关闭每台机器的防火墙
+
+``` vala
+#停止firewall
+systemctl stop firewalld.service  
+#禁止firewall开机启动
+systemctl disable firewalld.service  
+#查看默认防火墙状态（关闭后显示not running，开启后显示running）
+firewall-cmd --state  
+```
+
+####  关闭每台机器的Selinux
+
+禁用selinux，也就是修改/etc/selinux/config文件，修改后的内容为：
+
+``` nginx
+vi /etc/selinux/config 
+
+修改：SELINUX=disabled
+```
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543387206447.png)
+
+重启系统：`reboot`
+
+查看SELinux 的状态：
+
+	[root@master ~]# sestatus
+	SELinux status:  disabled
+
+####  关闭每台机器的THP服务
+ 
+ 为了解决已启用“透明大页面”，它可能会导致重大的性能问题。
+
+
+``` groovy
+vi /etc/rc.local
+添加一下内容
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+```
+检查：有[never]则表示THP被禁用
+
+	[root@master ~]# cat /sys/kernel/mm/transparent_hugepage/enabled
+	always madvise [never]
+	
+
+#### 集群时间同步
+
+ 查看是否安装时间同步服务器`rpm -qa |grep ntpd` 》》没有安装则需要安装此服务 》》`yum install ntp`
+	 
+
+ 1. 在主节点
+
+``` vim
+		vi /etc/ntp.conf
+
+		1. 去掉这个注释，将地址改成网段地址
+		restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+		
+		注释掉这几个
+		#server 0.centos.pool.ntp.org iburst
+		#server 1.centos.pool.ntp.org iburst
+		#server 2.centos.pool.ntp.org iburst
+		#server 3.centos.pool.ntp.org iburst
+	
+		添加一下内容
+        server 0.asia.pool.ntp.org
+        server 3.asia.pool.ntp.org
+        restrict 0.asia.pool.ntp.org nomodify notrap noquery
+        restrict 3.asia.pool.ntp.org nomodify notrap noquery
+		server 127.127.1.0
+		fudge  127.127.1.0  stratum 10
+		
+		
+		
+		2.配置boot时间和系统时间同步
+		vi /etc/sysconfig/ntpd  加入下面一句话，用于
+		SYNC_HWCLOCK=yes
+		
+	
+	
+		3.启动ntpd服务器	
+
+        ntpdate -u 3.asia.pool.ntp.org
+		sudo service ntpd start
+		sudo service ntpd status
+		chkconfig ntpd on
+		chkconfig --list |grep ntpd
+```
+2. 客户机配置（从节点）
+
+``` lsl
+		vi /etc/ntp.conf
+		
+		1.去掉这个注释，将地址改成网段地址
+		restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+        
+        
+        注释掉这几个
+		# server 0.centos.pool.ntp.org iburst
+        # server 1.centos.pool.ntp.org iburst
+        # server 2.centos.pool.ntp.org iburst
+        # server 3.centos.pool.ntp.org iburst
+        
+        
+        
+        添加一下内容
+        server 192.168.1.46
+        restrict 192.168.1.46 nomodify notrap noquery
+        server  127.127.1.0     # local clock
+        fudge   127.127.1.0 stratum 10
+        
+	    2. 启动ntpd客服端	
+        ntpdate -u 192.168.1.46
+		sudo service ntpd start
+		sudo service ntpd status
+		chkconfig ntpd on
+		chkconfig --list |grep ntpd
+```
+
+#### 搭建Yum源服务器
+
+##### 安装yum源
+
+ 1. 选择master服务器作为http服务器：
+
+``` crmsh
+[root@master ~]# mkdir -p /var/www/html
+```
+使用安装系统的ISO镜像文件CentOS-7-x86_64-DVD-1804.iso把CentOS-7-x86_64-DVD-1804.iso镜像复制到http服务器(选择master机器）的默认目录/var/www/html下
+	
+
+``` crmsh
+	[root@master ~]# cd /var/www/html
+	[root@master html]# ls
+	CentOS-7-x86_64-DVD-1804.iso
+```
+在/var/www/html目录下创建文件夹CentOS
+
+``` crmsh
+[root@master html]# mkdir CentOS 
+```
+
+将ISO文件挂载至文件夹/var/www/html/CentOS下
+
+``` crmsh
+[root@master html]# cd  /var/www/html  
+[root@master html]# mount -o loop CentOS-7-x86_64-DVD-1804.iso CentOS 
+```
+(取消挂载 umount /var/www/html/CentOS)
+
+查看文件夹/var/www/html/CentOS
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543388518095.png)
+
+``` crmsh
+[root@master CentOS]# cd /etc/yum.repos.d/
+[root@master yum.repos.d]# mkdir -p /etc/yum.repos.d/bak
+[root@master yum.repos.d]# cp *.repo ./bak 
+```
+修改CentOS-Media.repo，删去原有内容并写入如下内容：
+
+``` crmsh
+[root@master yum.repos.d]# vi CentOS-Media.repo 
+```
+原有内容：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543388680886.png)
+
+修改后内容：
+
+``` ini
+[c7-media]
+name=CentOS-$releasever - Everything_ISO
+enabled=1
+baseurl=file:///var/www/html/CentOS
+gpgcheck=1
+gpgkey=file:///var/www/html/CentOS/RPM-GPG-KEY-CentOS-7
+```
+
+修改CentOS-Base.repo，在每一组中添加一行如下内容：enabled=0
+
+``` crmsh
+[root@master yum.repos.d]# vi CentOS-Base.repo
+```
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543388783761.png)
+
+运行如下命令：
+
+``` glsl
+#清除yum的缓存、头文件、已下载的软件包等等
+yum clean all
+
+
+#重建yum缓存
+yum makecache
+
+
+#查看已启用的镜像源
+ yum repolist all
+```
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543388900071.png)
+
+ISO镜像yum源搭建OK！！！
+
+##### 安装http服务器
+
+本文在集群机器中任选一台机器作为源服务器，以master机器为例检查系统是否已经安装http服务 
+
+``` crmsh
+[root@master ~]# which httpd
+/usr/sbin/httpd
+```
+若没有出现上述/usr/sbin/httpd目录信息，则说明没有安装；如果有，则跳过该步骤！
+
+``` nginx
+#如果没有安装则执行
+yum install httpd
+```
+
+http服务使用80端口，检查端口是否占用
+
+``` lsl
+netstat -nltp | grep 80
+```
+如果有占用情况，安装完毕后需要修改http服务的端口号
+
+``` vim
+vi /etc/httpd/conf/httpd.conf
+```
+
+ 修改监听端口，Listen 80为其他端口
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543389158112.png)
+
+启动httpd服务器：
+
+``` crmsh
+[root@master ~]# systemctl start httpd.service
+```
+打开浏览器，访问http://192.168.3.100:80 ，能正确打开网页，服务正常启动
+
+#### 制作离线源
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543389439503.png)
+
+将这四个Ambari及HDP相关安装包复制到http服务器(这里我们选择master机器）的/var/www/html目录下，解压Ambari及HDP相关rpm包，生成相应的目录：
+
+``` css
+[root@master html]# tar -xzvf ambari-2.6.2.0-centos7.tar.gz
+[root@master html]# tar -xzvf HDP-2.6.5.0-centos7-rpm.tar.gz
+[root@master html]# tar -xzvf HDP-GPL-2.6.5.0-centos7-gpl.tar.gz
+[root@master html]# tar -xzvf HDP-UTILS-1.1.0.22-centos7.tar.gz
+```
+
+
+
+WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
