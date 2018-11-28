@@ -5,12 +5,156 @@ grammar_cjkRuby: true
 ---
 
 
-## Centos7.0 安装
+## Centos7.0 安装详解
 
- -  [参考链接](https://www.osyunwei.com/archives/7829.html)
+ -  [参考链接](https://www.cnblogs.com/wcwen1990/p/7630545.html)
  -  [参考链接](https://blog.csdn.net/liuxiangke0210/article/details/80534614)
 
+本文基于vmware workstations进行CentOS7安装过程展示，关于vmware workstations安装配置本人这里不再介绍，基本过程相当于windows下安装个软件而已。
 
+ 1. 打开vmware workstations，文件->新建虚拟机，出现如下界面，选择“自定义（高级）”选项，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384179863.png)
+
+ 2. 此步骤默认，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384205707.png)
+
+ 3. 在出现下面界面，选中“稍后安装操作系统”选项，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384249008.png)
+
+ 4. 在出现如下界面，客户机操作系统选择“linux”，版本选择“CentOS 64位”，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384336509.png)
+
+ 5. 出现如下界面，输入自定义虚拟机名称，虚拟机名称最好能做到望文生义，这里是“CentOS7_CDH_bd06”，指定虚拟机位置，这里是“D:\Virtual Machines\CentOS7_CDH_bd06”，然后下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384396912.png)
+
+ 6. 出现下面界面，选择处理器数量和每个处理器核心数量，这里分别是2和4，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384431507.png)
+
+ 7. 出现如下界面，指定虚拟机占用内存大小，这里是2048M，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384461898.png)
+
+ 8. 出现如下界面，选择网络连接类型，这里选择“使用桥接网络”，各位安装虚拟机过程根据需要自行选择，安装向导中已经针对各种模式进行了比较规范的说明，这里补充说明如下：
+
+1）使用桥接网络：虚拟机ip与本机在同一网段，本机与虚拟机可以通过ip互通，本机联网状态下虚拟机即可联网，同时虚拟机与本网段内其他主机可以互通，这种模式常用于服务器环境架构中。
+
+2）使用网络地址转换（NAT）：虚拟机可以联网，与本机互通，与本机网段内其他主机不通。
+
+3）使用仅主机模式网络：虚拟机不能联网，与本机互通，与本机网段内其他主机不通。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384671383.png)
+
+ 9. 默认，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384703010.png)
+ 10. 默认、下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384728647.png)
+
+ 11. 默认，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384766205.png)
+
+ 12. 出现下面界面，输入虚拟机磁盘大小，默认20g一般不够使用，建议设置略大一些，这里设置虚拟机磁盘大小为80G，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384820915.png)
+
+ 13. 默认，下一步继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384840599.png)
+
+ 14. 默认、点击“完成”结束虚拟机创建：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543384865741.png)
+
+ 15. 退出安装向导后，我们可以在虚拟机管理界面左侧栏看到刚刚创建的虚拟机，右侧栏可以看到虚拟机详细配置信息。
+ 16. 上图界面中点击“编辑虚拟机设置”选项，出现如下界面：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385004649.png)
+
+ 17. 上图中需要指定“CD/DVD(IDE)”安装镜像，移除“USB控制器”、“声卡”和“打印机”，然后点击确定，按照上述设置后界面如下图所示：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385050686.png)
+
+ 18. 点击开启虚拟机进入CentOS7操作系统安装过程。
+ 19. 虚拟机控制台出现界面，选择Install CentOS liunx 7，点击回车键继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385110314.png)
+
+ 20. 根据提示点击回车键继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385145125.png)
+
+ 21. 如下界面默认选择English，点击Continue继续：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385185877.png)
+
+ 22. CentOS7安装配置主要界面如下图所示，根据界面展示，这里对以下3个部分配置进行说明：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385210362.png)
+
+Localization和software部分不需要进行任何设置，其中需要注意的是sofrware selection选项，这里本次采用默认值（即最小化安装，这种安装的linux系统不包含图形界面）安装，至于其他组件，待后期使用通过yum安装即可。（建议最小化安装里面的软件全选）
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385279057.png)
+
+如上图，system部分需要必须规划配置的是图中红色部分选项，即磁盘分区规划，另外可以在安装过程中修改network & host name选项中修改主机名（默认主机名为localhost.localdomain）。具体配置过程如下：
+
+点击“installation destination”，进入如下界面，选中80g硬盘，下来滚动条到最后，选中“i will configure partitioning”，即自定义磁盘分区，最后点击左上角done进行磁盘分区规划：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385299964.png)
+
+ 23. CentOS7划分磁盘即在下图界面进行，这里先说明一下前期规划：
+
+./boot：1024M，标准分区格式创建。
+swap：4096M，标准分区格式创建。
+/：剩余所有空间，采用lvm卷组格式创建。
+规划后界面如下，点击done完成分区规划，在弹出对话框中点击“accept changs”：
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385348782.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385379701.png)
+
+ 24. 完成磁盘规划后，点击下图红框部分，修改操作系统主机名，这里修改为db06（如第二图所示），然后点击done完成主机名配置，返回主配置界面：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385410539.png)
+
+ 25. 在下图中，其实从第24步配置开始我们就可以发现右下角“begin installtion”按钮已经从原本的灰色变成蓝色，这说明已经可以进行操作系统安装工作了，点击“begin installtion”进行操作系统安装过程。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385471834.png)
+
+ 26. 在下图用户设置中需要做的仅是修改root用户密码，点击“root password”，设置密码，如果密码安全度不高，比如我这里的密码为“root1234”，那么可能需要点击2次确定才可以。当root密码设置成功再次返回安装界面时我们可以发现之前user setting界面红色警告消失了，对比下面图1和图3：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385512426.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385529826.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385549130.png)
+
+ 27. 在下图，操作系统安装已经完成，点击reboot重启操作系统。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385568082.png)
+
+ 28. 使用root用户登录（即root），修改IP地址（vi /etc/sysconfig/network-scripts/ifcfg-ens32）：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385604584.png)
+
+按字符键“i”进入编辑模式，修改/etc/sysconfig/network-scripts/ifcfg-ens32文件内容如下：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385636061.png)
+
+按“esc”键后，输入:wq回车，完成配置文件编辑。
+
+输入：service network restart命令重启网卡，生效刚刚修改ip地址，`ping www.baidu.com` 测试网络连通性。
+
+![ ](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543385672431.png)
+ 
+ 
+好了，至此，CentOS7操作系统安装成功了。
 
 
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
