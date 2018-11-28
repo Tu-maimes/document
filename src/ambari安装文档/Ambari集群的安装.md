@@ -630,7 +630,7 @@ gpgcheck=1
 enabled=0
 gpgkey=http:///192.168.3.100/CentOS/RPM-GPG-KEY-CentOS-7
 ```
-
+将这几个文件拷贝到各个机器的对应目录下。
 
 
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
