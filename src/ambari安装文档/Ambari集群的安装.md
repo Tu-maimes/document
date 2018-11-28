@@ -756,6 +756,8 @@ mysql> flush privileges;
 
 [root@master .ssh]# yum repolist
 
+
+如果可以看到Ambari 的对应版本的安装包列表，说明公共库已配置成功。
 ```
 
 
