@@ -473,7 +473,26 @@ vi /etc/httpd/conf/httpd.conf
 [root@master html]# tar -xzvf HDP-GPL-2.6.5.0-centos7-gpl.tar.gz
 [root@master html]# tar -xzvf HDP-UTILS-1.1.0.22-centos7.tar.gz
 ```
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543389600749.png)
 
 
+目录说明：
+ambari目录：包含ambari-server，ambari-agent，ambari-log4j等rpm包
+HDP目录：包含hadoop的生态圈的组件，比如hdfs，hive，hbase，mahout等
+HDP-UTILS目录：包含HDP平台所包含的工具组件等，比如nagios，ganglia，puppet等
+
+##### 配置Ambari源
+
+复制ambari.repo文件到/etc/yum.repos.d（该步骤在master机器上执行）
+复制hdp.repo文件到/etc/yum.repos.d（该步骤在master机器上执行）
+复制hdp-gpl.gpl.repo文件到/etc/yum.repos.d（该步骤在master机器上执行）
+``` groovy
+cp /var/www/html/ambari/centos7/2.6.2.0-155/ambari.repo /etc/yum.repos.d/
+cp /var/www/html/HDP/centos7/2.6.5.0-292/hdp.repo
+/etc/yum.repos.d/
+cp /var/www/html/HDP-GPL/centos7/2.6.5.0-292/hdp-gpl.gpl.repo
+/etc/yum.repos.d/
+```
+编辑刚拷贝的文件文件：
 
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
