@@ -418,7 +418,7 @@ yum makecache
 
 
 #查看已启用的镜像源
- yum repolist all
+yum repolist all
 ```
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543388900071.png)
 
