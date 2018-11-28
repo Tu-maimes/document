@@ -730,6 +730,33 @@ mysql> flush privileges;
 
 修改root用户的密码为root
 
+### Ambari安装过程
+
+在各个节点上清空缓存文件  
+
+``` crmsh
+[root@master .ssh]#  yum clean all
+
+
+将master服务器上的软件包信息缓存到本地
+目的：提高搜索安装软件的速度
+
+[root@master .ssh]# yum makecache
+
+为了检验文件是否配置正确，可以使用 ：
+
+
+[root@master .ssh]# yum search ambari-agent
+[root@master .ssh]# yum search Oozie
+[root@master .ssh]# yum search ganglia
+
+
+如果配置有问题，就会出现找不到文件包的问题。
+察看仓库列表：
+
+[root@master .ssh]# yum repolist
+
+```
 
 
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
