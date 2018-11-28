@@ -785,8 +785,127 @@ mysql> flush privileges;
 ``` crmsh
 [root@master .ssh]# yum install ambari-server
 
-输入y之后：
+一直输入Y
+```
+待安装完成后，便需要对 Ambari Server 做一个简单的配置。执行下面的命令
+
+``` crmsh
+[root@master .ssh]# ambari-server  setup
+```
+如果还没有关闭SELinux，执行这个命令的过程中会提示，选择y，即可临时关闭。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543395099869.png)
+
+直接回车，并且默认指定 Ambari Server 的运行用户为 root
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543395132195.png)
+
+选择3，自定义已经安装JDK路径：
+
+在Path to JAVA_HOME: /usr/java/jdk1.8.0_152
+
+默认高级数据库配置，在这里输入y，选择数据库：
+
+输入 3 选择mysql。
+
+
+``` ldif
+Database name(ambari):
+Username (ambari): 
+Enter Database Password (bigdata): ambari
+Re-enter password: ambari
+```
+默认设置了 Ambari GUI 的登录用户为 admin/admin，并且指定 Ambari Server 的运行用户为 root。
+
+##### 创建数据库ambari
+
+创建MySQL ambari用户
+
+在使用mysql数据库时需要执行一下步骤:
+
+
+- WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
+
+``` shell
+[root@master ~]# ambari-server setup --jdbc-db=mysql --jdbc-driver=/usr/share/java/mysql-connector-java-5.1.45-bin.jar 
+
+
+#前面设置的root用户密码为root
+[root@master lib]# mysql -u root -p
+Enter password: 
+
+mysql> CREATE DATABASE ambari;
+mysql> CREATE USER 'ambari'@'localhost' IDENTIFIED BY 'ambari';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'localhost';
+
+
+mysql> CREATE USER 'ambari'@'%' IDENTIFIED BY 'ambari';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'%';
+
+mysql> CREATE USER 'ambari'@'master' IDENTIFIED BY 'ambari';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'ambari'@'master';
+mysql> FLUSH PRIVILEGES;
+mysql> use ambari;
+mysql> source /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql;
+
+mysql> show databases;
+mysql> show tables;
+mysql> quit;
+```
+注意：以上说明：创建用户：ambari，密码：ambari 
+
+- Before starting Ambari Server, you must copy the MySQL JDBC driver JAR file to /usr/share/java and set property "server.jdbc.driver.path=[path/to/custom_jdbc_driver]" in ambari.properties.
+Press <enter> to continue.
+把mysql的驱动路径添加到ambari.properties
+
+``` stylus
+vi /etc/ambari-server/conf/ambari.properties
+#添加一下内容
+server.jdbc.driver.path=/usr/share/java/mysql-connector-java-5.1.45-bin.jar
 ```
 
+#### 启动Ambari 界面
 
-WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
+简单的 setup 配置完成后。就可以启动 Ambari 了。运行下面的命令:
+
+``` crmsh
+[root@master resources]#  ambari-server  start
+```
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543396178090.png)
+
+
+``` crmsh
+[root@master resources]# netstat -tnlp|grep java
+```
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543396210288.png)
+
+如果8080端口监听了，表示启动正常。
+
+如果没有正常监听，就查看日志/var/log/ambari-server/ambari-server.log，察看是否有错误，根据提示解决即可。
+
+查看ambari-server状态
+
+``` crmsh
+[root@master resources]# ambari-server status
+```
+
+当成功启动 Ambari Server 之后，便可以从浏览器登录，默认的端口为 8080。
+
+以本文环境为例，在主机的浏览器的地址栏输入http://192.168.3.100:8080
+登录密码为 admin/admin
+
+在界面配置创库地址:
+在仓库baseurl中指定本地的HDP和HDP UTILS仓库的BaseURL
+
+操作系统选择: redhat7 
+baseurl:
+HDP-2.6:
+http://192.168.3.100/HDP/centos7/2.6.5.0-292/
+HDP-2.6-GPL
+http://192.168.3.100/HDP-GPL/centos7/2.6.5.0-292/
+
+HDP-UTILS-1.1.0.22:
+http://192.168.3.100/HDP-UTILS/centos7/1.1.0.22/
+
