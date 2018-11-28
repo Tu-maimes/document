@@ -760,5 +760,15 @@ mysql> flush privileges;
 如果可以看到Ambari 的对应版本的安装包列表，说明公共库已配置成功。
 ```
 
+##### Ambari Server安装
+
+安装之前先准备JDK1.8：
+
+``` crmsh
+[root@master ~]# mkdir -p /usr/java
+```
+把jdk-8u152-linux-x64.tar.gz复制到/usr/java目录下面，并解压：`[root@master java]# tar -zvxf jdk-8u152-linux-x64.tar.gz` 
+
+
 
 WARNING: Before starting Ambari Server, you must run the following DDL against the database to create the schema: /var/lib/ambari-server/resources/Ambari-DDL-MySQL-CREATE.sql
