@@ -11,7 +11,8 @@ renderNumberedHeading: true
 
  -  [参考链接](https://www.cnblogs.com/wcwen1990/p/7630545.html)
  -  [参考链接](https://blog.csdn.net/liuxiangke0210/article/details/80534614)
-
+ - [官方参考文档](https://docs.hortonworks.com/HDPDocuments/Ambari-2.6.2.2/bk_ambari-installation/content/ch_Getting_Ready.html) 
+ 
 本文基于vmware workstations进行CentOS7安装过程展示，关于vmware workstations安装配置本人这里不再介绍，基本过程相当于windows下安装个软件而已。
 
  1. 打开vmware workstations，文件->新建虚拟机，出现如下界面，选择“自定义（高级）”选项，下一步继续：
