@@ -69,3 +69,12 @@ Netty的多种内存管理策略，在启动辅助类中配置相关参数，可
  1. Reactor单线程模型
  2. Reactor多线程模型
  3. 主从Reactor多线程模型
+
+
+Reactor单线程模型,指的是所有的IO操作都在一个NIO线程上面完成,NIO线程的职责如下:
+
+- 作为NIO服务端,接受客服端的TCP连接
+- 作为NIO客服端,向服务端发起TCP连接
+- 读取通信对端发送消息或者应答消息
+
+![Reactor单线程模型](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543851236858.png)
