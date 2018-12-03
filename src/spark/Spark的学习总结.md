@@ -32,4 +32,5 @@ grammar_cjkRuby: true
 
 ![NIO的多路复用模型图](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543845950532.png)
 
+ 1. Netty架构按照Reactor模式设计和实现的架构图
 
