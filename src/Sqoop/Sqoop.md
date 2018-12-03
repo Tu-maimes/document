@@ -2,6 +2,9 @@
 title: Sqoop
 tags: 作者:汪帅
 grammar_cjkRuby: true
+
+grammar_mindmap: true
+renderNumberedHeading: true
 ---
 
 # Sqoop的运行流程
@@ -27,3 +30,6 @@ public void validateOptions(SqoopOptions options) ：提供您的选项所需的
  2. 支持用户定义的自定义选项
 
 Sqoop解析用户传递的参数并存储在SqoopOptions对象中。然后，此对象充当数据传输对象。在运行实际的MapReduce，MapReduce阶段甚至后处理阶段之前，此对象被传递到处理的各个阶段。
+
+
+
