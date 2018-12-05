@@ -1,5 +1,5 @@
 ---
-title: 自定义Sqoop的使用教程
+title: 自定义扩展Sqoop的使用教程
 tags: 作者:汪帅
 grammar_cjkRuby: true
 ---
