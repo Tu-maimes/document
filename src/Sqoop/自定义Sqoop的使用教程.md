@@ -10,6 +10,10 @@ grammar_cjkRuby: true
 Sqoop通过配置自动生成把关系型数据库导入Hadoop系统的类。该类包含导入Hadoop的每个字段。该类的实例保存表的一行数据。生成的类实现Hadoop中使用的序列化Api，即 **Writable** 和 **DBWritable** 接口。以及其他方法：
 - 一个解释分隔文本字段的parse()方法
 - 一个toString()方法，用于保留用户选择的分隔符
+
+保证在生成的类中完整的方法在抽象类中指定:`org.apache.sqoop.lib.SqoopRecord`
+
+SqoopRecord的实例可能依赖于Sqoop的公共API即：`org.apache.sqoop.lib.*`
 ## ToolPlugin插件的基类
 
 
