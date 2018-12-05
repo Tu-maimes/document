@@ -4,7 +4,33 @@ tags: 作者:汪帅
 grammar_cjkRuby: true
 ---
 
-## 注册用户的自定义插件
+## 开发API参考
+
+### 外部API
+Sqoop通过配置自动生成把关系型数据库导入Hadoop系统的类。该类包含导入Hadoop的每个字段。该类的实例保存表的一行数据。生成的类实现Hadoop中使用的序列化Api，即 **Writable** 和 **DBWritable** 接口。以及其他方法：
+- 一个解释分隔文本字段的parse()方法
+- 一个toString()方法，用于保留用户选择的分隔符
+## ToolPlugin插件的基类
+
+
+开发了Sqoop的扩展工具,你需要使用插件类包装并使用Sqoop注册该插件类。您的插件类应该从org.apache.sqoop.tool.ToolPlugin 和重写getTools()方法扩展 。
+示例如下：
+
+``` scala
+import org.apache.sqoop.tool.ToolDesc;
+import org.apache.sqoop.tool.ToolPlugin;
+import java.util.Collections;
+import java.util.List;
+public class ExtendHBasePlugin extends ToolPlugin {
+    @Override
+    public List<ToolDesc> getTools() {
+        return Collections
+                .singletonList(new ToolDesc("extendHbase", ExtendHBase.class, "HDFS上的数据导入到HBase"));
+    }
+}
+```
+
+### 注册用户的自定义插件
 
  1. 把自定义的jar文件拷贝到相关集群的./Sqoop/lib目录，并在sqoop-site.xml进行注册。
 
