@@ -78,7 +78,7 @@ public static final String HBASE_ROWKEY_SEPARATOR = "hbase-rowkey-separator";
                 out.setCustomToolOptions(optionsMap);
             }
         } catch (NumberFormatException nfe) {
-            throw new SqoopOptions.InvalidOptionsException("Error: expected numeric argument.\n" + "Try --help for usage.");
+            throw new SqoopOptions.InvalidOptionsException("Error: expected numeric argument.\n Try --help for usage.");
         }
     }
 ```
