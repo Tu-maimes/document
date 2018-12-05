@@ -50,4 +50,4 @@ sqoop extendHbase \
 |hdfs-line-separator|HDFS上的文件数据行的分隔符|
 |hbase-col|HBase的列名称与HDFS上的数据列一一对应,彼此之间采用逗号分隔|
 
-==注意：==在设置RowKey时多个字段必须在hbase-col设置中必须包含。
+==注意==：在设置RowKey时多个字段必须在hbase-col设置中必须包含。
