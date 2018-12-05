@@ -13,7 +13,79 @@ Sqoop通过配置自动生成把关系型数据库导入Hadoop系统的类。该
 
 保证在生成的类中完整的方法在抽象类中指定:`org.apache.sqoop.lib.SqoopRecord`
 
-SqoopRecord的实例可能依赖于Sqoop的公共API即：`org.apache.sqoop.lib.*`
+SqoopRecord的实例可能依赖于Sqoop的公共API即：`org.apache.sqoop.lib.*` 
+Sqoop的客户端不需要直接与这些类中的任何一个进行交互，尽管Sqoop生成的类将依赖于它们。
+RecordParser类将使用可控的分隔符和引号字符将一行文本解析为字段列表。
+静态FieldFormatter类提供了一种方法，用于处理将在SqoopRecord.toString()实现中使用的字段中的字符的引用和转义
+ResultSet和PreparedStatement对象以及SqoopRecords之间的数据编组是通过JdbcWritableBridge完成的。
+BigDecimalSerializer包含一对方法，这些方法有助于在Writable接口上序列化BigDecimal对象
+
+
+
+# 开发Sqoop插件
+
+Sqoop允许用户开发自己的插件。用户可以将他们的插件开发为单独的jar在$SQOOP_LIB中部署它们并使用Sqoop注册。Sqoop架构也是一个基于插件的架构，并且所有的内部工具（导入，导出，合并等）都是作为插件得到支持。用户可以开发自定义工具插件。一旦部署并注册到Sqoop，这些插件就可以像任何其他内部工具一样工作。运行sqoop help命令时，它们也会在工具中列出。
+
+## BaseSqoopTool - 用户定义工具的基类
+
+### 继承与重写
+
+BaseSqoopTool是所有Sqoop工具的基类。如果要开发自定义工具，则需要从BaseSqoopTool继承工具并重写以下方法：
+
+- `public int run(SqoopOptions options)` ：这是该工具的主要方法，并充当自定义工具的执行入口点。
+- `public void configureOptions(ToolOptions toolOptions)`：配置我们希望接收的命令行参数。您还可以指定所有命令行参数的描述。当用户执行时 sqoop help <your tool>，将以该方法提供的信息输出给用户。
+- `public void applyOptions(CommandLine in, SqoopOptions out)` ：解析所有选项并填充SqoopOptions，它在完成执行期间充当数据传输对象。
+- `public void validateOptions(SqoopOptions options)` ：提供您的选项所需的任何验证。
+
+### 支持用户定义自定义选项
+
+Sqoop解析用户传递的参数并存储在SqoopOptions对象中。然后，此对象充当数据传输对象。在运行实际的MapReduce，MapReduce阶段甚至后处理阶段之前，此对象被传递到处理的各个阶段。用户自定义了新的工具就会产生一些新的选项，这些选项不会映射到SqoopOptions类的任何现有成员。用户可以向SqoopOption类添加新成员，这意味着用户必须在sqoop中进行更改并对其进行编译，这对所有用户来说都是不可能的。其他选择是使用extraArgs会员。这是一个字符串数组，其中包含可以直接传递给第三方工具（如mysqldump等）的第三方工具选项。此数组字符串每次都需要解析才能理解参数。支持用户定义工具的自定义选项的最优雅方式是 customToolOptionsmap。这是SqoopOption类的映射成员。开发人员可以解析用户定义的参数，并使用适当的键/值对填充此映射。当SqoopOption对象被传递到处理的各个阶段时，这些值将随时可用，并且每次访问都不需要解析。
+示例如下：
+- `--hbase-col`
+- `--hdfs-line-separator`
+- `--hbase-rowkey-separator`
+SqoopOption对象中没有这些选项可用。Tool Developer可以覆盖该applyOptions方法，在此方法中，可以在customToolOptions映射中解析和填充用户选项。完成后，SqoopOption对象可以在整个程序中传递，这些值将可供用户使用。
+
+
+``` processing
+public static final String HBASE_COL = "hbase-col";
+public static final String HDFS_LINE_SEPARATOR = "hdfs-line-separator";
+public static final String HBASE_ROWKEY_SEPARATOR = "hbase-rowkey-separator";
+```
+
+下面是解析上述选项并填充customToolOptions映射的示例applyOptions示例：
+
+ 
+
+``` d
+	@Override
+    public void applyOptions(CommandLine in, SqoopOptions out) throws 	SqoopOptions.InvalidOptionsException {
+        try {
+            Map<String, String> optionsMap = new HashMap<String, String>();
+            super.applyOptions(in, out);
+            applyHBaseOptions(in, out);
+            if (in.hasOption(EXPORT_PATH_ARG)) {
+                out.setExportDir(in.getOptionValue(EXPORT_PATH_ARG));
+            }
+            if (in.hasOption(HDFS_LINE_SEPARATOR)) {
+                optionsMap.put(HDFS_LINE_SEPARATOR, in.getOptionValue(HDFS_LINE_SEPARATOR));
+            }
+            if (in.hasOption(HBASE_COL)) {
+                optionsMap.put(HBASE_COL, in.getOptionValue(HBASE_COL));
+            }
+            if (in.hasOption(HBASE_ROWKEY_SEPARATOR)) {
+                optionsMap.put(HBASE_ROWKEY_SEPARATOR, in.getOptionValue(HBASE_ROWKEY_SEPARATOR));
+            }
+            if (out.getCustomToolOptions() == null) {
+                out.setCustomToolOptions(optionsMap);
+            }
+        } catch (NumberFormatException nfe) {
+            throw new SqoopOptions.InvalidOptionsException("Error: expected numeric argument.\n" + "Try --help for usage.");
+        }
+    }
+```
+
+
 ## ToolPlugin插件的基类
 
 
