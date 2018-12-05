@@ -55,8 +55,6 @@ public static final String HBASE_ROWKEY_SEPARATOR = "hbase-rowkey-separator";
 
 下面是解析上述选项并填充customToolOptions映射的示例applyOptions示例：
 
- 
-
 ``` d
 	@Override
     public void applyOptions(CommandLine in, SqoopOptions out) throws 	SqoopOptions.InvalidOptionsException {
@@ -84,7 +82,38 @@ public static final String HBASE_ROWKEY_SEPARATOR = "hbase-rowkey-separator";
         }
     }
 ```
+配置我们希望接收的命令行参数。您还可以指定所有命令行参数的描述。
 
+``` x86asm
+	@Override
+    public void configureOptions(ToolOptions toolOptions) {
+        super.configureOptions(toolOptions);
+        toolOptions.addUniqueOptions(getHBaseOptions());
+        RelatedOptions formatOpts = new RelatedOptions(
+                "设置相关mapreduce的参数");
+        formatOpts.addOption(OptionBuilder.withArgName("dir")
+                .hasArg()
+                .withDescription("要导出数据的hdfs地址")
+                .withLongOpt(EXPORT_PATH_ARG)
+                .create());
+        formatOpts.addOption(OptionBuilder.withArgName("char")
+                .hasArg()
+                .withDescription("hdfs数据的行分隔符")
+                .withLongOpt(HDFS_LINE_SEPARATOR)
+                .create());
+        formatOpts.addOption(OptionBuilder.withArgName("char")
+                .hasArg()
+                .withDescription("hbase的列簇")
+                .withLongOpt(HBASE_COL)
+                .create());
+        formatOpts.addOption(OptionBuilder.withArgName("char")
+                .hasArg()
+                .withDescription("hbase的复合rowkey的字段分隔符")
+                .withLongOpt(HBASE_ROWKEY_SEPARATOR)
+                .create());
+        toolOptions.addUniqueOptions(formatOpts);
+    }
+```
 
 ## ToolPlugin插件的基类
 
