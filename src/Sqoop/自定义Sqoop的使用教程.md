@@ -2,7 +2,11 @@
 title: 自定义扩展Sqoop的使用教程
 tags: 作者:汪帅
 grammar_cjkRuby: true
+grammar_mindmap: true
+renderNumberedHeading: true
 ---
+
+[toc!?direction=lr]
 
 # 开发API参考
 
