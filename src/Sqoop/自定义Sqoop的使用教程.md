@@ -4,9 +4,9 @@ tags: 作者:汪帅
 grammar_cjkRuby: true
 ---
 
-## 开发API参考
+# 开发API参考
 
-### 外部API
+## 外部API
 Sqoop通过配置自动生成把关系型数据库导入Hadoop系统的类。该类包含导入Hadoop的每个字段。该类的实例保存表的一行数据。生成的类实现Hadoop中使用的序列化Api，即 **Writable** 和 **DBWritable** 接口。以及其他方法：
 - 一个解释分隔文本字段的parse()方法
 - 一个toString()方法，用于保留用户选择的分隔符
@@ -34,7 +34,6 @@ BigDecimalSerializer包含一对方法，这些方法有助于在Writable接口�
 ```
 
 ![添加成功界面](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544078894416.png)
-
 
 
 3. 依赖的pom文件
