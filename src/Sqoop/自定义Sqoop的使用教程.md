@@ -33,7 +33,7 @@ BigDecimalSerializer包含一对方法，这些方法有助于在Writable接口�
  mvn install:install-file -DgroupId=com.yss.sqoop -DartifactId=sqoop -Dversion=1.4.6 -Dpackaging=jar -Dfile=D:\Develop\repository\sqoop\sqoop-1.4.6.2.6.5.0-292.jar
 ```
 
-![eescription here](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544078894416.png)
+![添加成功界面](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544078894416.png)
 
 
 
