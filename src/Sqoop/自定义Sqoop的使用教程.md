@@ -21,6 +21,31 @@ ResultSet和PreparedStatement对象以及SqoopRecords之间的数据编组是通
 BigDecimalSerializer包含一对方法，这些方法有助于在Writable接口上序列化BigDecimal对象
 
 
+## 开发环境的准备
+
+官方的源码可以进行阅读查看在对其编译比较麻烦，采用的是把集群上的sqoop-1.4.6.2.6.5.0-292.jar来作为依赖开发。
+
+ 1. 先把jar文件添加的本地的maven库中。
+
+ 2. 在本机的命令行环境运行
+
+``` x86asm
+ mvn install:install-file -DgroupId=com.yss.sqoop -DartifactId=sqoop -Dversion=1.4.6 -Dpackaging=jar -Dfile=D:\Develop\repository\sqoop\sqoop-1.4.6.2.6.5.0-292.jar
+```
+
+![eescription here](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544078894416.png)
+
+
+
+3. 依赖的pom文件
+
+``` xml
+ 		 <dependency>
+            <groupId>com.yss.sqoop</groupId>
+            <artifactId>sqoop</artifactId>
+            <version>1.4.6</version>
+        </dependency>
+```
 
 # 开发Sqoop插件
 
@@ -114,6 +139,13 @@ public static final String HBASE_ROWKEY_SEPARATOR = "hbase-rowkey-separator";
         toolOptions.addUniqueOptions(formatOpts);
     }
 ```
+
+
+
+
+
+
+
 
 ## ToolPlugin插件的基类
 
