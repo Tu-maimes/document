@@ -183,7 +183,7 @@ public class ExtendHBasePlugin extends ToolPlugin {
 ```
 注册结束后再命令行输入：sqoop help 显示自定义的命令即注册成功。
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543979172525.png)
+![添加成功界面](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1543979172525.png)
 
 ## Sqoop脚本示例
 
