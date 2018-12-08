@@ -252,3 +252,28 @@ Spark将内存分为四个部分：
  2. 堆外的存储内存
  3. 堆上的执行内存
  4. 堆外的执行内存
+
+## Spark核心功能
+
+### 基础设施
+
+在Spark中有很多基础设施，被Spark中的各种组件广泛使用。包括Spark配置（SparkConf）、Spark内置的RPC框架、事件总线、度量系统。
+
+ 1. SparkConf用于管理Spark应用程序的各种配置信息.
+ 2. Spark内置的RPC框架使用Netty实现,有同步和异步的多种实现,Spark各个组件间的通信依赖于此RPC框架.
+ 3. 如果说RPC框架是跨机器节点不同组件间的通信设施,那么事件总线就是SparkContext内部各个组件间使用事件-------监听器模式异步调用的实现.
+ 4. 度量系统由Spark中的多种度量源(Source)和多种度量输出(Sink)构成,完成对Spark集群中各个组件运行期状态的监控.
+
+### SparkContext
+Spark应用程序的提交与执行都离不开SparkContext的支持.在正式提交应用程序之前,首先需要初始化SparkContext.SparkContxt隐藏了网络通信、分布式部署、消息通信、存储体系、计算引擎、度量系统、文件服务、WebU等内容。
+
+### SparkEnv
+
+Spark执行环境SparkEnv是Spark中的Task运行所必须的组件。SparkEnv内部封装了RPC环境（RPCEnv）、序列化管理器、广播管理器（BroadcastManager）、map任务输出跟踪器（MapOutputTracker）、存储体系、度量系统（MetricsSystem）、输出提交协调器（OutputCommitCoordinator）等Task运行所需的各种组件。
+
+### 存储体系
+Spark优先考虑使用各节点的内存作为存储，当内存不足时会考虑使用磁盘，这极大地减少了磁盘IO，提升任务的执行效率。Spark的内存存储空间与执行存储空间被定义为软边界，二者可以相互调用资源，提高了资源的利用效率，又提高了Task的执行效率。Spark可以直接操作操作系统的内存，直接操作系统内存，空间的分配和释放也更迅速。
+
+### 调度系统
+
+调度系统主要由DAGScheduler和TaskScheduler组成，它们都内置在SparkContext中。DAGScheduler负责创建Job、将DAG中的RDD划分到不同的Stage、给Stage创建对应的Task、批量提交Task等功能。TaskSchdule负责按照FIFO或者FAIR等调度算法对Task进行调度;为Task分配资源;将Task发送到集群管理器的当前
