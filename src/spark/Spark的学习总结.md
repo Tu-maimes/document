@@ -4,6 +4,7 @@ tags: 作者:汪帅
 grammar_cjkRuby: true
 grammar_mindmap: true
 renderNumberedHeading: true
+
 ---
 
 [toc!?direction=lr]
@@ -284,3 +285,36 @@ Spark优先考虑使用各节点的内存作为存储，当内存不足时会考
 
 ## Spark扩展功能
 
+### SparkSQL
+
+Spark Sql的过程可以总结为:首先使用Sql语句解析器(SqlParser)将Sql转换为语法树(Tree),并且使用规则执行器(RuleExecutor)将一系列规则(Rule)应用到语法树,最终生成物理执行计划并执行。其中包括语法分析器（Analyzer）和优化器（Optimizer）。Hive的执行过程与SQL类似。
+
+### Spark Streaming
+
+SparkStreaming与Apache Stom类似。Dstream是Spark Streaming中国所有数据流的抽象，Dstream可以被组织为DStream Graph。Dstream本质上由一系列连续的RDD组成。
+
+### GraphX
+
+Spark提供的分布式图计算框架。GraphX主要遵循整体同步并行计算模式。GraphX目前一封装了最短路径、网页排名、连接组件、三角关系等算法实现。
+
+### MLlib
+
+Spark提供机器学习框架。
+
+## Spark模型设计
+
+### Spark编程模型
+
+Spark应用程序从编程到提交、执行、输出的整个过程。
+
+![代码执行过程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544275483636.png)
+
+
+```mermaid!
+sequenceDiagram
+A->> B: Query
+B->> C: Forward query
+Note right of C: Thinking...
+C->> B: Response
+B->> A: Forward response
+```
