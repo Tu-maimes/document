@@ -191,7 +191,7 @@ public class ExtendHBasePlugin extends ToolPlugin {
 ## Sqoop脚本示例
 
 
-``` haml
+``` shell
 sqoop extendHbase \
     --hbase-table mytable \
     --column-family i \
