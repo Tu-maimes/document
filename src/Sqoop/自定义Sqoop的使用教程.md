@@ -33,7 +33,7 @@ BigDecimalSerializer包含一对方法，这些方法有助于在Writable接口�
 
  2. 在本机的命令行环境运行
 
-``` x86asm
+``` shell
  mvn install:install-file -DgroupId=com.yss.sqoop -DartifactId=sqoop -Dversion=1.4.6 -Dpackaging=jar -Dfile=D:\Develop\repository\sqoop\sqoop-1.4.6.2.6.5.0-292.jar
 ```
 
@@ -75,7 +75,7 @@ Sqoop解析用户传递的参数并存储在SqoopOptions对象中。然后，此
 SqoopOption对象中没有这些选项可用。Tool Developer可以覆盖该applyOptions方法，在此方法中，可以在customToolOptions映射中解析和填充用户选项。完成后，SqoopOption对象可以在整个程序中传递，这些值将可供用户使用。
 
 
-``` processing
+``` java
 public static final String HBASE_COL = "hbase-col";
 public static final String HDFS_LINE_SEPARATOR = "hdfs-line-separator";
 public static final String HBASE_ROWKEY_SEPARATOR = "hbase-rowkey-separator";
@@ -83,7 +83,7 @@ public static final String HBASE_ROWKEY_SEPARATOR = "hbase-rowkey-separator";
 
 下面是解析上述选项并填充customToolOptions映射的示例applyOptions示例：
 
-``` d
+``` java
 	@Override
     public void applyOptions(CommandLine in, SqoopOptions out) throws 	SqoopOptions.InvalidOptionsException {
         try {
@@ -112,7 +112,7 @@ public static final String HBASE_ROWKEY_SEPARATOR = "hbase-rowkey-separator";
 ```
 配置我们希望接收的命令行参数。您还可以指定所有命令行参数的描述。
 
-``` x86asm
+``` java
 	@Override
     public void configureOptions(ToolOptions toolOptions) {
         super.configureOptions(toolOptions);
@@ -174,7 +174,7 @@ public class ExtendHBasePlugin extends ToolPlugin {
 
  1. 把自定义的jar文件拷贝到相关集群的./Sqoop/lib目录，并在sqoop-site.xml进行注册。
 
-``` applescript
+``` xml
 <property>
     <name>sqoop.tool.plugins</name>
     <value>org.apache.sqoop.extend.ExtendHBasePlugin</value>
