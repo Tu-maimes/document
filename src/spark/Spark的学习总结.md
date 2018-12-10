@@ -330,3 +330,46 @@ Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGSchedu
 ### Spark基本架构
 
 
+从部署的角度来看，Spark集群由集群管理器（Cluster Manager）、工作节点（Worker）、执行器（Executor）、驱动器（Driver）、应用程序（Application）等部分组成。
+
+![Spark 基本架构图](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544408271684.png)
+
+
+
+#### Cluster Manager
+
+Spark的集群管理器，主要负责对整个集群的资源分配与管理。Cluster Manager在YARN部署模式下为ResourceManager。ClusterManager分配的资源属于一级分配，将各个worker上的内存、CPU等资源分配给Application，并不负责对executor的资源分配。在Standalone部署模式下的Master会直接给Application分配内存、CPU及Executor等资源。
+
+#### Worker
+
+Spark的工作节点。在YARN部署模式下实际由NodeManager替代。Worker节点主要负责以下工作：
+- 将自己的内存、CPU等资源通过注册机制告知Cluster Manager;
+- 创建Executor;
+- 分配资源和任务给Executor;
+- 同步资源信息、Executor状态信息给Cluster manager等.
+
+#### Executor
+
+执行计算任务的一线组件.主要负责任务的执行及与Worker、Driver的信息同步.
+
+#### Driver
+
+Application的驱动程序,Application通过Driver与Cluster Manager、Executor进行通信.Driver可以再Application中,也可以由Application提交Cluster Manager由Cluster Manager安排Worker运行.
+
+#### Application
+
+用户使用Spark提供的API编写的应用程序,Application通过SparkApi进行RDD的转换和DAG的构建,并通过Driver将Application注册到Cluster Manager.Cluster manager将会根据Applicatin的资源需求,通过一级分配将Executor、内存、CPU等资源分配给Application。Driver通过二级分配将Executor等资源分配给每一个任务，Application最后通过Driver高速Executor运行任务。
+
+
+## Spark的基础设施
+
+### Soark的配置
+
+Spark的配置通过以下三种方式获取：
+
+ 1. 来源于系统参数（即使用System.getProperties获取的属性）中以spark.作前缀的部分属性;
+ 2. 使用SparkConf的Api进行设置;
+ 3. 从其他SparkConf中克隆
+
+
+
