@@ -363,7 +363,7 @@ Application的驱动程序,Application通过Driver与Cluster Manager、Executor�
 
 ## Spark的基础设施
 
-### Soark的配置
+### Spark的配置
 
 Spark的配置通过以下三种方式获取：
 
@@ -375,3 +375,104 @@ Spark的配置通过以下三种方式获取：
 
 
 ![Spark内置RPC框架的基本框架](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544410602435.png)
+
+
+#### RPC配置TransportConf
+
+Spark通常使用SparkTransportConf创建TransportConf
+
+``` scala
+object SparkTransportConf {
+  /**
+   * Specifies an upper bound on the number of Netty threads that Spark requires by default.
+   * In practice, only 2-4 cores should be required to transfer roughly 10 Gb/s, and each core
+   * that we use will have an initial overhead of roughly 32 MB of off-heap memory, which comes
+   * at a premium.
+   *
+   * Thus, this value should still retain maximum throughput and reduce wasted off-heap memory
+   * allocation. It can be overridden by setting the number of serverThreads and clientThreads
+   * manually in Spark's configuration.
+   */
+  private val MAX_DEFAULT_NETTY_THREADS = 8
+
+  /**
+   * Utility for creating a [[TransportConf]] from a [[SparkConf]].
+   * @param _conf the [[SparkConf]]
+   * @param module the module name
+   * @param numUsableCores if nonzero, this will restrict the server and client threads to only
+   *                       use the given number of cores, rather than all of the machine's cores.
+   *                       This restriction will only occur if these properties are not already set.
+   */
+  def fromSparkConf(_conf: SparkConf, module: String, numUsableCores: Int = 0): TransportConf = {
+    val conf = _conf.clone
+
+    // Specify thread configuration based on our JVM's allocation of cores (rather than necessarily
+    // assuming we have all the machine's cores).
+    // NB: Only set if serverThreads/clientThreads not already set.
+    val numThreads = defaultNumThreads(numUsableCores)
+    conf.setIfMissing(s"spark.$module.io.serverThreads", numThreads.toString)
+    conf.setIfMissing(s"spark.$module.io.clientThreads", numThreads.toString)
+
+    new TransportConf(module, new ConfigProvider {
+      override def get(name: String): String = conf.get(name)
+      override def get(name: String, defaultValue: String): String = conf.get(name, defaultValue)
+      override def getAll(): java.lang.Iterable[java.util.Map.Entry[String, String]] = {
+        conf.getAll.toMap.asJava.entrySet()
+      }
+    })
+  }
+
+  /**
+   * Returns the default number of threads for both the Netty client and server thread pools.
+   * If numUsableCores is 0, we will use Runtime get an approximate number of available cores.
+   */
+  private def defaultNumThreads(numUsableCores: Int): Int = {
+    val availableCores =
+      if (numUsableCores > 0) numUsableCores else Runtime.getRuntime.availableProcessors()
+    math.min(availableCores, MAX_DEFAULT_NETTY_THREADS)
+  }
+}
+```
+
+#### RPC客服端工厂TransportClientFactory
+
+
+TransportClientFactory构造器的实现
+
+``` java
+ public TransportClientFactory(
+      TransportContext context,
+      List<TransportClientBootstrap> clientBootstraps) {
+    this.context = Preconditions.checkNotNull(context);
+    this.conf = context.getConf();
+    this.clientBootstraps = Lists.newArrayList(Preconditions.checkNotNull(clientBootstraps));
+    this.connectionPool = new ConcurrentHashMap<>();
+    this.numConnectionsPerPeer = conf.numConnectionsPerPeer();
+    this.rand = new Random();
+
+    IOMode ioMode = IOMode.valueOf(conf.ioMode());
+    this.socketChannelClass = NettyUtils.getClientChannelClass(ioMode);
+    this.workerGroup = NettyUtils.createEventLoop(
+        ioMode,
+        conf.clientThreads(),
+        conf.getModuleName() + "-client");
+    this.pooledAllocator = NettyUtils.createPooledByteBufAllocator(
+      conf.preferDirectBufs(), false /* allowCache */, conf.clientThreads());
+    this.metrics = new NettyMemoryMetrics(
+      this.pooledAllocator, conf.getModuleName() + "-client", conf);
+  }
+```
+TransportClientFactory构造器中的各参数如下:
+
+ - context: 参数传递TransportContext的引用.
+ - conf:指TransportConf,这里通过调用TransportContext的getConf获取
+ - clientBootstraps: 参数传递的TransportClientBootstrap列表
+ - connectionPool:针对每个Socket地址的连接池ClientPool的缓存.
+
+![ConnectionPool的数据结构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544412797134.png)
+
+- numConnectionPerPeer:从TransportConf获取的key为"saprk.+模块名+.io.num-ConnectionPerPeer"的属性值.此属性值用于指定对等节点间的连接数.这里的模块名实际为TransportConf的module字段.
+- rand:对Socket地址对应的连接池ClientPool中缓存的TransportClient进行随机选择,对每个连接座负载均衡.
+- ioMode: IO模式
+- socketChannelClass:客服端Channel被创建时使用的类,通过ioMode来匹配,默认为NioSocketChannel,Spark还支持EpollEventLoopGroup
+- workerGroup:根据Netty的规范,客服端只有worker组,所以此处创建Worker-Group 。workerGroup的实际类型是NioEventLoopGroup.
