@@ -309,11 +309,24 @@ Spark应用程序从编程到提交、执行、输出的整个过程。
 ![代码执行过程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544275483636.png)
 
 
+![程序执行的流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544406085854.png)
 
 
+### Rdd计算模型
 
-```sequence
-    小明->小李: 你好 小李, 最近怎么样?
-    Note right of 小李: 小李想了想
-    小李-->小明: 还是老样子
-``` 
+Rdd是对各种数据计算模型的统一抽象。Spark的计算过程主要是Rdd的迭代计算过程。
+
+#### Rdd的分区计算模型
+
+Rdd的迭代计算过程类似管道，分区数量取决于Partition数量的设定，每个分区的数据只会在一个Task中计算。所有的分区可以再多个机器节点的Executor上并行执行.
+
+#### Rdd的血缘关系与Stage划分计算模型
+
+Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGScheduler调度后的模型图。
+
+![DAGScheduler由Rdd构成的DAG进行调度](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544406837397.png)
+
+
+### Spark基本架构
+
+
