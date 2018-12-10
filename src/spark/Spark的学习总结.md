@@ -312,19 +312,76 @@ Spark应用程序从编程到提交、执行、输出的整个过程。
 ![程序执行的流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544406085854.png)
 
 
-### Rdd计算模型
+### RDD详解
 
-Rdd是对各种数据计算模型的统一抽象。Spark的计算过程主要是Rdd的迭代计算过程。
+#### RDD的定义及五大特性的剖析
 
-#### Rdd的分区计算模型
+RDD 是分布式内存的一个抽象概念，是一种高度受限的共享内存模型，即 RDD 是只读的记录分区的集合，能横跨集群所有节点并行计算，是一种基于工作集的应用抽象。
+RDD 底层存储原理：其数据分布存储于多台机器上，事实上，每个 RDD 的数据都以 Block的形式存储于多台机器上，每个 Executor 会启动一个 BlockManagerSlave ， 并管理一部分Block；而Block 的元数据由 Driver 节点上的 BlockManagerMaster 保存， BlockManagerSlave生成 Block 后向 BlockManagerMaster 注册该 Block, BlockManagerMaster 管理 RDD 与 Block的关系，当即RDD 不再需要存储的时候，将向 BlockManagerSlave 发送指令删除相应的 Block。BlockManager 管理 RDD 的物理分区，每个 Block 就是节点上对应的一个数据块，可以存储在内存或者磁盘上。而 RDD 中的 Pattition 是一个逻辑数据块，对应相应的物理块 Block。
+本质上， 一个朋RDD在代码中相当于数据的一个元数据结构，存储着数据分区及其逻辑结构
+映射关系，存储着 RDD 之前的依赖转换关系。
 
-Rdd的迭代计算过程类似管道，分区数量取决于Partition数量的设定，每个分区的数据只会在一个Task中计算。所有的分区可以再多个机器节点的Executor上并行执行.
+> 数据本地性判断:BlockManagerMaster 会持有整个 Application 的 Block 的位置、Block 所占用的存储空间等元数据信息，在 Spark 的 Driver 的DAGScheduler 中，就是通过这些信息来确认数据运行的本地性的。
 
-#### Rdd的血缘关系与Stage划分计算模型
+
+RDD作为泛型的抽象的数据结构，支持两种计算操作算子：Transformation（变换）与Action（行动）。且RDD的写操作是粗粒度的，读操作既可以是粗粒度的，也可以是细粒度的。
+
+##### 分区列表
+
+没一个分区都会被一个计算任务(Task)处理,分区数决定并行计算数量。
+
+##### 每一个分区都有一个计算函数
+
+Spark的Rdd计算函数是以分片为基本单位的，每个Rdd都会实现compute函数。
+
+##### 依赖其他RDD
+
+RDD之间的依赖有两种：窄依赖(NarrowDependency）、宽依赖（WideDependency）。RDD是Spark的核心数据结构，通过RDD的依赖关系形成调度关系。通过对RDD的操作形成整个Spark程序。
+
+##### key-value数据类型的RDD 分区器
+key-value数据类型的RDD分区器控制分区策略和分区数。每个key-value形式的RDD都有Partitioner属性，它决定了RDD如何分区。当然，Partition的个数还决定每个Stage的Task个数。RDD的分片函数，想控制RDD的分片函数的时候可以分区（Partitioner）传入相关的参数。
+
+##### 每个分区都有一个优先位置列表
+它会存储每个Partition的优先位置，对于一个HDFS文件来说，就是每个Partition块的位置。观察运行spark集群的控制台会发现Spark的具体计算，具体分片前，它已经清楚地知道任务发生在什么节点上，也就是说，任务本身是计算层面的、代码层面的，代码发生运算之前已经知道它要运算的数据在什么地方，有具体节点的信息。这就符合大数据中数据不动代码动的特点。
+
+
+#### 为什么需要RDD
+
+从数据处理模型、依赖划分原则、数据处理效率及容错4个方面解释Spark为什么需要RDD。
+##### 数据处理模型
+RDD是一个容错的、并行的数据结构，可以将控制数据存储到磁盘或内存，能够获取数据的分区。为了统一数据处理的方式抽象出了RDD这一模型。
+
+##### 依赖划分原则
+
+RDD包含一个或者多个分区，每个分区实际是一个数据集合的片段。在构建DAG的过程中，会将RDD用依赖关系串联起来。每个RDD都有其依赖，这些依赖分为窄依赖与宽依赖两种。从功能角度讲，窄依赖会划分懂啊同一个Stage中，这样就能以管道的方式迭代执行，宽依赖依赖的分区Task不止一个，所以往往需要跨节点传输数据。从容灾的角度讲，恢复计算结果的方式不同。窄依赖只需要重新执行父RDD的丢失分区的计算即可恢复，而宽依赖则需要考虑恢复所有父RDD的丢失分区。
+
 
 Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGScheduler调度后的模型图。
 
 ![DAGScheduler由Rdd构成的DAG进行调度](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544406837397.png)
+
+解释了依赖划分的原因，实际也解释了为什么要划分Stage这个问题。
+
+##### 数据处理效率
+
+RDD的计算过程允许多节点并发执行。能充分的利用硬件的资源提高允许效率。
+
+##### 容错处理
+
+RDD本身是一个不可变的数据集，当某个节点行的Task失败时，可以利用DAG重新调度计算这些失败的Task。在流式计算场景中，Spark需要记录日志和CheckPoint，以便利用CheckPoint和日志对数据恢复。
+
+#### 持久化RDD
+
+Spark对于持久化RDD提供了三个选项：
+
+- 序列化成Java对象存储在内存中
+- 作为序列化数据存储在内存中
+- 存储在磁盘上
+
+第一个选项性能最快，因为JVM能在本机访问每个RDD元素。
+第二个选项让用户在内存空间有限时，选择比Java对象更加有效的存储方式。
+第三个选项对于那些太大而无法存入内存的RDDs是有用的，但是每次使用都需要重新计算，这很耗时。
+
 
 
 ### Spark基本架构
@@ -476,3 +533,5 @@ TransportClientFactory构造器中的各参数如下:
 - ioMode: IO模式
 - socketChannelClass:客服端Channel被创建时使用的类,通过ioMode来匹配,默认为NioSocketChannel,Spark还支持EpollEventLoopGroup
 - workerGroup:根据Netty的规范,客服端只有worker组,所以此处创建Worker-Group 。workerGroup的实际类型是NioEventLoopGroup.
+- pooledAllocator：汇集ByteBuf但对线程缓存禁用的分配器。
+
