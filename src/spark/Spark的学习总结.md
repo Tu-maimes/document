@@ -4,7 +4,6 @@ tags: 作者:汪帅
 grammar_cjkRuby: true
 grammar_mindmap: true
 renderNumberedHeading: true
-
 ---
 
 [toc!?direction=lr]
@@ -309,3 +308,12 @@ Spark应用程序从编程到提交、执行、输出的整个过程。
 
 ![代码执行过程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544275483636.png)
 
+
+
+
+
+```sequence
+    小明->小李: 你好 小李, 最近怎么样?
+    Note right of 小李: 小李想了想
+    小李-->小明: 还是老样子
+``` 
