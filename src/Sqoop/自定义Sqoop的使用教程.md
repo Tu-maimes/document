@@ -44,7 +44,7 @@ BigDecimalSerializer包含一对方法，这些方法有助于在Writable接口�
 
 ``` xml
  		 <dependency>
-            <groupId>com.yss.sqoop</groupId>
+            <groupId>com.ambari.sqoop</groupId>
             <artifactId>sqoop</artifactId>
             <version>1.4.6</version>
         </dependency>
