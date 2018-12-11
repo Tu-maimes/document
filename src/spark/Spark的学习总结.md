@@ -446,6 +446,47 @@ Spark中的Job本身内部是由具体的Task构成的，基于Spark程序内部
 
 ![Task计算示意图](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544499723895.png)
 
+#### RDD容错原理与四大核心要点
+
+##### Rdd容错原理
+
+根据依赖关系的不同,容错分为两种情况:
+
+ 1. 宽依赖在对数据进行恢复的时候会导致计数数据重复,浪费资源性能.
+ 2. 窄依赖在对数据恢复时只需要计算出错的部分数据即可.
+
+##### 四大核心要点
+
+Spark框架层面的容错机制,主要分为三大层面(调度层,RDD血统层,CheckPoint层),在这三大层面中包括Spark RDD容错四大核心.
+- Stage输出失败,上层调度器DAGSchedule重试.
+- Spark计算中,Task内部任务失败,底层调度器重试.
+- RDD Lineage血统中窄依赖、宽依赖计算。
+- CheckPoint缓存。
+
+###### 调度层（DAG生成与Task重算）
+
+ 1. DAG生成层
+
+Stage输出失败，上层调度DAGSchedule会进行重试。
+
+``` scala
+/**
+   *重新提交任何失败的阶段
+   */
+  private[scheduler] def resubmitFailedStages() {
+    if (failedStages.size > 0) {
+      // Failed stages may be removed by job cancellation, so failed might be empty even if
+      // the ResubmitFailedStages event has been scheduled.
+      logInfo("Resubmitting failed stages")
+      clearCacheLocs()
+      val failedStagesCopy = failedStages.toArray
+      failedStages.clear()
+      for (stage <- failedStagesCopy.sortBy(_.firstJobId)) {
+        submitStage(stage)
+      }
+    }
+  }
+```
 
 ### Spark基本架构
 
@@ -597,4 +638,5 @@ TransportClientFactory构造器中的各参数如下:
 - socketChannelClass:客服端Channel被创建时使用的类,通过ioMode来匹配,默认为NioSocketChannel,Spark还支持EpollEventLoopGroup
 - workerGroup:根据Netty的规范,客服端只有worker组,所以此处创建Worker-Group 。workerGroup的实际类型是NioEventLoopGroup.
 - pooledAllocator：汇集ByteBuf但对线程缓存禁用的分配器。
+
 
