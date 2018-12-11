@@ -475,18 +475,28 @@ Stage输出失败，上层调度DAGSchedule会进行重试。
    */
   private[scheduler] def resubmitFailedStages() {
     if (failedStages.size > 0) {
-      // Failed stages may be removed by job cancellation, so failed might be empty even if
-      // the ResubmitFailedStages event has been scheduled.
+      //失败的阶段可以通过作业取消删除
+	//如果resubmitFailedStages事件已调度,失败将是空值
       logInfo("Resubmitting failed stages")
       clearCacheLocs()
+	  //获取所有失败Stage
       val failedStagesCopy = failedStages.toArray
       failedStages.clear()
+	  //对之前获取的所有失败的Stage根据JobId排序后逐一重试
       for (stage <- failedStagesCopy.sortBy(_.firstJobId)) {
+	  //再次提交
         submitStage(stage)
       }
     }
   }
 ```
+
+ 2.Task计算层
+
+底层调度器会对此Task进行若干次重试(默认4次).
+
+详细见:TaskSetManager.scala
+
 
 ### Spark基本架构
 
