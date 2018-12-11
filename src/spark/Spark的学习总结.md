@@ -344,6 +344,59 @@ key-value数据类型的RDD分区器控制分区策略和分区数。每个key-v
 ##### 每个分区都有一个优先位置列表
 它会存储每个Partition的优先位置，对于一个HDFS文件来说，就是每个Partition块的位置。观察运行spark集群的控制台会发现Spark的具体计算，具体分片前，它已经清楚地知道任务发生在什么节点上，也就是说，任务本身是计算层面的、代码层面的，代码发生运算之前已经知道它要运算的数据在什么地方，有具体节点的信息。这就符合大数据中数据不动代码动的特点。
 
+##### RDD源码的剖析
+
+``` scala
+/** 
+*  : :  DeveloperApi 
+＊通过子类实现给定分区的计算
+*/ 
+@DeveloperApi 
+def  compute(split:  Partition， context : TaskContext ）：Iterator[T]
+/** 
+*  通过子类实现，返回一个RDD分区列表，这个方法仅只被调用一次，它是安全地执行一次
+*  耗时计算
+*  该数组中的分区必须满足以下属性
+* rdd .partitions.zipWithindex.forall {case(partition,  index)  => 
+*  partition.  index  ==  index  }
+*/ 
+protected  def  getPartitions:  Array [Partition] 
+/**
+*返回对父 ROD 的依赖列表，这个方法仅只被调用一次，它是安全地执行一次耗时计算
+*/
+protected  def  getDependencies:  Seq [Dependency[_]]  =  deps 
+/**
+*可选的，指定优先位置，输入参数是 split 分片，输出结果是一组优先的节点位置
+*/
+ protected def getPreferredLocations(split: Partition): Seq[String] = Nil
+ /*可选地由子类覆盖，以指定它们的分区方式*/
+ @transient val partitioner: Option[Partitioner] = None
+```
+TaskContext 是读取或改变执行任务的环境，用 org.apache.spark.TaskContext.get() 
+可返回当前可用的 TaskContext ,可以调用内部的函数访问正在运行任务的环境信息。
+
+##### Partition源码的剖析
+
+Partitioner 是一个对象，定义了如何在 key-Value 类型的 RDD 元素中用 Key 分区，从 0 到
+nurnPartitions-1 区间内映射每一个 Key 到 Partition ID 。 Partition 是一个 RDD 的分区标识符。
+
+``` scala
+/**
+ * RDD中分区的标识符。
+ */
+trait Partition extends Serializable {
+  /**
+   * 获取分区在其父RDD中的索引
+   */
+  def index: Int
+
+  // 最好的默认实现HashCode
+  override def hashCode(): Int = index
+
+  override def equals(other: Any): Boolean = super.equals(other)
+}
+```
+
 
 #### 为什么需要RDD
 
