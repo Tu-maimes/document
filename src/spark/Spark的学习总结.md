@@ -435,13 +435,14 @@ Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGSchedu
 
 ##### Task简介
 
-Task是计算运行在集群上的基本计算单位。一个Task负责处理RDD的一个Partition，Task的数目是基于该Stage中最后UI个RDD的Partition的个数来决定的。
+Task是计算运行在集群上的基本计算单位。一个Task负责处理RDD的一个Partition，Task的数目是基于该Stage中最后UI个RDD的Partition的个数来决定的。Task运行于Executor上，而Executor位于CoarseGrainedExecutorBackend (JVM进程)中。
 Task分为两类：
 
  1. ShuffleMapTask
  2. resultTask
 
 ##### 计算过程深度解析 
+Spark中的Job本身内部是由具体的Task构成的，基于Spark程序内部的调度模式，即 根据宽依赖的关系，划分不同的Stage，最后一个Stage依赖倒数第二个Stage等，我们从最 后一个Stage获取结果：在Stage内部，我们知道有一系列的任务，这些任务被提交到集群上 的计算节点进行计算，计算节点执行计算逻辑时，复用位于Executor中线程池中的线程，线 程巾运行的任务调用具体Task的run方法进行计算，此时，如果调用具体Task的run方法， 就需要考虑不同Stage内部具体Task的类型，Spark规定最后一个Stage中的Task的类型为 resultTask，因为我们需要获取最后的结果，所以前面所有Stage的Task是shuffleMapTask。 RDD在进行计算前，Driver给其他Executor发送消息，让Executor启动Task，在Executor 启动Task成功后，通过消息机制汇报启动成功信息给Driver。
 
 
 
