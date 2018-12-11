@@ -40,6 +40,7 @@ BigDecimalSerializer包含一对方法，这些方法有助于在Writable接口�
 ![添加成功界面](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544078894416.png)
 
 相关参数简介:
+
  |属性|描述|
  |---|---|
  |-DgroupId|项目包名|
