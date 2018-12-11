@@ -418,7 +418,7 @@ RDD作为弹性分布式数据集,弹性具体体现在七个方面:
  6. 数据调度弹性,DAGSchedule、TASKSchedule和资源管理无关
  7. 数据分片的高度弹性(coalesce)
 
-### RDD依赖关系
+#### RDD依赖关系
 
 ##### 依赖划分原则
 
@@ -431,6 +431,17 @@ Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGSchedu
 解释了依赖划分的原因，实际也解释了为什么要划分Stage这个问题。
 
 
+#### RDD内部的计算机制
+
+##### Task简介
+
+Task是计算运行在集群上的基本计算单位。一个Task负责处理RDD的一个Partition，Task的数目是基于该Stage中最后UI个RDD的Partition的个数来决定的。
+Task分为两类：
+
+ 1. ShuffleMapTask
+ 2. resultTask
+
+##### 计算过程深度解析 
 
 
 
