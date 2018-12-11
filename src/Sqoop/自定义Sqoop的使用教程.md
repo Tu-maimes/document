@@ -53,6 +53,7 @@ BigDecimalSerializer包含一对方法，这些方法有助于在Writable接口�
 3. 依赖的pom文件
 
 ``` xml
+
  		 <dependency>
             <groupId>com.ambari.sqoop</groupId>
             <artifactId>sqoop</artifactId>
