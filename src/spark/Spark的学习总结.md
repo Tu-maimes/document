@@ -423,6 +423,7 @@ def lockForWriting(
  9.size：返回infos的大小，即所有Block的数量。
  10.entries：以迭代器形式返回infos。
  11.removeBlock:移除BlockId对应的BlockInfo
+ 12.clear:清除BlockInfoManager中的所有信息,并通知所有在BlockInfoManager管理的Block的锁上等待的线程.
 
 ### 调度系统
 
