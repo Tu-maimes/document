@@ -804,4 +804,4 @@ TransportClientFactory构造器中的各参数如下:
 - workerGroup:根据Netty的规范,客服端只有worker组,所以此处创建Worker-Group 。workerGroup的实际类型是NioEventLoopGroup.
 - pooledAllocator：汇集ByteBuf但对线程缓存禁用的分配器。
 
-
+[SparkSubmit]![提交流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544603278966.png)
