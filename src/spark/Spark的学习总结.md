@@ -435,7 +435,11 @@ localDirs:本地目录的数组
 
 #### 磁盘存储DiskStore
 
+DiskStore的属性:
 
+ 1. conf:即SparkConf.
+ 2. diskManager:即磁盘Block管理器DiskBlockManager
+ 3. minMemoryMapBytes:读取磁盘中的Block时,是直接读取还是使用FileChannel的内存镜像映射方法读取的阀值.
 
 ### 调度系统
 
