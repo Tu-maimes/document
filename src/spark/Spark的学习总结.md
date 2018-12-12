@@ -282,7 +282,7 @@ Spark存储体系是各个Driver和Executor实例中的BlockManager所组成。�
 
 #### 基本概念
 
- 1. BlockManager的唯一标识BlockManagerId
+ ##### BlockManager的唯一标识BlockManagerId
 
 BLockManagerId中的属性包括以下几项：
 - host_: 主机域名或IP
@@ -290,7 +290,7 @@ BLockManagerId中的属性包括以下几项：
 - executorId_: 当前BlockManager所在的实例的ID.如果实例是Driver,那么ID为Driver,否则由Master负责给各个Executor分配.
 - topologyInfo_:拓扑信息.
 
- 2. 块的唯一标识BlockId
+##### 块的唯一标识BlockId
 
 - name: Block全局唯一的标识名.
 - isRDD:当前BlockId是否是RDDBlock
@@ -298,7 +298,7 @@ BLockManagerId中的属性包括以下几项：
 - isShuffle:当前BlockId是否是ShuffleBlockid
 - isBroadcast:当前BlockId是否是BroadcastBlockId
 
- 3. 存储级别StorageLevel
+##### 存储级别StorageLevel
 
 Spark的存储体系包括磁盘存储与内存存储。Spark将内存又分为堆外内存和堆内存。有些数据块本身支持序列化及反序列化，有些数据块还支持备份与复制。Spark存储体系将以上这些数据块的不同特性抽象为存储级别。
 Storagelevel中的成员属性:
@@ -307,7 +307,7 @@ Storagelevel中的成员属性:
 - useOffHeap:能否写入堆外能存.当Block的StorageLevel中的_useOffHeap为true时,存储体系将允许Block写入堆内存.
 - deserialized:是否需要对Block反序列化.当Block本身经过了序列化后,Block的StorageLevel中的_deserialized将被设置为true,即可以对Block进行反序列化.
 - replication:Block的复制份数.Block的StorageLevel中的_replication默认等于1,可以再构造Block的StorageLevel时明确指定_replication的数量.当_replication大于1时,Block除了在本地的存储体系中写入一份,还会复制到其他不同的节点的存储体系中写入,达到复制备份的目的.
- 4. 块信息 BlockInfo
+ ##### 块信息 BlockInfo
 
 Blockinfo用于描述块的元数据信息,包括存储级别、Block类型、大小、锁信息等。
 Blockinfo的成员属性:
@@ -319,7 +319,7 @@ Blockinfo的成员属性:
 - readerCount:Blockinfo所描述的Block被锁定读取的次数.
 - writerTask:任务尝试在对应BlockInfo的写锁_writerTask用于保存任务尝试的ID(每个任务在实际执行时,会多次尝试,每次尝试都会分配一个ID)
 
- 5. BlockResult
+##### BlockResult
 
 BlockResult用于封装从本地的BlockManager中获取Block数据及与Block相关联的度量数据.
 BlockResult中有一下属性:
@@ -328,7 +328,7 @@ BlockResult中有一下属性:
 - readMethod: 读取Block的方法.readMethod采用枚举类型DataReadMethod提供的Memory、Disk、Hadoop、Network四个枚举值。
 - bytes：读取的Block的字节长度
 
- 6. BlockStatus
+##### BlockStatus
 
 用于封装Block的状态信息
 - storageLevel:即Block的StorageLevel
