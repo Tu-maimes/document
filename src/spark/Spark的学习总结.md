@@ -338,6 +338,7 @@ BlockResult中有一下属性:
 
 #### Block信息管理器
 
+BlockInfoManager对BlockInfo进行一些管理,主要是对BlockInfoManager将主要对Block的锁资源进行管理.
 ##### Block锁的基本概念
 
 
