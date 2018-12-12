@@ -369,7 +369,7 @@ def lockForReading(
       blocking: Boolean = true): Option[BlockInfo] = synchronized {
     logTrace(s"Task $currentTaskAttemptId trying to acquire read lock for $blockId")
     do {
-      infos.get(blockId) match {
+      infos.get(blockId) match { //从infos中获取Block对应的BlockInfo
         case None => return None
         case Some(info) =>
           if (info.writerTask == BlockInfo.NO_WRITER) {
