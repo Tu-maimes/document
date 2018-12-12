@@ -289,8 +289,16 @@ BLockManagerId中的属性包括以下几项：
 - port_: BlockManager中的BlockTransferService对外服务的端口
 - executorId_: 当前BlockManager所在的实例的ID.如果实例是Driver,那么ID为Driver,否则由Master负责给各个Executor分配.
 - topologyInfo_:拓扑信息.
-- 
- 2. 
+
+ 2. 块的唯一标识BlockId
+
+- name: Block全局唯一的标识名.
+- isRDD:当前BlockId是否是RDDBlock
+- asRDDId:将当前BlockId转换为RDDBlockId.如果当前BlockId是RDDBlockId,则转换为RDDBlockId,否则返回None.
+- isShuffle:当前BlockId是否是ShuffleBlockid
+- isBroadcast:当前BlockId是否是BroadcastBlockId
+
+ 3. 
 
 ### 调度系统
 
