@@ -412,7 +412,7 @@ def lockForWriting(
     None
   }
 ```
-
+lockForReading和lockForWriting这两个方法共同实现了写锁与写锁、写锁与读锁之间的互斥性，同时也实现了读锁与读锁之间的共享性。
  5. 
 
 ### 调度系统
