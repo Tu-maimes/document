@@ -431,6 +431,7 @@ def lockForWriting(
 DiskBlockManager是存储体系的成员之一,它负责为逻辑的Block与数据写入磁盘的位置之间建立逻辑的映射关系.DiskBlockManager的属性:
 deleteFilesOnStop:停止DiskBlockManager的时候是否删除本地目录的布尔类型标记.当不指定外部的ShuffleClient(即spark.shuffle.service.enabled属性为false)或者当前实例是Driver时,此属性为true.
 conf :即SparkConf
+localDirs:本地目录的数组
 
 ### 调度系统
 
