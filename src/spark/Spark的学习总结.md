@@ -420,6 +420,8 @@ def lockForWriting(
 释放写锁添加读锁
  7.lockNewBlockForWriting：写新Block时获得写锁
  8.releaseAllLocksForTask：释放给定的任务尝试线程所占的所有Block的锁，并通知所有等待获取锁的线程。
+ 9.size：返回infos的大小，即所有Block的数量。
+ 10.
 
 ### 调度系统
 
