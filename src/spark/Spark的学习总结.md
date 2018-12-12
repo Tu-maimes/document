@@ -280,7 +280,17 @@ Spark存储体系是各个Driver和Executor实例中的BlockManager所组成。�
 
 ![存储体系架构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544579158824.png)
 
+#### 基本概念
 
+ 1. BlockManager的唯一标识BlockManagerId
+
+BLockManagerId中的属性包括以下几项：
+- host_: 主机域名或IP
+- port_: BlockManager中的BlockTransferService对外服务的端口
+- executorId_: 当前BlockManager所在的实例的ID.如果实例是Driver,那么ID为Driver,否则由Master负责给各个Executor分配.
+- topologyInfo_:拓扑信息.
+- 
+ 2. 
 
 ### 调度系统
 
