@@ -304,7 +304,8 @@ Spark的存储体系包括磁盘存储与内存存储。Spark将内存又分为�
 Storagelevel中的成员属性:
 - useDisk:能否写入磁盘.当Block的StorageLevel中的_useDisk为true时,存储体系将允许Block写入磁盘.
 - useMemory:能否写入堆内存.当Block的StorageLevel中的_useMemory为true时,存储体系将允许Block写入堆内存.
-- 
+- useOffHeap:能否写入堆外能存.当Block的StorageLevel中的_useOffHeap为true时,存储体系将允许Block写入堆内存.
+- deserialized:是否需要对Block反序列化.当Block本身经过了序列化后,Block的StorageLevel中的_deserialized将被设置为true,即可以对Block进行反序列化.
  4. 
 
 ### 调度系统
