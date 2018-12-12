@@ -341,7 +341,7 @@ BlockResult中有一下属性:
 BlockInfoManager对BlockInfo进行一些管理,主要是对BlockInfoManager将主要对Block的锁资源进行管理.
 ##### Block锁的基本概念
 
-BlockInfoManager是BlockManager内部的子组件之一,BlockInfoManager对Block的锁管理采用了共享锁与排他锁,其中读锁是共享锁,写锁是排他锁.
+BlockInfoManager是BlockManager内部的子组件之一,BlockInfoManager对Block的锁管理采用了共享锁与排他锁,其中读锁是共享锁,写锁是排他锁.读锁与写锁是存在互斥性的
 
 
 ### 调度系统
