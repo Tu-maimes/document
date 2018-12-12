@@ -418,7 +418,7 @@ def lockForWriting(
 - 如果当前任务尝试线程没有获得Block的写锁，则释放当前Block的读锁。释放读锁实际是减少当前任务尝试线程已经获取的Block的读锁次数。
  6.downgradeLock：锁降级
 释放写锁添加读锁
- 7.lockNewBlockForWriting
+ 7.lockNewBlockForWriting：写新Block时获得写锁
 
 ### 调度系统
 
