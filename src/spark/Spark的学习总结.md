@@ -389,6 +389,32 @@ def lockForReading(
 
  4. lockForWriting:锁定写
 
+``` scala
+def lockForWriting(
+      blockId: BlockId,
+      blocking: Boolean = true): Option[BlockInfo] = synchronized {
+    logTrace(s"Task $currentTaskAttemptId trying to acquire write lock for $blockId")
+    do {
+      infos.get(blockId) match {
+        case None => return None
+        case Some(info) =>
+          if (info.writerTask == BlockInfo.NO_WRITER && info.readerCount == 0) {
+            info.writerTask = currentTaskAttemptId
+            writeLocksByTask.addBinding(currentTaskAttemptId, blockId)
+            logTrace(s"Task $currentTaskAttemptId acquired write lock for $blockId")
+            return Some(info)
+          }
+      }
+      if (blocking) {
+        wait()
+      }
+    } while (blocking)
+    None
+  }
+```
+
+ 5. 
+
 ### 调度系统
 
 调度系统主要由DAGScheduler和TaskScheduler组成，它们都内置在SparkContext中。DAGScheduler负责创建Job、将DAG中的RDD划分到不同的Stage、给Stage创建对应的Task、批量提交Task等功能。TaskSchdule负责按照FIFO或者FAIR等调度算法对Task进行调度;为Task分配资源;将Task发送到集群管理器的当前应用的Executor上,由Executor负责执行等工作。Spark增加了SparkSession和DataFrame的API，SparkSession底层实际依然依赖于SparkContext。
