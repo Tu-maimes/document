@@ -307,7 +307,20 @@ Storagelevel中的成员属性:
 - useOffHeap:能否写入堆外能存.当Block的StorageLevel中的_useOffHeap为true时,存储体系将允许Block写入堆内存.
 - deserialized:是否需要对Block反序列化.当Block本身经过了序列化后,Block的StorageLevel中的_deserialized将被设置为true,即可以对Block进行反序列化.
 - replication:Block的复制份数.Block的StorageLevel中的_replication默认等于1,可以再构造Block的StorageLevel时明确指定_replication的数量.当_replication大于1时,Block除了在本地的存储体系中写入一份,还会复制到其他不同的节点的存储体系中写入,达到复制备份的目的.
- 4. 
+ 4. 块信息 BlockInfo
+
+Blockinfo用于描述块的元数据信息,包括存储级别、Block类型、大小、锁信息等。
+Blockinfo的成员属性:
+
+- Level:Blockinfo所描述的Block的存储级别,即StorageLevel
+- classTag:BlockInfo所描述的Block的类型
+- tellMaster:BlockInfo所描述的Block是否需要告知Master.
+- size:BlockInfo所描述的Block的大小
+- readerCount:Blockinfo所描述的Block被锁定读取的次数.
+- writerTask:任务尝试在对应BlockInfo的写锁_writerTask用于保存任务尝试的ID(每个任务在实际执行时,会多次尝试,每次尝试都会分配一个ID)
+
+
+ 5. 
 
 ### 调度系统
 
