@@ -298,7 +298,14 @@ BLockManagerId中的属性包括以下几项：
 - isShuffle:当前BlockId是否是ShuffleBlockid
 - isBroadcast:当前BlockId是否是BroadcastBlockId
 
- 3. 
+ 3. 存储级别StorageLevel
+
+Spark的存储体系包括磁盘存储与内存存储。Spark将内存又分为堆外内存和堆内存。有些数据块本身支持序列化及反序列化，有些数据块还支持备份与复制。Spark存储体系将以上这些数据块的不同特性抽象为存储级别。
+Storagelevel中的成员属性:
+- useDisk:能否写入磁盘.当Block的StorageLevel中的_useDisk为true时,存储体系将允许Block写入磁盘.
+- useMemory:能否写入堆内存.当Block的StorageLevel中的_useMemory为true时,存储体系将允许Block写入堆内存.
+- 
+ 4. 
 
 ### 调度系统
 
