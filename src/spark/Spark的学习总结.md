@@ -326,6 +326,7 @@ BlockResult中有一下属性:
  
 - data: Block及与Block相关联的度量数据
 - readMethod: 读取Block的方法.readMethod采用枚举类型DataReadMethod提供的Memory、Disk、Hadoop、Network四个枚举值。
+- bytes：读取的Block的字节长度
  6. 
 
 ### 调度系统
