@@ -343,6 +343,9 @@ BlockInfoManager对BlockInfo进行一些管理,主要是对BlockInfoManager将�
 
 BlockInfoManager是BlockManager内部的子组件之一,BlockInfoManager对Block的锁管理采用了共享锁与排他锁,其中读锁是共享锁,写锁是排他锁.读锁与写锁是存在互斥性的.
 
+BlockInfoManager的成员属性:
+
+- infos: BlockId与BlockInfo之间映射关系的缓存.
 
 
 
