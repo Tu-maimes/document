@@ -359,6 +359,7 @@ BlockInfomanager提供的方法是如何实现Block的锁管理机制的.
 
  1. 注册TaskAttemptId
  2. currentTaskAttemptId
+ 3. lockForReading
 
 ### 调度系统
 
