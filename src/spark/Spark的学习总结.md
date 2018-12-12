@@ -362,8 +362,11 @@ BlockInfomanager提供的方法是如何实现Block的锁管理机制的.
  3. lockForReading:锁定读
 
 ``` scala
+
+
 def lockForReading(
       blockId: BlockId,
+	  //如果为true(默认)，此调用将阻塞，直到获取锁为止。如果为false，该调用将在锁获取失败时立即返回
       blocking: Boolean = true): Option[BlockInfo] = synchronized {
     logTrace(s"Task $currentTaskAttemptId trying to acquire read lock for $blockId")
     do {
