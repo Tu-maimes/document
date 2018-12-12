@@ -380,7 +380,7 @@ def lockForReading(
           }
       }
       if (blocking) {
-        wait()
+        wait() //等待占用写锁的任务尝试线程释放Block的写锁后唤醒当前线程
       }
     } while (blocking)
     None
