@@ -372,7 +372,7 @@ def lockForReading(
       infos.get(blockId) match { //从infos中获取Block对应的BlockInfo
         case None => return None
         case Some(info) =>
-          if (info.writerTask == BlockInfo.NO_WRITER) {
+          if (info.writerTask == BlockInfo.NO_WRITER) { //由当任务尝试线程持有读锁并返回BlockInfo
             info.readerCount += 1
             readLocksByTask(currentTaskAttemptId).add(blockId)
             logTrace(s"Task $currentTaskAttemptId acquired read lock for $blockId")
