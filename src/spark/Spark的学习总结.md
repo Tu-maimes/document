@@ -347,6 +347,7 @@ BlockInfoManager的成员属性:
 
 - infos: BlockId与BlockInfo之间映射关系的缓存.
 - writeLocksByTask:每次任务执行尝试的标识TaskAttemptId与执行获取的Block的写锁之间的映射关系.TaskAttemptId与写锁之间是一对多的关系,即一次任务尝试执行会获取零到多个Block的写锁
+- 
 
 
 
