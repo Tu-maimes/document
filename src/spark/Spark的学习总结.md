@@ -387,7 +387,7 @@ def lockForReading(
   }
 ```
 
- 4. 
+ 4. lockForWriting:锁定写
 
 ### 调度系统
 
