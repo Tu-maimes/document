@@ -358,6 +358,7 @@ BlockInfoManager的成员属性:
 BlockInfomanager提供的方法是如何实现Block的锁管理机制的.
 
  1. 注册TaskAttemptId
+ 2. currentTaskAttemptId
 
 ### 调度系统
 
