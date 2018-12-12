@@ -399,7 +399,7 @@ def lockForWriting(
         case None => return None
         case Some(info) =>
           if (info.writerTask == BlockInfo.NO_WRITER && info.readerCount == 0) {
-            info.writerTask = currentTaskAttemptId
+            info.writerTask = currentTaskAttemptId //由当前任务尝试线程持有写锁
             writeLocksByTask.addBinding(currentTaskAttemptId, blockId)
             logTrace(s"Task $currentTaskAttemptId acquired write lock for $blockId")
             return Some(info)
