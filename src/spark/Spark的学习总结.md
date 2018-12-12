@@ -445,6 +445,9 @@ DiskStore的属性:
 
 ##### 内存池模型
 
+抽象类MemoryPool
+
+![MemoryPool继承体系的实现](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544609008236.png)
 
 
 ### 调度系统
