@@ -319,8 +319,14 @@ Blockinfo的成员属性:
 - readerCount:Blockinfo所描述的Block被锁定读取的次数.
 - writerTask:任务尝试在对应BlockInfo的写锁_writerTask用于保存任务尝试的ID(每个任务在实际执行时,会多次尝试,每次尝试都会分配一个ID)
 
+ 5. BlockResult
 
- 5. 
+BlockResult用于封装从本地的BlockManager中获取Block数据及与Block相关联的度量数据.
+BlockResult中有一下属性:
+ 
+- data: Block及与Block相关联的度量数据
+- readMethod: 读取Block的方法.readMethod采用枚举类型DataReadMethod提供的Memory、Disk、Hadoop、Network四个枚举值。
+ 6. 
 
 ### 调度系统
 
