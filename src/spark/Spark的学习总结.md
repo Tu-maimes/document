@@ -327,7 +327,14 @@ BlockResult中有一下属性:
 - data: Block及与Block相关联的度量数据
 - readMethod: 读取Block的方法.readMethod采用枚举类型DataReadMethod提供的Memory、Disk、Hadoop、Network四个枚举值。
 - bytes：读取的Block的字节长度
- 6. 
+
+ 6. BlockStatus
+
+用于封装Block的状态信息
+- storageLevel:即Block的StorageLevel
+- memSize:Block占用的内存大小
+- diskSize:Block占用的磁盘大小
+- isCached:是否存储到存储体系中,即memSize与diskSize的大小之和是否大于0
 
 ### 调度系统
 
