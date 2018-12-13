@@ -454,7 +454,7 @@ DiskStore的属性:
 Spark既将内存作为存储体系的一部分,又作为计算引擎所需要的计算资源,因此MemoryPool既有用于存储体系的实现类StorageMemoryPool,又有用于计算的Execution MemoryPool.
 
 ##### MemoryManager模型
-
+有了MemoryPool模型和StorageMemoryPool的基础。
 
 
 ### 调度系统
