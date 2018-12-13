@@ -449,6 +449,7 @@ DiskStore的属性:
 
 ![MemoryPool继承体系的实现](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544609008236.png)
 
+##### StorageMemoryPool详解
 
 ### 调度系统
 
