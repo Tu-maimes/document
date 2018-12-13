@@ -612,6 +612,7 @@ Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGSchedu
 ##### RDD窄依赖解析
 
 RDD的窄依赖(Narrow Dependency)是RDD中最常见的依赖关系,用来表示每一个父RDD中的Partition最多被子RDD的一个Partition所使用。NarrowDependency继承了Dependency以表示窄依赖。
+窄依赖分为两类：
 
 
 
