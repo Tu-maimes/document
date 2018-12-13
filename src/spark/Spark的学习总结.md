@@ -456,11 +456,7 @@ Spark既将内存作为存储体系的一部分,又作为计算引擎所需要�
 ##### MemoryManager模型
 有了MemoryPool模型和StorageMemoryPool的基础。我们可以来看看抽象类MemoryManager定义的内存管理器的接口规范了。MemoryManager的属性中既有和存储体系相关的，也有和任务执行相关的：
 
- - conf：即Spark
- - numCores：CPU内核数
- - onHeapStorageMemory：用于存储的堆内存大小
- - onHeapExecutionMemory:用于执行计算的堆内存大小
- - 
+![MemoryManager管理的4块内存池](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544689234264.png)
 
 ### 调度系统
 
