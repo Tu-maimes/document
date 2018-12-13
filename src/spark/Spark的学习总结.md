@@ -614,8 +614,8 @@ Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGSchedu
 RDD的窄依赖(Narrow Dependency)是RDD中最常见的依赖关系,用来表示每一个父RDD中的Partition最多被子RDD的一个Partition所使用。NarrowDependency继承了Dependency以表示窄依赖。
 窄依赖分为两类：
 
- 1. 第一类是一对一的依赖关系，在Spark中用OneToOneDependeny来表示父RDD与子RDD的依赖关系是一对一的依赖关系。
- 2. 第二类是范围依赖关系，在Spark中用RangeDependency表示，表示父RDD与子RDD的一对一的范围内依赖关系。
+ 1. 第一类是一对一的依赖关系，在Spark中用OneToOneDependeny来表示父RDD与子RDD的依赖关系是一对一的依赖关系。如：map、filter。
+ 2. 第二类是范围依赖关系，在Spark中用RangeDependency表示，表示父RDD与子RDD的一对一的范围内依赖关系。如：union。
 
 
 
