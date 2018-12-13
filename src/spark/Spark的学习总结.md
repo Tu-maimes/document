@@ -454,8 +454,13 @@ DiskStore的属性:
 Spark既将内存作为存储体系的一部分,又作为计算引擎所需要的计算资源,因此MemoryPool既有用于存储体系的实现类StorageMemoryPool,又有用于计算的Execution MemoryPool.
 
 ##### MemoryManager模型
-有了MemoryPool模型和StorageMemoryPool的基础。我们可以来看看抽象类MemoryManager定义的内存管理器的接口规范了。
+有了MemoryPool模型和StorageMemoryPool的基础。我们可以来看看抽象类MemoryManager定义的内存管理器的接口规范了。MemoryManager的属性中既有和存储体系相关的，也有和任务执行相关的：
 
+ - conf：即Spark
+ - numCores：CPU内核数
+ - onHeapStorageMemory：用于存储的堆内存大小
+ - onHeapExecutionMemory:用于执行计算的堆内存大小
+ - 
 
 ### 调度系统
 
