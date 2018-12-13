@@ -611,7 +611,7 @@ Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGSchedu
 
 #### RDD窄依赖解析
 
-
+RDD的窄依赖(Narrow Dependency)是RDD中最常见的依赖关系,
 
 
 
