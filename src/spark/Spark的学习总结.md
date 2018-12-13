@@ -451,7 +451,7 @@ DiskStore的属性:
 
 ##### StorageMemoryPool详解
 
-Spark既将内存作为存储体系的一部分,又作为计算引擎所需要的计算资源,
+Spark既将内存作为存储体系的一部分,又作为计算引擎所需要的计算资源,因此MemoryPool
 
 ### 调度系统
 
