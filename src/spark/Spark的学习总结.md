@@ -451,7 +451,7 @@ DiskStore的属性:
 
 ##### StorageMemoryPool详解
 
-Spark既将内存作为存储体系的一部分,又作为计算引擎所需要的计算资源,因此MemoryPool既有用于存储体系的实现类StorageMemoryPool,又有用于计算的Execution MemoryPool
+Spark既将内存作为存储体系的一部分,又作为计算引擎所需要的计算资源,因此MemoryPool既有用于存储体系的实现类StorageMemoryPool,又有用于计算的Execution MemoryPool.
 
 ### 调度系统
 
@@ -608,6 +608,11 @@ Rdd的血缘关系、Stage划分的角度来看，Rdd构成的DAG经过DAGSchedu
 ![DAGScheduler由Rdd构成的DAG进行调度](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544406837397.png)
 
 解释了依赖划分的原因，实际也解释了为什么要划分Stage这个问题。
+
+#### 窄依赖解析
+
+
+
 
 
 #### RDD内部的计算机制
