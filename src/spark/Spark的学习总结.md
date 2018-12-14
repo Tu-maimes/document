@@ -503,7 +503,9 @@ MemoryStore相比于MemoryManager，提供了一种宏观的内存模型，Memor
 
 ![MemoryStore的内存模型](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544757619166.png)
 
-整个MemoryStore的存储分为三块:一块是MemoryStore的entries属性持有的很多MemoryEntry所占据的内存blocksMemoryUsed;
+整个MemoryStore的存储分为三块:
+一块是MemoryStore的entries属性持有的很多MemoryEntry所占据的内存blocksMemoryUsed;
+一块是onHeapUnrollMemoryMap或者offHeapUnrollMemoryMap中使用展开方式占用的内存currentUnrollMemory
 ### 调度系统
 
 调度系统主要由DAGScheduler和TaskScheduler组成，它们都内置在SparkContext中。DAGScheduler负责创建Job、将DAG中的RDD划分到不同的Stage、给Stage创建对应的Task、批量提交Task等功能。TaskSchdule负责按照FIFO或者FAIR等调度算法对Task进行调度;为Task分配资源;将Task发送到集群管理器的当前应用的Executor上,由Executor负责执行等工作。Spark增加了SparkSession和DataFrame的API，SparkSession底层实际依然依赖于SparkContext。
