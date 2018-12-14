@@ -464,6 +464,7 @@ MemoryManager有两个子类,分别是StaticMemoryManager和UnifiedMemoryManager
 
 UnifiedMemoryManager在MemoryManager的内存模型之上,将计算内存和存储之间的边界修改为"软"边界,即任何一方可以向另一方借用空闲的内存.
 
+![UnifiedMemoryManager管理的四块内存](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544750612643.png)
 
 ### 调度系统
 
