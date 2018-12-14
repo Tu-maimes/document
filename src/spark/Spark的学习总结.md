@@ -466,9 +466,9 @@ UnifiedMemoryManager在MemoryManager的内存模型之上,将计算内存和存�
 
 ![UnifiedMemoryManager管理的四块内存](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544750612643.png)
 
-##### 内存存储MemoryStore
+#### 内存存储MemoryStore
 
-
+MemoryStore负责将Block存储到内存。
 
 
 ### 调度系统
