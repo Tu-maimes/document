@@ -499,7 +499,7 @@ private case class SerializedMemoryEntry[T](
 ```
 
 BlockEvictionHandler:Block驱逐处理器。blockEvictionHandler用于将Block从内存中驱逐出去。
-
+MemoryStore相比于MemoryManager，提供了一种宏观的内存模型，MemoryManager模型的堆内存和堆外内存在MemoryStore的内存模型中是透明的,UnifiedMemoryManager中存储内存与计算内存的"软"边界在MemoryStore的内存模型中也是透明的.
 
 ### 调度系统
 
