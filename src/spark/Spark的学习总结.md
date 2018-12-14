@@ -470,6 +470,7 @@ UnifiedMemoryManager在MemoryManager的内存模型之上,将计算内存和存�
 
 MemoryStore负责将Block存储到内存。Spark通过将广播数据、RDD、Shuffle数据存储到内存，减少了对磁盘IO的依赖，提高了程序的读写效率。
 
+##### MemoryStore的内存模型
 
 ### 调度系统
 
