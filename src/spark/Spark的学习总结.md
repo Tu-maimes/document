@@ -521,8 +521,9 @@ graph TD;
     BlockManager的初始化-->BlockTransferService的初始化;
    BlockManager的初始化-->ShuffleClient初始化;
      BlockManager的初始化-->在BlockManagerMaster注册BlockManager;
-   BlockTransferService的初始化-->D;
-   ShuffleClient初始化-->注册或者启动（Driver节点）Shuffle服务;
+   BlockTransferService的初始化;
+   ShuffleClient初始化--> 生成ShuffleServiceId;
+  生成ShuffleServiceId -->注册或者启动Shuffle服务;
 ```
 
 
