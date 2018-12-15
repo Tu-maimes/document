@@ -516,7 +516,14 @@ BlockManager运行在每个借点上(包括Driver和Executor)提供对本地或�
 
 每个Driver或Executor在创建自身的SparkEnv时都会创建BlockManager。BlockManager只有在其initialize方法被调用后才能发挥作用。
 
-
+```mermaid!
+graph TD;
+    BlockManager的初始化-->BlockTransferService的初始化;
+   BlockManager的初始化-->ShuffleClient初始化;
+     BlockManager的初始化-->在BlockManagerMaster注册BlockManager;
+   BlockTransferService的初始化-->D;
+   ShuffleClient初始化-->注册或者启动（Driver节点）Shuffle服务;
+```
 
 
 ### 调度系统
