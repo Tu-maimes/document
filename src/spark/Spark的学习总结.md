@@ -528,7 +528,7 @@ graph TD;
 
 ##### BlockManager提供的方法
 
- 1. reregister : 
+ 1. reregister : 此方法用于BlockManagerMaster重新注册BlockManager,并向BlockManagerMaster报告所有的Block信息.
 
 ### 调度系统
 
