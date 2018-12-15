@@ -512,7 +512,7 @@ MemoryStore相比于MemoryManager，提供了一种宏观的内存模型，Memor
 
 BlockManager运行在每个借点上(包括Driver和Executor)提供对本地或远端节点上的内存、磁盘及堆外内存中Block的管理。存储体系从狭义上来说指的就是BlockManager,从广义上来说,则包括整个Spark集群中的各个BlockManager、BlockInfoManager、DiskBlockManager、DiskStore、MemoryManager、MemoryStore、对集群中的所有BlockManager进行管理BlockManagerMaster及各个节点上对外提供Block上传与下载服务的BlockTransferService。
 
-#### BlockManager的初始化
+##### BlockManager的初始化
 
 每个Driver或Executor在创建自身的SparkEnv时都会创建BlockManager。BlockManager只有在其initialize方法被调用后才能发挥作用。
 
@@ -526,6 +526,9 @@ graph TD;
   生成ShuffleServiceId -->注册或者启动Shuffle服务;
 ```
 
+##### BlockManager提供的方法
+
+ 1. reregister : 
 
 ### 调度系统
 
