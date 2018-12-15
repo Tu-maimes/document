@@ -510,7 +510,7 @@ MemoryStore相比于MemoryManager，提供了一种宏观的内存模型，Memor
 
 #### 块管理器BlockManager
 
-BlockManager运行在每个借点上(包括Driver和Executor)提供对本地或远端节点上的内存、磁盘及堆外内存中Block的管理。
+BlockManager运行在每个借点上(包括Driver和Executor)提供对本地或远端节点上的内存、磁盘及堆外内存中Block的管理。存储体系从狭义上来说指的就是BlockManager,从广义上来说,则包括整个Spark集群中的各个BlockManager、BlockInfoManager、DiskBlockManager、DiskStore、MemoryManager、MemoryStore、对集群中的所有BlockManager进行管理BlockManagerMaster及各个节点上对外提供Block上传与下载服务的BlockTransferService。
 
 
 ### 调度系统
