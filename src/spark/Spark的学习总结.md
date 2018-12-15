@@ -514,7 +514,9 @@ BlockManager运行在每个借点上(包括Driver和Executor)提供对本地或�
 
 #### BlockManager的初始化
 
-每个Driver或Executor在创建自身的SparkEnv时都会创建BlockManager。
+每个Driver或Executor在创建自身的SparkEnv时都会创建BlockManager。BlockManager只有在其initialize方法被调用后才能发挥作用。
+
+
 
 
 ### 调度系统
