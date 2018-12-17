@@ -566,6 +566,9 @@ BlockManager中创建Shuffle客服端的代码如下:
     blockTransferService
   }
 ```
+备注:如果部署了外部的Shuffle服务,则需要配置spark.shuffle.service.enabled属性为true(此属性将决定externalShuffleServiceEnabled的值,默认是false)
+
+
 
 ### 调度系统
 
