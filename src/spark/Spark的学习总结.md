@@ -582,6 +582,9 @@ NettyBlockRpcService中使用了OneForOneStreamManager来提供一对一的流�
 
 ##### Shuffle客服端
 
+如果没有部署外部Shuffle服务，即spark.shuffle.service.enabled属性为false时，NettyBlockTransferService不但通过OneForOneStreamManager与NettyBlockRpcServer对外提供Block上传与下载的服务，也将作为默认的Shuffle客服端。
+
+
 ### 调度系统
 
 调度系统主要由DAGScheduler和TaskScheduler组成，它们都内置在SparkContext中。DAGScheduler负责创建Job、将DAG中的RDD划分到不同的Stage、给Stage创建对应的Task、批量提交Task等功能。TaskSchdule负责按照FIFO或者FAIR等调度算法对Task进行调度;为Task分配资源;将Task发送到集群管理器的当前应用的Executor上,由Executor负责执行等工作。Spark增加了SparkSession和DataFrame的API，SparkSession底层实际依然依赖于SparkContext。
