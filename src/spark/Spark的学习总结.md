@@ -586,6 +586,7 @@ NettyBlockRpcService中使用了OneForOneStreamManager来提供一对一的流�
 
 ###### 发送下载远端Block的请求
 
+ 1. 异步下载
 
 ``` scala
 override def fetchBlocks(
@@ -622,6 +623,8 @@ override def fetchBlocks(
   }
 ```
 ![Shuffle之Block下载流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545033921445.png)
+
+ 2. 在 BlockTransferService中封装了fetchBlockSync同步下载远端block
 
 ### 调度系统
 
