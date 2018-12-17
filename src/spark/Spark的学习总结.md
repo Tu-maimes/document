@@ -577,8 +577,7 @@ NetttyBlocktransferService只有在其init方法被调用,即被初始化后才�
  1. OneForOneStreamManager的实现
 NettyBlockRpcService中使用了OneForOneStreamManager来提供一对一的流服务.OneForOneStreamManager实现了StreamManager的registerChannel、getChunk、connectionTerminated、checkAuthorization、registerStream五个方法。
 
-
- 2. 
+ 2. NettyBlockRpcServer的实现
 
 ### 调度系统
 
