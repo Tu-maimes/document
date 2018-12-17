@@ -535,7 +535,7 @@ graph TD;
 
 #### BlockManagerMaster对BlockManager的管理
 
-BlockManagerMaster的作用是堆存在于Executor或者Driver上的BlockManager进行统一管理。
+BlockManagerMaster的作用是堆存在于Executor或者Driver上的BlockManager进行统一管理。Executor与Driver关于BlockManager的交互都依赖于BlockManagerMaster,
 
 ### 调度系统
 
