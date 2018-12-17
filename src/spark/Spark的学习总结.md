@@ -547,6 +547,9 @@ BlockManagerMasterEndpoint接收Driver或Executor上的BlockManagerMaster发送�
 - blockLocations : BlockId与存储了此BlockId对应Block的BlockManager的BlockManagerId之间的一对多关系缓存.
 - topologyMapper : 对集群所有节点的拓扑结构的映射
 
+#### Block传输服务
+
+
 
 
 ### 调度系统
