@@ -582,7 +582,9 @@ NettyBlockRpcService中使用了OneForOneStreamManager来提供一对一的流�
 
 ##### Shuffle客服端
 
-如果没有部署外部Shuffle服务，即spark.shuffle.service.enabled属性为false时，NettyBlockTransferService不但通过OneForOneStreamManager与NettyBlockRpcServer对外提供Block上传与下载的服务，也将作为默认的Shuffle客服端。NettyBlockTransferService作为Shuffle客服端，具有发起上传和下载请求并接收服务端响应的能力。
+如果没有部署外部Shuffle服务，即spark.shuffle.service.enabled属性为false时，NettyBlockTransferService不但通过OneForOneStreamManager与NettyBlockRpcServer对外提供Block上传与下载的服务，也将作为默认的Shuffle客服端。NettyBlockTransferService作为Shuffle客服端，具有发起上传和下载请求并接收服务端响应的能力。NettyBlockTransferService的两个方法--------fetchBlocks和uploadBlock将帮我们来实现.
+
+
 
 
 ### 调度系统
