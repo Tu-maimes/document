@@ -282,7 +282,6 @@ Spark优先考虑使用各节点的内存作为存储，当内存不足时会考
 - BlockManager本身则对上述组件在功能进行整合和封装
 - BlockManagerMaster和BlockManagerMasterEndpoint一同管理分散在不同节点上的BlockManager
 - BlockManagerSlaverEndpoint则可以接收BlockManagerMasterEndpoint下发的各种命令
-- BlockTransferSlaverEndpoint则可以接收BlockManagerMasterEndpoint下的各种命令
 - BlockTransferService提供Block的上传与下载服务,Shuffle客服端则提供Block的上传与下载的客服端实现
 
 
@@ -446,6 +445,8 @@ DiskBlockManager是存储体系的成员之一,它负责为逻辑的Block与数�
 deleteFilesOnStop:停止DiskBlockManager的时候是否删除本地目录的布尔类型标记.当不指定外部的ShuffleClient(即spark.shuffle.service.enabled属性为false)或者当前实例是Driver时,此属性为true.
 conf :即SparkConf
 localDirs:本地目录的数组
+
+
 
 #### 磁盘存储DiskStore
 
