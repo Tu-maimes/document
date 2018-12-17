@@ -549,8 +549,10 @@ BlockManagerMasterEndpoint接收Driver或Executor上的BlockManagerMaster发送�
 
 #### Block传输服务
 
-BlocktTransferService是BlockManager的子组件之一。
+BlocktTransferService是BlockManager的子组件之一。抽象类BlockTransferService有两个实现
 
+ 1. MockBlockTransferService
+ 2. NettyBlockTransferService
 
 ### 调度系统
 
