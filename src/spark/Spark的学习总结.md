@@ -628,6 +628,46 @@ override def fetchBlocks(
 
 ###### 发送向远端上传Block的请求
 
+ 
+
+``` scala
+override def uploadBlock(
+                            hostname: String,
+                            port: Int,
+                            execId: String,
+                            blockId: BlockId,
+                            blockData: ManagedBuffer,
+                            level: StorageLevel,
+                            classTag: ClassTag[_]): Future[Unit] = {
+    val result = Promise[Unit]()
+    val client = clientFactory.createClient(hostname, port)
+
+    // StorageLevel和ClassTag使用JavaSerializer序列化为字节。
+    ////其他的都是用二进制协议编码的。
+    val metadata = JavaUtils.bufferToArray(serializer.newInstance().serialize((level, classTag)))
+
+    // 将nio缓冲区转换或复制为数组以便序列化。
+    val array = JavaUtils.bufferToArray(blockData.nioByteBuffer())
+
+    client.sendRpc(new UploadBlock(appId, execId, blockId.name, metadata, array).toByteBuffer,
+      new RpcResponseCallback {
+        override def onSuccess(response: ByteBuffer): Unit = {
+          logTrace(s"Successfully uploaded block $blockId")
+          result.success((): Unit)
+        }
+
+        override def onFailure(e: Throwable): Unit = {
+          logError(s"Error while uploading block $blockId", e)
+          result.failure(e)
+        }
+      })
+
+    result.future
+  }
+```
+
+![Block的上传流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545034809350.png)
+
 ### 调度系统
 
 调度系统主要由DAGScheduler和TaskScheduler组成，它们都内置在SparkContext中。DAGScheduler负责创建Job、将DAG中的RDD划分到不同的Stage、给Stage创建对应的Task、批量提交Task等功能。TaskSchdule负责按照FIFO或者FAIR等调度算法对Task进行调度;为Task分配资源;将Task发送到集群管理器的当前应用的Executor上,由Executor负责执行等工作。Spark增加了SparkSession和DataFrame的API，SparkSession底层实际依然依赖于SparkContext。
