@@ -630,6 +630,8 @@ override def fetchBlocks(
 
  
 
+ 1. 异步上传
+
 ``` scala
 override def uploadBlock(
                             hostname: String,
@@ -667,6 +669,10 @@ override def uploadBlock(
 ```
 
 ![Block的上传流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545034809350.png)
+
+ 2. 同步上传
+
+ 在 BlockTransferService中封装了uploadBlockSync同步上传到远端block
 
 ### 调度系统
 
