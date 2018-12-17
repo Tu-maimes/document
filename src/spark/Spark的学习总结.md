@@ -570,7 +570,7 @@ BlockManager中创建Shuffle客服端的代码如下:
 
 ##### 初始化NettyBlockTransferService
 
-NetttyBlocktransferService只有在其init方法被调用,即被初始化后才提供服务。
+NetttyBlocktransferService只有在其init方法被调用,即被初始化后才提供服务。BlockManager在初始化的时候,将调用NettyBlocktransferService的init方法.
 
 
 ### 调度系统
