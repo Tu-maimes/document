@@ -549,7 +549,7 @@ BlockManagerMasterEndpoint接收Driver或Executor上的BlockManagerMaster发送�
 
 #### Block传输服务
 
-
+BlocktTransferService是BlockManager的子组件之一。
 
 
 ### 调度系统
