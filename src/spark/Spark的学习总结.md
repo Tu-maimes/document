@@ -545,6 +545,7 @@ BlockManagerMaster的作用是堆存在于Executor或者Driver上的BlockManager
 BlockManagerMasterEndpoint接收Driver或Executor上的BlockManagerMaster发送的消息,对所有的BlockManager统一管理。BlockManagerMasterEndpoint定义的一些管理BlockManager的属性.
 
 - blockLocations : BlockId与存储了此BlockId对应Block的BlockManager的BlockManagerId之间的一对多关系缓存.
+- topologyMapper : 对集群所有节点的拓扑结构的映射
 
 
 
