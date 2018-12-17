@@ -584,8 +584,44 @@ NettyBlockRpcService中使用了OneForOneStreamManager来提供一对一的流�
 
 如果没有部署外部Shuffle服务，即spark.shuffle.service.enabled属性为false时，NettyBlockTransferService不但通过OneForOneStreamManager与NettyBlockRpcServer对外提供Block上传与下载的服务，也将作为默认的Shuffle客服端。NettyBlockTransferService作为Shuffle客服端，具有发起上传和下载请求并接收服务端响应的能力。NettyBlockTransferService的两个方法--------fetchBlocks和uploadBlock将帮我们来实现.
 
+###### 发送下载远端Block的请求
 
 
+``` scala
+override def fetchBlocks(
+                            host: String,
+                            port: Int,
+                            execId: String,
+                            blockIds: Array[String],
+                            listener: BlockFetchingListener,
+                            tempFileManager: DownloadFileManager): Unit = {
+    logTrace(s"Fetch blocks from $host:$port (executor id $execId)")
+    try {
+      //创建匿名内部类
+      val blockFetchStarter = new RetryingBlockFetcher.BlockFetchStarter {
+        override def createAndStart(blockIds: Array[String], listener: BlockFetchingListener) {
+          val client = clientFactory.createClient(host, port)
+          new OneForOneBlockFetcher(client, appId, execId, blockIds, listener,
+            transportConf, tempFileManager).start()
+        }
+      }
+      //获取值作为下载请求的最大重试次数maxRetries
+      val maxRetries = transportConf.maxIORetries()
+      if (maxRetries > 0) {
+        // 注意，这个获取器将正确地处理maxretry == 0;我们避免它，以防万一
+        ////这段代码有错误。一旦我们确定了稳定性，就应该去掉if语句。
+        new RetryingBlockFetcher(transportConf, blockFetchStarter, blockIds, listener).start()
+      } else {
+        blockFetchStarter.createAndStart(blockIds, listener)
+      }
+    } catch {
+      case e: Exception =>
+        logError("在开始读取块时异常", e)
+        blockIds.foreach(listener.onBlockFetchFailure(_, e))
+    }
+  }
+```
+![Shuffle之Block下载流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545033921445.png)
 
 ### 调度系统
 
