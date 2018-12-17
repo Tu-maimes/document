@@ -542,7 +542,7 @@ BlockManagerMaster的作用是堆存在于Executor或者Driver上的BlockManager
 
 ##### BlockManagerMasterEndpoint详解
 
-BlockManagerMasterEndpoint接收Driver或Executor上的BlockManagerMaster发送的消息,对所有的BlockManager统一管理
+BlockManagerMasterEndpoint接收Driver或Executor上的BlockManagerMaster发送的消息,对所有的BlockManager统一管理。
 
 
 
