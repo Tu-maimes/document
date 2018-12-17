@@ -529,7 +529,11 @@ graph TD;
 ##### BlockManager提供的方法
 
  1. reregister : 此方法用于BlockManagerMaster重新注册BlockManager,并向BlockManagerMaster报告所有的Block信息.
- 2. 
+ 2. getCurrentBlockStatus:获取Block的状态信息,以及向BlockManagerMaster汇报
+ 3. getLocalBytes:此方法用于从存储体系获取BlockId锁对应Block的数据,并封装为ChunkedByteBuffer后返回
+ 
+
+#### BlockManagerMaster对BlockManager的管理
 
 ### 调度系统
 
