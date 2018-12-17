@@ -566,7 +566,7 @@ BlockManager中创建Shuffle客服端的代码如下:
     blockTransferService
   }
 ```
-备注:如果部署了外部的Shuffle服务,则需要配置spark.shuffle.service.enabled属性为true(此属性将决定externalShuffleServiceEnabled的值,默认是false)
+备注:如果部署了外部的Shuffle服务,则需要配置spark.shuffle.service.enabled属性为true(此属性将决定externalShuffleServiceEnabled的值,默认是false),此时将创建 ExternalShuffleClient.但在默认情况下,NetttyBlockTransferService也会作为Shuffle的客服端.
 
 
 
