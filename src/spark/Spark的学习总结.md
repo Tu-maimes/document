@@ -446,7 +446,7 @@ deleteFilesOnStop:停止DiskBlockManager的时候是否删除本地目录的布�
 conf :即SparkConf
 localDirs:本地目录的数组
 
-
+![DiskBlockManager管理的文件目录结构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545037455611.png)
 
 #### 磁盘存储DiskStore
 
