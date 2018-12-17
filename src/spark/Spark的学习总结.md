@@ -624,7 +624,8 @@ override def fetchBlocks(
 ```
 ![Shuffle之Block下载流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545033921445.png)
 
- 2. 在 BlockTransferService中封装了fetchBlockSync同步下载远端block
+ 2. 同步下载
+在 BlockTransferService中封装了fetchBlockSync同步下载远端block
 
 ###### 发送向远端上传Block的请求
 
