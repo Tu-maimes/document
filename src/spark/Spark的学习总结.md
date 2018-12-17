@@ -555,6 +555,17 @@ BlocktTransferService是BlockManager的子组件之一。抽象类BlockTransferS
  2. NettyBlockTransferService
 
 NettyBlockTransferService提供了可以被其他节点的客服端访问的Shuffle服务.
+BlockManager中创建Shuffle客服端的代码如下:
+``` scala
+ // 这要么是一个外部服务，要么只是直接连接到其他执行器的标准BlockTransferService。
+  private[spark] val shuffleClient = if (externalShuffleServiceEnabled) {
+    val transConf = SparkTransportConf.fromSparkConf(conf, "shuffle", numUsableCores)
+    new ExternalShuffleClient(transConf, securityManager,
+      securityManager.isAuthenticationEnabled(), conf.get(config.SHUFFLE_REGISTRATION_TIMEOUT))
+  } else {
+    blockTransferService
+  }
+```
 
 ### 调度系统
 
