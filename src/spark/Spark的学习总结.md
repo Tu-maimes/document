@@ -868,6 +868,16 @@ RDD的窄依赖(Narrow Dependency)是RDD中最常见的依赖关系,用来表示
 
 Spark提供了分区计算来解决这个问题。ShuffleDependency的Partition属性的类型是Partitioner,抽象类Partitioner定义了分区计算器的接口规范,ShuffleDependency的分区取决于Partitioner的具体实现。
 
+``` scala
+abstract class Partitioner extends Serializable {
+  def numPartitions: Int
+  def getPartition(key: Any): Int
+}
+```
+
+
+Partitioner的numPartitions方法用于获取分区数量。
+
 #### RDD内部的计算机制
 
 ##### Task简介
