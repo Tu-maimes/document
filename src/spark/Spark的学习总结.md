@@ -907,6 +907,10 @@ class HashPartitioner(partitions: Int) extends Partitioner {
 使用哈希和取模的方式,可以方便地计算出下游RRDD的各个分区将具体处理那些key.由于上游RDD所处理的key的哈希值在取模后很可能产生数据倾斜,所以HashPartition并不是一个均衡的分区计算器.
 
 
+#### RDDInfo
+
+
+
 #### RDD内部的计算机制
 
 ##### Task简介
