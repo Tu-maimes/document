@@ -909,6 +909,8 @@ class HashPartitioner(partitions: Int) extends Partitioner {
 
 #### RDDInfo
 
+RDDInfo用于描述RDD的信息,主要介绍下
+scpe : RDD的操作范围.scop的类型为RDDOperationScope,每个RDD都有一个RDDOperationScope.RDDOperationScope与Stage或Job之间并无特殊关系,一个RDDOperationScope可以存在于一个Stage内,也可以跨越多个Job.
 
 
 #### RDD内部的计算机制
