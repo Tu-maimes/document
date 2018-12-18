@@ -890,7 +890,7 @@ class HashPartitioner(partitions: Int) extends Partitioner {
 //计算出下游RDD的各个分区将具体处理那些key
   def getPartition(key: Any): Int = key match {
     case null => 0
-	//返回值为所对应的分区编号
+	//取模运算,返回值为所对应的分区编号
     case _ => Utils.nonNegativeMod(key.hashCode, numPartitions)
   }
 
