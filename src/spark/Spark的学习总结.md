@@ -710,6 +710,7 @@ DAGScheduler会将Job的RDD划分到不同的Stage,并构建这些Stage的依赖
 ##### ResultStage的实现
 
 ResultStage可以使用指定的函数对RDD中的分区进行计算并得出最终结果。
+ResultStage判断一个分区是否完成，是通过ActiveJob的Boolean类型数组finished，因为finished记录了每一个分区是否完成。
 
 ### 计算引擎
 
