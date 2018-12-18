@@ -718,6 +718,10 @@ ShuffleMapStage是DAG调度流程的中间Stage，它可以包括一到多个Shu
 
 ##### StageInfo
 
+StageInfo用于描述Stage信息，并可以传递给Sparklistener.
+
+#### 面向DAG的调度器DAGScheduler
+
 
 
 ### 计算引擎
