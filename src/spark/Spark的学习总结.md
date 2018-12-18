@@ -882,6 +882,29 @@ Partitoner有很多的实现类，它们的继承体系所示 。
 ![Partitioner的继承体系](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545097168157.png)
 
 
+``` scala
+class HashPartitioner(partitions: Int) extends Partitioner {
+  require(partitions >= 0, s"Number of partitions ($partitions) cannot be negative.")
+
+  def numPartitions: Int = partitions
+//计算出下游RDD的各个分区将具体处理那些key
+  def getPartition(key: Any): Int = key match {
+    case null => 0
+	//返回值为所对应的分区编号
+    case _ => Utils.nonNegativeMod(key.hashCode, numPartitions)
+  }
+
+  override def equals(other: Any): Boolean = other match {
+    case h: HashPartitioner =>
+      h.numPartitions == numPartitions
+    case _ =>
+      false
+  }
+
+  override def hashCode: Int = numPartitions
+}
+```
+
 #### RDD内部的计算机制
 
 ##### Task简介
