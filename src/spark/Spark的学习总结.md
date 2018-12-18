@@ -877,6 +877,8 @@ abstract class Partitioner extends Serializable {
 
 
 Partitioner的numPartitions方法用于获取分区数量。Partitioner的getPartiton方法用于将输入的key映射到下游RDD的从0到numPartitions-1这个范围中的某一个分区。
+Partitoner有很多的实现类，它们的继承体系所示 。
+
 
 #### RDD内部的计算机制
 
