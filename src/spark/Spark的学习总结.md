@@ -864,6 +864,7 @@ RDD的窄依赖(Narrow Dependency)是RDD中最常见的依赖关系,用来表示
  1. 第一类是一对一的依赖关系，在Spark中用OneToOneDependency来表示父RDD与子RDD的依赖关系是一对一的依赖关系。如：map、filter。
  2. 第二类是范围依赖关系，在Spark中用RangeDependency表示，表示父RDD与子RDD的一对一的范围内依赖关系。如：union。
 
+#### 分区计算器Partitioner
 
 
 
