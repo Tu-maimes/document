@@ -705,7 +705,11 @@ DiskBlockObjectWriter用于将JVM中的对象直接写入磁盘文件中。DiskB
 
 #### Stage详解
 
-DAGScheduler会将Job的RDD划分到不同的Stage,并构建这些Stage的依赖关系.这样可以使得没有依赖关系的Stage并行执行,并保证有依赖关系的Stage顺序执行。并行执行能够有效的利用集群资源，提升运行效率，而串行则适用于那些在时间和数据资源上存在强制依赖的场景。
+DAGScheduler会将Job的RDD划分到不同的Stage,并构建这些Stage的依赖关系.这样可以使得没有依赖关系的Stage并行执行,并保证有依赖关系的Stage顺序执行。并行执行能够有效的利用集群资源，提升运行效率，而串行则适用于那些在时间和数据资源上存在强制依赖的场景。Stage分为需要处理Shuffle的ShuffleMapStage和最下游的ResultStage。
+
+##### ResultStage的实现
+
+
 
 ### 计算引擎
 
