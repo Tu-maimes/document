@@ -716,6 +716,10 @@ ResultStage判断一个分区是否完成，是通过ActiveJob的Boolean类型�
 
 ShuffleMapStage是DAG调度流程的中间Stage，它可以包括一到多个ShuffleMapTask，这些ShuffleMapTask将生成于Shuffle的数据。ShuffleMapStage一般是ResultStage或者是其他ShuffleMapStage的前置Stage，ShuffleMapTask则通过Shuffle与下游Stage中的Task串联起来。从ShuffleMapStage的命名可以看出，它将对Shuffle的数据映射到下游Stage的各个分区中。
 
+##### StageInfo
+
+
+
 ### 计算引擎
 
 计算引擎由内存管理器（MemoryManager）、Tungsten、任务内存管理器（TaskMemory-Manager）、Task、外部排序器（ExternalSorter）、Shuffle（ShuffleManager）等组成。MemoryManager除了对存储体系中的存储内存提供支持和管理外，还为计算引擎中的执行内存提供支持和管理。Tungsten除用于存储外，也可以用于计算或者执行。TaskMemoryManager对分配给单个Task的内存资源进行更细粒度的管理和控制.ExternalSorter用于在map端或reduce端对shuffleMapTask计算得到的中间结果进行排序、聚合等操作。ShuffleManager用于将各个分区对应的ShuffleMapTask产生的中间结果持久化到磁盘,并在reduce端按照分区远程拉取ShuffleMapTask产生的中间结。
