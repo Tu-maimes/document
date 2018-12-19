@@ -763,7 +763,9 @@ DAGScheduler本身的成员属性：
  21. failedEpoch：当检测到一个节点出现故障时，会将执行失败的Executor和MapOutputTracker当前的纪元添加到failedEpoch，此外，还使用failedEpoch忽略迷失的ShuffleMapTask的结果。
  22. outputCommitCoordinator：SparkEnv的子组件
  23. closureSerializer：SparkEnv中创建的closureSerializer
- 24. 
+ 24. disallowStageRetryForTest：在测试过程中，发生FetchFailed时，使用此属性则不会对Stage进行重试。
+ 25. messageScheduler：只有一个线程的SchedulerThreadPoolExecutor，创建的线程以dag-scheduler-message开头。messageScheduler的职责是对失败的Stage进行重试。
+ 26. eventProcessLoop：DAGSchedulerEventProcessLoop
 
 ### 计算引擎
 
