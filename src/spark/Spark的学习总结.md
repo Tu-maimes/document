@@ -751,7 +751,8 @@ DAGScheduler本身的成员属性：
  9. nextJobId：类型为AtomicInteger用于生成下一个Job的身份标识（即JobId）
  10. numTotalJobs：总共提交的作业数量。numTotalJobs实际读取了nextJobId的当前值。
  11. nextStageId：类型为AtomicInteger用于生成下一个Stage的身份标识
- 12. jobIdToStageIds：用于缓存JobId与StageId之间的映射关系。
+ 12. jobIdToStageIds：用于缓存JobId与StageId之间的映射关系。由于jobIdToStageIds的类型HashMap[Int,HashSet[Int]]，所以Job与Stage之间是一对多的关系。
+ 13. stageIdToStage：用于缓存StageId与Stage之间的映射关系。
 
 ### 计算引擎
 
