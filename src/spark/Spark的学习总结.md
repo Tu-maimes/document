@@ -738,9 +738,18 @@ DAGSchedulerEventProcessLoop是DAGScheduler内部的事件循环处理器，用�
 
 ##### DAGScheduler的组成
 
+DAGScheduler本身的成员属性：
 
-
-
+ 1. sc ： SparkContext
+ 2. taskScheduler ： TaskScheduler的引用
+ 3. listenerBus ： LiveListenerBus
+ 4. mapOutputTracker：MapOutputTrackerMaster
+ 5. blockManagerMaster：BlockManagerMaster
+ 6. env ：SparkEnv
+ 7. clock ：时钟对象
+ 8. metricsSource ： 有关DAGScheduler的度量源
+ 9. nextJobId：类型为AtomicInteger用于生成下一个Job的身份标识（即JobId）
+ 10. numTotalJobs：总共提交的作业数量。numTotalJobs实际读取了nextJobId的当前值。
 
 ### 计算引擎
 
