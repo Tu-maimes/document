@@ -722,6 +722,8 @@ StageInfo用于描述Stage信息，并可以传递给Sparklistener.
 
 ###### JobListener与JobWaiter
 
+###### ActiveJob详解
+
 #### 面向DAG的调度器DAGScheduler
 
 DAGSchedule实现了面向DAG的高层次调度，即将DAG中的各个RDD划分到不同的Stage。DAGSchedule可以通过计算将DAG中的一系列RDD划分到不同的Stage，然后构建这些Stage之间的父子关系，最后将每个Stage按照Partition切分为多个Task，并以Task集合（即TaskSet）的形式提交给底层的TaskScheduler。
