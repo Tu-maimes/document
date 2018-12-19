@@ -779,7 +779,7 @@ DAGSchedulerEventProcessLoop接收到JobSubmitted事件，将调用DAGScheduler�
 
 ###### 构建Stage
 
-一个Job可能被划分
+一个Job可能被划分一到多个Stage。各个Stage之间存在着依赖关系，下游的Stage依赖上游的Stage。Job中所有Stage的提交过程包括反向驱动与正向提交。
 
 ### 计算引擎
 
