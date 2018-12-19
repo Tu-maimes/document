@@ -758,7 +758,7 @@ DAGScheduler本身的成员属性：
  16. waitingStages：处于等待状态的Stage集合
  17. runningStages：处于运行状态的Stage集合
  18. failedStages：处于失败状态的Stage集合
- 19. 
+ 19. activeJobs：
 
 ### 计算引擎
 
