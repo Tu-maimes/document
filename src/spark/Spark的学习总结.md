@@ -759,7 +759,8 @@ DAGScheduler本身的成员属性：
  17. runningStages：处于运行状态的Stage集合
  18. failedStages：处于失败状态的Stage集合
  19. activeJobs：所有激活的Job的集合
- 20. cacheLocs：缓存每个RDd的所有分区的位置信息。cacheLocs的数据类型是HashMap[Int,IndexedSeq[Seq[Tasklocation]]]，所以每个RDD的分区按照分区号作为索引存储到IndexedSeq。
+ 20. cacheLocs：缓存每个RDd的所有分区的位置信息。cacheLocs的数据类型是HashMap[Int,IndexedSeq[Seq[Tasklocation]]]，所以每个RDD的分区按照分区号作为索引存储到IndexedSeq。由于RDD的每个分区作为一个Block以及存储体系的复制因素，因此RDD的每个分区的Block可能存在于多个节点的BlockManager上，RDD每个分区的位置信息为TaskLocation的序列。
+ 21. failedEpoch：当检测到一个节点出现故障时，会将执行失败的Executor和MapOutputTracker当前的纪元添加到failedEpoch，此外，还使用failedEpoch忽略迷失的ShuffleMapTask的结果。
 
 ### 计算引擎
 
