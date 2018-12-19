@@ -724,7 +724,7 @@ StageInfo用于描述Stage信息，并可以传递给Sparklistener.
 
 ###### ActiveJob详解
 
-ActiveJob用来表示已经激活的Job。
+ActiveJob用来表示已经激活的Job，即被DAGScheduler接收处理的Job。
 
 #### 面向DAG的调度器DAGScheduler
 
