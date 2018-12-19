@@ -758,7 +758,8 @@ DAGScheduler本身的成员属性：
  16. waitingStages：处于等待状态的Stage集合
  17. runningStages：处于运行状态的Stage集合
  18. failedStages：处于失败状态的Stage集合
- 19. activeJobs：
+ 19. activeJobs：所有激活的Job的集合
+ 20. cacheLocs：缓存每个RDd的所有分区的位置信息。cacheLocs的数据类型是HashMap[Int,IndexedSeq[Seq[Tasklocation]]]，所以每个RDD的分区按照分区号作为索引存储到IndexedSeq。
 
 ### 计算引擎
 
