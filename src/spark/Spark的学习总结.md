@@ -775,7 +775,7 @@ DAGScheduler本身的成员属性：
 
 ###### 处理提交的Job
 
-DAGSchedulerEventProcessLoop接收到JobSubmitted事件。
+DAGSchedulerEventProcessLoop接收到JobSubmitted事件，将调用DAGScheduler的handleJobSumitmitted方法。
 
 ### 计算引擎
 
