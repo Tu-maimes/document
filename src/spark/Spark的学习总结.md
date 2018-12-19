@@ -728,7 +728,7 @@ ActiveJob用来表示已经激活的Job，即被DAGScheduler接收处理的Job�
 
 ######  DAGSchedulerEventProcessLoop的介绍
 
-DAGSchedulerEventProcessLoop是DAGScheduler内部的事件循环处理器，
+DAGSchedulerEventProcessLoop是DAGScheduler内部的事件循环处理器，用于处理DAGSchedulerEvent类型的事件。
 
 #### 面向DAG的调度器DAGScheduler
 
