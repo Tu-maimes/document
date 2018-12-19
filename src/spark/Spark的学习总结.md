@@ -755,7 +755,10 @@ DAGScheduler本身的成员属性：
  13. stageIdToStage：用于缓存StageId与Stage之间的映射关系。
  14. shuffleIdToMapStage：用于缓存Shuffle的身份标识（即ShuffleId）与ShuffleMapStage之间的映射关系
  15. jobIdToActiveJob：Job的身份标识与激活的Job（即ActiveJob）之间的映射关系。
- 16. 
+ 16. waitingStages：处于等待状态的Stage集合
+ 17. runningStages：处于运行状态的Stage集合
+ 18. failedStages：处于失败状态的Stage集合
+ 19. 
 
 ### 计算引擎
 
