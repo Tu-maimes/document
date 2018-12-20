@@ -809,6 +809,13 @@ DAGSchedulerEventProcessLoop接收到JobSubmitted事件，将调用DAGScheduler�
 
 TaskScheduler对任务的调度时借助于调度池来实现的，Pool是对Task集合进行调度的调度池。调度池内部有一个根调度队列，根调度队列中包含了多个子调度池。子调度池自身的调度队列中还可以包含其他的调度池或者TaskSetManager，所以整个调度池是一个多层次的调度队列。
 
+![调度队列的层次关系](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545285925094.png)
+
+
+#### 任务集合管理器TaskSetManager
+
+TaskSetManager也实现了Scheduler特质，并参与到调度池的调度中。
+
 
 ### 计算引擎
 
