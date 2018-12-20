@@ -720,7 +720,7 @@ ShuffleMapStage是DAG调度流程的中间Stage，它可以包括一到多个Shu
 
 StageInfo用于描述Stage信息，并可以传递给Sparklistener.
 
-#### 面向DAG的调度器DAGScheduler
+![enter description here](./videos/43287540dadebb4ccb9e7c20dcc3a7e8.mp4 "43287540dadebb4ccb9e7c20dcc3a7e8")#### 面向DAG的调度器DAGScheduler
 
 DAGSchedule实现了面向DAG的高层次调度，即将DAG中的各个RDD划分到不同的Stage。DAGSchedule可以通过计算将DAG中的一系列RDD划分到不同的Stage，然后构建这些Stage之间的父子关系，最后将每个Stage按照Partition切分为多个Task，并以Task集合（即TaskSet）的形式提交给底层的TaskScheduler。
 所有的组件都通过向DAGScheduler投递DAGSchedulerEvent来使用DAGScheduler。DAGScheduler内部的DAGSchedulerEventProcessLoop将处理这些DAGSchedulerEvent，并调用DAGScheduler的不同方法。JobListener用于堆作业中每个Task执行成功或失败进行监听，JobWaiter实现了JobListener并最终确定作业的成功与失败。
@@ -798,6 +798,8 @@ DAGSchedulerEventProcessLoop接收到JobSubmitted事件，将调用DAGScheduler�
  5. DAGScheduler首先把最上游的Stage中的Task集合提交给TaskScheduler，然后逐步将下游的Stage中的Task集合提交给TaskScheduler。TaskScheduler将对Task集合进行调度。
 
 ###### Task执行结果处理
+
+#### 调度算法
 
 
 
