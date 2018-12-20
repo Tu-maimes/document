@@ -646,8 +646,8 @@ port	|41414|	启动服务器的端口。|
  flume-ng agent -c conf -f /etc/flume/conf/flume-conf.properties.template -n agent -Dflume.monitoring.type=http -Dflume.monitoring.port=5653
 
 ```
-这将使得Flume在5653端口上启动一个HTTP服务器。访问/metric界面,将返回如下JSON格式的度量(用来访问指标的URL是http://192.168.102.115:5653/metrics)
-==备注:当前的机器IP是192.168.102.115==
+这将使得Flume在5653端口上启动一个HTTP服务器。访问/metric界面,将返回如下JSON格式的度量(用来访问指标的URL是http://host:5653/metrics)
+==备注:当前的机器IP是host==
 JSON格式的数据类型:
 {
 "type.component1" : {"metric1":"value1","metric2":"value2"},
@@ -666,7 +666,7 @@ Ganglia的度量参数列表：
 |pollFrequency|	60	|时间，以秒为单位，从连续报告到Ganglia服务器|
 |isGanglia3	|false|	Ganglia服务器版本是3。默认情况下，Flume以Ganglia 3.1格式发送|
 ``` stylus
- flume-ng agent -c conf -f etc/flume/conf/flume-conf.properties.template --name agent  -Dflume.monitoring.type=ganglia -Dflume.monitoring.hosts=192.168.102.120:8655 -Dflume.monitoring.pollFrequency=30 -Dflume.monitoring.isGanglia3=ture
+ flume-ng agent -c conf -f etc/flume/conf/flume-conf.properties.template --name agent  -Dflume.monitoring.type=ganglia -Dflume.monitoring.hosts=host:8655 -Dflume.monitoring.pollFrequency=30 -Dflume.monitoring.isGanglia3=ture
 ```
 
 ###  度量的含义
@@ -740,38 +740,28 @@ Ganglia的度量参数列表：
 
  2. 使用配置组启动具有不同配置的Flume代理。大多数情况下，Flume流程很复杂，不同的代理程序在Flume主机上运行。从Ambari Web界面，您可以将主机划分为不同的配置组。每个配置组都可以与Flume代理的特定配置文件相关联。本节介绍如何为Flume代理创建配置组。在Flume Configs页面上，==默认组包含所有Flume主机，此默认组中的所有主机都运行相同的Flume代理==。
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542685332548.png)
 
  3. 要创建配置组，请单击“管理配置组” - > +。键入新组的名称和说明。单击确定。
 
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542690016261.png)
-
  4. 选择新组（在此示例中为“guzhi”），然后单击空主机名框下的+。
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542690509946.png)
 
  5. 选择要包含在配置组中的主机。单击保存。
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542690629191.png)
 
  6. Configs页面有两个部分：Flume代理配置的“flume.conf”和flume-env.sh文件的“Advanced flume-env”。展开“flume.conf”，默认情况下，它只包含一个注释行：＃Flume agent config。将代理配置添加到此字段。单击“保存”，然后重新启动Flume服务（单击“重新启动”）以使更改生效。。例如，从组列表中选择guzhi，单击flume.conf部分中的+，然后添加Flume代理配置详细信息。
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691001380.png)
-
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691483274.png)
-
  7.展开Advanced flume-env部分，单击+，然后根据需要更改flume-env值。您可以更新内存参数或将自定义JAR文件添加到类路径。
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691721791.png)
+
 
  8. 重启Flume后,在“摘要”页面上，您现在可以看到不同配置组中的主机运行不同的Flume代理。
 
-![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1542691906987.png)
 
 #### 命令行实现
 
- [Flume的代理](http://cleverowl.uk/2015/09/30/ingesting-files-with-apache-flume/)
+
  
  
 
