@@ -816,6 +816,10 @@ TaskScheduler对任务的调度时借助于调度池来实现的，Pool是对Tas
 
 TaskSetManager也实现了Scheduler特质，并参与到调度池的调度中。TaskSetManager对TaskSet进行管理，包括任务推断、Task本地性，并对Task进行资源分配。TaskSchedulerImpl依赖于TaskSetManager。
 
+##### Task集合
+
+
+
 
 ### 计算引擎
 
