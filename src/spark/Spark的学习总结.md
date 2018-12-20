@@ -801,7 +801,7 @@ DAGSchedulerEventProcessLoop接收到JobSubmitted事件，将调用DAGScheduler�
 
 #### 调度算法
 
-
+调度池对TaskSet的调度取决于调度算法。
 
 ### 计算引擎
 
