@@ -807,7 +807,7 @@ DAGSchedulerEventProcessLoop接收到JobSubmitted事件，将调用DAGScheduler�
 
 ##### Pool的实现
 
-TaskScheduler对任务的调度时借助于调度池来实现的，Pool是对Task集合进行调度的调度池。
+TaskScheduler对任务的调度时借助于调度池来实现的，Pool是对Task集合进行调度的调度池。调度池内部有一个根调度队列，根调度队列中包含了多个子调度池。子调度池自身的调度队列中还可以包含其他的调度池或者TaskSetManager，所以整个调度池是一个多层次的调度队列。
 
 
 ### 计算引擎
