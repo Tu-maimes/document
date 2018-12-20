@@ -788,6 +788,7 @@ DAGSchedulerEventProcessLoop接收到JobSubmitted事件，将调用DAGScheduler�
 ###### DAGScheduler的调度流程
 
  1. 表示应用程序通过对Spark API的调用，进行一系列RDD转换构建出RDD之间的依赖关系后，调用DAGScheduler的runJob方法将RDD及其血缘关系中的所有RDD传递给DAGScheduler进行调度。
+ 2. DAGScheduler的runJob方法实际通过调用DAGScheduler的submitJob方法向DAGSchedulerEventProcessLoop发送JobSubmitted事件。
 
 ### 计算引擎
 
