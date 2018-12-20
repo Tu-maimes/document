@@ -799,9 +799,16 @@ DAGSchedulerEventProcessLoop接收到JobSubmitted事件，将调用DAGScheduler�
 
 ###### Task执行结果处理
 
-#### 调度算法
+#### 调度池Pool
+
+##### 调度算法
 
 调度池对TaskSet的调度取决于调度算法。
+
+##### Pool的实现
+
+TaskScheduler对任务的调度时借助于调度池来实现的，Pool是对Task集合进行调度的调度池。
+
 
 ### 计算引擎
 
