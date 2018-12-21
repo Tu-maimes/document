@@ -829,6 +829,20 @@ Pool和TaskSetManager中对推断执行的操作分为两类：
 
 - checkSpeculatableTasks用于检查当前TaskSetManager中是否有需要推断的任务。
 - dequeeSpelativeTask根据指定的Host、Executor和本地性级别，从可推断的Task中找出可推断的Task在TaskSet中的索引和相应的本地性级别。
+
+##### Task本地性
+
+Spark目前支持五种本地性级别：
+
+ 1. PROCESS_LOCAL(本地进程)
+ 2. NODE_LOCAL(本地节点)
+ 3. NO_PREF(没有偏好)
+ 4. RACK_LOCAL(本地机架)
+ 5. ANY(任何)
+
+
+![获取允许的本地性级别](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545385155109.png)
+
 ### 计算引擎
 
 计算引擎由内存管理器（MemoryManager）、Tungsten、任务内存管理器（TaskMemory-Manager）、Task、外部排序器（ExternalSorter）、Shuffle（ShuffleManager）等组成。MemoryManager除了对存储体系中的存储内存提供支持和管理外，还为计算引擎中的执行内存提供支持和管理。Tungsten除用于存储外，也可以用于计算或者执行。TaskMemoryManager对分配给单个Task的内存资源进行更细粒度的管理和控制.ExternalSorter用于在map端或reduce端对shuffleMapTask计算得到的中间结果进行排序、聚合等操作。ShuffleManager用于将各个分区对应的ShuffleMapTask产生的中间结果持久化到磁盘,并在reduce端按照分区远程拉取ShuffleMapTask产生的中间结。
