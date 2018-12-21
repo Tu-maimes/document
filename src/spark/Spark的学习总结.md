@@ -818,9 +818,17 @@ TaskSetManager也实现了Scheduler特质，并参与到调度池的调度中。
 
 ##### Task集合
 
+DAGScheduler将Task提交给TaskScheduler时，需要将多个Task打包为TaskSet。Task是整个调度池中对Task进行调度管理的基本单位，由调度池中的TaskSetManager来管理。
 
+##### 调度池与推断执行
 
+Pool和TaskSetManager中对推断执行的操作分为两类：
 
+ 1. 可推断任务的检测与缓存
+ 2. 从缓存中找到可推断任务进行推断执行
+
+- checkSpeculatableTasks用于检查当前TaskSetManager中是否有需要推断的任务。
+- dequeeSpelativeTask根据指定的Host、Executor和本地性级别，从可推断的Task中找出可推断的Task在TaskSet中的索引和相应的本地性级别。
 ### 计算引擎
 
 计算引擎由内存管理器（MemoryManager）、Tungsten、任务内存管理器（TaskMemory-Manager）、Task、外部排序器（ExternalSorter）、Shuffle（ShuffleManager）等组成。MemoryManager除了对存储体系中的存储内存提供支持和管理外，还为计算引擎中的执行内存提供支持和管理。Tungsten除用于存储外，也可以用于计算或者执行。TaskMemoryManager对分配给单个Task的内存资源进行更细粒度的管理和控制.ExternalSorter用于在map端或reduce端对shuffleMapTask计算得到的中间结果进行排序、聚合等操作。ShuffleManager用于将各个分区对应的ShuffleMapTask产生的中间结果持久化到磁盘,并在reduce端按照分区远程拉取ShuffleMapTask产生的中间结。
