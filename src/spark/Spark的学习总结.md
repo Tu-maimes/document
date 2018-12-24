@@ -707,6 +707,10 @@ DiskBlockObjectWriter用于将JVM中的对象直接写入磁盘文件中。DiskB
 
 DAGScheduler会将Job的RDD划分到不同的Stage,并构建这些Stage的依赖关系.这样可以使得没有依赖关系的Stage并行执行,并保证有依赖关系的Stage顺序执行。并行执行能够有效的利用集群资源，提升运行效率，而串行则适用于那些在时间和数据资源上存在强制依赖的场景。Stage分为需要处理Shuffle的ShuffleMapStage和最下游的ResultStage。
 
+
+![ Stage的划分与提交](https://www.github.com/Tu-maimes/document/raw/master/小书匠/Stage的划分.png)
+
+
 ##### ResultStage的实现
 
 ResultStage可以使用指定的函数对RDD中的分区进行计算并得出最终结果。
@@ -841,6 +845,7 @@ Spark目前支持五种本地性级别：
  5. ANY(任何)
 
 ![获取允许的本地性级别](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545385155109.png)
+
 
 ### 计算引擎
 
