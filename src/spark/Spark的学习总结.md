@@ -268,7 +268,12 @@ Spark将内存分为四个部分：
  4. 度量系统由Spark中的多种度量源(Source)和多种度量输出(Sink)构成,完成对Spark集群中各个组件运行期状态的监控.
 
 ### SparkContext
-Spark应用程序的提交与执行都离不开SparkContext的支持.在正式提交应用程序之前,首先需要初始化SparkContext.SparkContxt隐藏了网络通信、分布式部署、消息通信、存储体系、计算引擎、度量系统、文件服务、WebU等内容。
+Spark应用程序的提交与执行都离不开SparkContext的支持.在正式提交应用程序之前,首先需要初始化SparkContext.SparkContxt隐藏了网络通信、分布式部署、消息通信、存储体系、计算引擎、度量系统、文件服务、WebUI等内容。
+
+
+#### SparkUI
+
+![SparkUI的组成架构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545704673583.png)
 
 ### SparkEnv
 
