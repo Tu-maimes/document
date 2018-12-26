@@ -7,7 +7,7 @@ renderNumberedHeading: true
 
 ---
 
-[toc!?direction=lr]
+[toc!?direction=lr&theme=colorful]
 
 > Spark内核设计的艺术-架构设计与实现
 > 架构师
