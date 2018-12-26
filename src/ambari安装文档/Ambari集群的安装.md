@@ -277,7 +277,7 @@ echo never > /sys/kernel/mm/transparent_hugepage/enabled
 		vi /etc/ntp.conf
 
 		1. 去掉这个注释，将地址改成网段地址
-		restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+		restrict 192.168.3.0 mask 255.255.255.0 nomodify notrap
 		
 		注释掉这几个
 		#server 0.centos.pool.ntp.org iburst
@@ -315,7 +315,7 @@ echo never > /sys/kernel/mm/transparent_hugepage/enabled
 		vi /etc/ntp.conf
 		
 		1.去掉这个注释，将地址改成网段地址
-		restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+		restrict 192.168.3.0 mask 255.255.255.0 nomodify notrap
         
         
         注释掉这几个
@@ -327,13 +327,13 @@ echo never > /sys/kernel/mm/transparent_hugepage/enabled
         
         
         添加一下内容
-        server 192.168.1.46
+        server 192.168.3.100
         restrict 192.168.1.46 nomodify notrap noquery
         server  127.127.1.0     # local clock
         fudge   127.127.1.0 stratum 10
         
 	    2. 启动ntpd客服端	
-        ntpdate -u 192.168.1.46
+        ntpdate -u 192.168.3.100
 		sudo service ntpd start
 		sudo service ntpd status
 		chkconfig ntpd on
