@@ -290,6 +290,10 @@ Spark执行环境SparkEnv是Spark中的Task运行所必须的组件。SparkEnv�
 ![ExecutorAllocationManager与集群管理器之间的关系](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545805659294.png)
 
 
+
+![Executor的动态分配过程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545810040580.png)
+
+
 ### 存储体系
 Spark优先考虑使用各节点的内存作为存储，当内存不足时会考虑使用磁盘，这极大地减少了磁盘IO，提升任务的执行效率。Spark的内存存储空间与执行存储空间被定义为软边界，二者可以相互调用资源，提高了资源的利用效率，又提高了Task的执行效率。Spark可以直接操作操作系统的内存，直接操作系统内存，空间的分配和释放也更迅速。
 
