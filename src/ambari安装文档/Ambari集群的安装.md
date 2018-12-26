@@ -690,12 +690,12 @@ mysql-community-libs-compat-5.7.21-1.el6.x86_64.rpm
 mysql-community-common-5.7.21-1.el6.x86_64.rpm
 mysql-community-embedded-devel-5.7.21-1.el6.x86_64.rpm
 
-#rpm -ivh mysql-community-common-5.7.21-1.el6.x86_64.rpm
-#rpm -ivh mysql-community-libs-5.7.21-1.el6.x86_64.rpm
-#rpm -ivh mysql-community-libs-compat-5.7.21-1.el6.x86_64.rpm
-#rpm -ivh mysql-community-client-5.7.21-1.el6.x86_64.rpm
-#rpm -ivh mysql-community-server-5.7.21-1.el6.x86_64.rpm
-#rpm -ivh mysql-community-devel-5.7.21-1.el6.x86_64.rpm
+#rpm -ivh mysql-community-common-5.7.21-1.el6.x86_64.rpm --force --nodeps
+#rpm -ivh mysql-community-libs-5.7.21-1.el6.x86_64.rpm --force --nodeps
+#rpm -ivh mysql-community-libs-compat-5.7.21-1.el6.x86_64.rpm --force --nodeps
+#rpm -ivh mysql-community-client-5.7.21-1.el6.x86_64.rpm --force --nodeps
+#rpm -ivh mysql-community-server-5.7.21-1.el6.x86_64.rpm --force --nodeps
+#rpm -ivh mysql-community-devel-5.7.21-1.el6.x86_64.rpm --force --nodeps
 
 #service mysqld start
 ```
