@@ -272,15 +272,17 @@ Spark将内存分为四个部分：
 
 ### SparkContext
 Spark应用程序的提交与执行都离不开SparkContext的支持.在正式提交应用程序之前,首先需要初始化SparkContext.SparkContxt隐藏了网络通信、分布式部署、消息通信、存储体系、计算引擎、度量系统、文件服务、WebUI等内容。
-
+[SparkContext的简介](https://www.cnblogs.com/chushiyaoyue/p/7468952.html)
 
 #### SparkUI
 
 ![SparkUI的组成架构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545704673583.png)
 
-### SparkEnv
+#### SparkEnv
 
 Spark执行环境SparkEnv是Spark中的Task运行所必须的组件。SparkEnv内部封装了RPC环境（RPCEnv）、序列化管理器、广播管理器（BroadcastManager）、map任务输出跟踪器（MapOutputTracker）、存储体系、度量系统（MetricsSystem）、输出提交协调器（OutputCommitCoordinator）等Task运行所需的各种组件。
+
+[SparkEnv的初始化](http://www.cnblogs.com/chushiyaoyue/p/7472904.html)
 
 ### 存储体系
 Spark优先考虑使用各节点的内存作为存储，当内存不足时会考虑使用磁盘，这极大地减少了磁盘IO，提升任务的执行效率。Spark的内存存储空间与执行存储空间被定义为软边界，二者可以相互调用资源，提高了资源的利用效率，又提高了Task的执行效率。Spark可以直接操作操作系统的内存，直接操作系统内存，空间的分配和释放也更迅速。
