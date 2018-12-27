@@ -9,6 +9,9 @@ renderNumberedHeading: true
 
 [toc!?direction=lr]
 
+
+[toc]
+
 > Spark内核设计的艺术-架构设计与实现
 > 架构师
 
@@ -298,6 +301,8 @@ Spark执行环境SparkEnv是Spark中的Task运行所必须的组件。SparkEnv�
 ContextCleaner用于清理那些超出应用范围的RDD、Shuffle对应的map任务状态、Shuffle元数据、Broadcast对象及RDD的CheckPoint数据。
 
 #### SparkListener与启动事件总线
+
+
 
 
 ### 存储体系
