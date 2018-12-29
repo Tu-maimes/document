@@ -104,6 +104,8 @@ Spark知道当前面的转换已经根据相同的partitioner分区器分好区�
 
 ## Spark-submit的参数调优
 
+### Spark作业基本原理简介
+
 ![Spark作业基本原理图](https://www.github.com/Tu-maimes/document/raw/master/小书匠/20180822095251656.jpg "20180822095251656")
 
 
@@ -117,4 +119,7 @@ Executor的内存主要分为三块：
 
 第二块是让task通过shuffle过程拉取了上一个stage的task的输出后，进行聚合等操作时使用，默认也是占Executor总内存的20%；
 
-第三块是让RDD持久化时使用，默认占Executor总内存的60%。
+第三块是让RDD持久化时使用，默认占Executor总内存的60%
+
+
+### Heading
