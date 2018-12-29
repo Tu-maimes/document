@@ -110,3 +110,11 @@ Spark知道当前面的转换已经根据相同的partitioner分区器分好区�
 根据你使用的部署模式（deploy-mode）不同，Driver进程可能在本地启动，也可能在集群中某个工作节点上启动。Driver进程本身会根据我们设置的参数，占有一定数量的内存和CPU core。而Driver进程要做的第一件事情，就是向集群管理器申请运行Spark作业需要使用的资源，这里的资源指的就是Executor进程。
 YARN集群管理器会根据我们为Spark作业设置的资源参数，在各个工作节点上，启动一定数量的Executor进程，每个Executor进程都占有一定数量的内存和CPU core。
 task是最小的计算单元，负责执行一模一样的计算逻辑（也就是我们自己编写的某个代码片段），只是每个task处理的数据不同而已。一个stage的所有task都执行完毕之后，会在各个节点本地的磁盘文件中写入计算中间结果，然后Driver就会调度运行下一个stage。下一个stage的task的输入数据就是上一个stage输出的中间结果。
+
+Executor的内存主要分为三块：
+
+第一块是让task执行我们自己编写的代码时使用，默认是占Executor总内存的20%；
+
+第二块是让task通过shuffle过程拉取了上一个stage的task的输出后，进行聚合等操作时使用，默认也是占Executor总内存的20%；
+
+第三块是让RDD持久化时使用，默认占Executor总内存的60%。
