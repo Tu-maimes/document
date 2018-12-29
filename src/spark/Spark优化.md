@@ -182,3 +182,41 @@ Executor的内存主要分为三块：
 
 
 参数调优建议：如果Spark作业中，有较多的RDD持久化操作，该参数的值可以适当提高一些，保证持久化的数据能够容纳在内存中。避免内存不够缓存所有的数据，导致数据只能写入磁盘中，降低了性能。但是如果Spark作业中的shuffle类操作比较多，而持久化操作比较少，那么这个参数的值适当降低一些比较合适。此外，如果发现作业由于频繁的gc导致运行缓慢（通过spark web ui可以观察到作业的gc耗时），意味着task执行用户代码的内存不够用，那么同样建议调低这个参数的值。
+
+
+- --spark.shuffle.memoryFraction
+
+ 
+
+参数说明：该参数用于设置shuffle过程中一个task拉取到上个stage的task的输出后，进行聚合操作时能够使用的Executor内存的比例，默认是0.2。也就是说，Executor默认只有20%的内存用来进行该操作。shuffle操作在进行聚合时，如果发现使用的内存超出了这个20%的限制，那么多余的数据就会溢写到磁盘文件中去，此时就会极大地降低性能。
+
+
+参数调优建议：如果Spark作业中的RDD持久化操作较少，shuffle操作较多时，建议降低持久化操作的内存占比，提高shuffle操作的内存占比比例，避免shuffle过程中数据过多时内存不够用，必须溢写到磁盘上，降低了性能。此外，如果发现作业由于频繁的gc导致运行缓慢，意味着task执行用户代码的内存不够用，那么同样建议调低这个参数的值。
+
+
+
+### 资源参数参考示例
+
+
+以下是一份spark-submit命令的示例，大家可以参考一下，并根据自己的实际情况进行调节：
+
+
+``` shell?linenums
+./bin/spark-submit \
+
+  --master yarn-cluster \
+
+  --num-executors 100 \
+
+  --executor-memory 6G \
+
+  --executor-cores 4 \
+
+  --driver-memory 1G \
+
+  --conf spark.default.parallelism=1000 \
+
+  --conf spark.storage.memoryFraction=0.5 \
+
+  --conf spark.shuffle.memoryFraction=0.3 \
+```
