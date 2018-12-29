@@ -70,3 +70,4 @@ def leftOuterJoin[W](other: RDD[(K, W)]): RDD[(K, (V, Option[W]))]
 
 ## 广播变量
 
+广播变量与Shuffle类算子联合使用避免Shuffle操作提高运算效率。
