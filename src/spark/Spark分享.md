@@ -1,0 +1,47 @@
+---
+title: Spark分享
+tags: 作者:大数据应用开发
+grammar_cjkRuby: true
+grammar_mindmap: true
+renderNumberedHeading: true
+---
+
+[toc!?direction=lr]
+
+## Stage
+
+DAGScheduler会将Job的RDD划分到不同的Stage,并构建这些Stage的依赖关系.这样可以使得没有依赖关系的Stage并行执行,并保证有依赖关系的Stage顺序执行。并行执行能够有效的利用集群资源，提升运行效率，而串行则适用于那些在时间和数据资源上存在强制依赖的场景。Stage分为需要处理Shuffle的ShuffleMapStage和最下游的ResultStage。
+
+### ResultStage
+
+ResultStage可以使用指定的函数对RDD中的分区进行计算并得出最终结果。 ResultStage判断一个分区是否完成，是通过ActiveJob的Boolean类型数组finished，因为finished记录了每一个分区是否完成。
+
+
+### ShuffleMapStage
+
+ShuffleMapStage是DAG调度流程的中间Stage，它可以包括一到多个ShuffleMapTask，这些ShuffleMapTask将生成于Shuffle的数据。ShuffleMapStage一般是ResultStage或者是其他ShuffleMapStage的前置Stage，ShuffleMapTask则通过Shuffle与下游Stage中的Task串联起来。从ShuffleMapStage的命名可以看出，它将对Shuffle的数据映射到下游Stage的各个分区中。
+
+### StageInfo
+
+StageInfo用于描述Stage信息，并可以传递给Sparklistener。
+## DAGScheduler
+
+DAGSchedule实现了面向DAG的高层次调度，即将DAG中的各个RDD划分到不同的Stage。DAGSchedule可以通过计算将DAG中的一系列RDD划分到不同的Stage，然后构建这些Stage之间的父子关系，最后将每个Stage按照Partition切分为多个Task，并以Task集合（即TaskSet）的形式提交给底层的TaskScheduler。 所有的组件都通过向DAGScheduler投递DAGSchedulerEvent来使用DAGScheduler。DAGScheduler内部的DAGSchedulerEventProcessLoop将处理这些DAGSchedulerEvent，并调用DAGScheduler的不同方法。JobListener用于堆作业中每个Task执行成功或失败进行监听，JobWaiter实现了JobListener并最终确定作业的成功与失败。
+
+### DAGSchedulerEventProcessLoop的介绍
+
+DAGSchedulerEventProcessLoop是DAGScheduler内部的事件循环处理器，用于处理DAGSchedulerEvent类型的事件。DAGSchedulerEventProcessLoop的实现与LiveListenerBus非常的相似。
+
+### Stage的划分与提交
+
+![Stage的划分与提交核心方法](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546060011376.png)
+
+### DAGScheduler的调度流程
+
+![DAGScheduler的调度流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1545272317529.png)
+
+1. 表示应用程序通过对Spark API的调用，进行一系列RDD转换构建出RDD之间的依赖关系后，调用DAGScheduler的runJob方法将RDD及其血缘关系中的所有RDD传递给DAGScheduler进行调度。
+2. DAGScheduler的runJob方法实际通过调用DAGScheduler的submitJob方法向DAGSchedulerEventProcessLoop发送JobSubmitted事件。DAGSchedulerEventProcessLoop接收到JobSubmitted事件后，将JobSubmitted事件放入事件队列(eventQueue)
+3. DAGSchedulerEventProcessLoop内部的轮询线程eventThread不断从事件队列中获取DAGSchedulerEvent事件，并调用DAGSchedulerEventProcessLoop的doOnReceive方法对事件进行处理。
+4. DAGSchedulerEventProcessLoop的doOnReceive方法处理JobSubmitted事件时，将调用DAGScheduler的handleJobSubmitted方法。handleJobSubmitted方法将对RDD构建Stage及Stage之间的依赖关系。
+5. DAGScheduler首先把最上游的Stage中的Task集合提交给TaskScheduler，然后逐步将下游的Stage中的Task集合提交给TaskScheduler。TaskScheduler将对Task集合进行调度。
