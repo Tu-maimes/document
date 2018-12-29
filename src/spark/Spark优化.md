@@ -100,3 +100,8 @@ repartitionAndSortWithinPartitions是Spark官网推荐的一个算子。官方�
 7. 使用相同分区方式的join可以避免Shuffle
 Spark知道当前面的转换已经根据相同的partitioner分区器分好区的时候如何避免shuffle。如果RDD有相同数目的分区，join操作不需要额外的shuffle操作。因为RDD是相同分区的，rdd1中任何一个分区的key集合都只能出现在rdd2中的单个分区中。因此rdd3中任何一个输出分区的内容仅仅依赖rdd1和rdd2中的单个分区，第三次shuffle就没有必要了。
 那如果rdd1和rdd2使用不同的分区器，或者使用默认的hash分区器但配置不同的分区数呢？那样的话，仅仅只有一个rdd（较少分区的RDD）需要重新shuffle后再join
+
+
+## Spark-submit的参数调优
+
+
