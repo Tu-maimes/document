@@ -878,6 +878,9 @@ Spark目前支持五种本地性级别：
 #### 运行器后端接口LauncherBackend
 
 
+![LauncherServer的工作原理](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546409549001.png)
+
+
 
 
 
