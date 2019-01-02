@@ -885,7 +885,7 @@ Spark目前支持五种本地性级别：
 
 #### 调度后端接口SchedulerBackend
 
-
+TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，SchedulerBackend给Task分配资源后将与分配给Task的Executor通信，并要求后者运行Task。
 
 
 ### 计算引擎
