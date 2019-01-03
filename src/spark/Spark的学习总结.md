@@ -898,6 +898,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
  3. 代表TaskScheduler调用SchedulerBackend的reviveOffers方法给Task提供资源。
  4. SchedulerBackend向RpcEndpoint发送ReviveOffers消息。
  5. RpcEndpoint将调用TaskScheduler的resourceOffers方法给Task提供资源。
+ 6. TaskScheduler调用根调度池的getSortedTaskSetQueue方法对所有TaskSetManager按照调度算法进行排序后，对TaskSetmanager管理的TaskSet按照“最大本地性”的原则选择其中的Task,最后为Task创建尝试执行信息、对Task进行序列化、生成TaskDescription等。
 
 ### 计算引擎
 
