@@ -1,5 +1,5 @@
 ---
-title: Spark优化
+title: Spark的Shuffle算子与提交参数的优化配置
 tags: 作者:汪帅
 grammar_cjkRuby: true
 grammar_mindmap: true
