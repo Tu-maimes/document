@@ -889,6 +889,10 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
 
 ![SchedulerBackend的继承体系](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546416218710.png)
 
+#### TaskSchedulerImpl的调度流程
+
+
+
 
 
 ### 计算引擎
