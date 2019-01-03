@@ -909,7 +909,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
  2. 代表SchedulerBackend的实现类将Task的完成状态封装为StatusUpdate消息发送给RpcEndpoint的实现类。
  3. RpcEndpoint的实现类接收到StatusUpdate消息后，将调用TaskSchedulerImpl的statusUpdate方法。
  4. TaskSchedulerimpl的StatusUpdate方法发现Task是执行成功的状态，那么调用TaskResultGetter的enqueueSuccessfulTask方法。
- 5. TaskResultGetter的enqueueSuccessfulTask方法对DirectTaskResult类型的结果进行反序列化得到Task执行结果。
+ 5. TaskResultGetter的enqueueSuccessfulTask方法对DirectTaskResult类型的结果进行反序列化得到Task执行结果，
 
 ### 计算引擎
 
