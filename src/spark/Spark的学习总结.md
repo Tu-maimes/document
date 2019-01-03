@@ -908,7 +908,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
  1. Executor中的TaskRunner在执行Task的过程中，不断将Task的状态通过调用SchedulerBackend的实现类的statusUpdate方法告诉SchedulerBackend的实现类。当Task执行成功后，TaskRunner也会将Task的完成状态告诉SchedulerBackend的实现类。
  2. 代表SchedulerBackend的实现类将Task的完成状态封装为StatusUpdate消息发送给RpcEndpoint的实现类。
  3. RpcEndpoint的实现类接收到StatusUpdate消息后，将调用TaskSchedulerImpl的statusUpdate方法。
- 4. TaskSchedulerimpl的StatusUpdate方法发现Task是执行成功的状态，
+ 4. TaskSchedulerimpl的StatusUpdate方法发现Task是执行成功的状态，那么调用TaskResultGetter的enqueueSuccessfulTask方法。
 
 ### 计算引擎
 
