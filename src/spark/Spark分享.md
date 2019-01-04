@@ -651,8 +651,82 @@ private def dequeueTask(execId: String, host: String, maxLocality: TaskLocality.
 ## Task启动
 
 
-
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578973478.png)
 
 org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend#launchTasks
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579048623.png)
+
+
+
+首先看一下，传入的对象：TaskDescription
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579149075.png)
+
+
+TaskDescription任务信息：
+    taskId: Long ：  任务id
+    attemptNumber: Int, 重试次数
+    executorId: String ： executor的Id ，即task分配给具体哪个executor
+    name: String, 任务名称
+    index: Int ：   任务在TaskSet中的索引 
+    addedFiles: Map[String, Long] ： 任务依赖的文件
+    addedJars: Map[String, Long] ： 任务依赖的jar包
+    properties: Properties ： 任务依赖的属性
+    serializedTask: ByteBuffer 序列化 
+
+
+executor 启动task ， 调用：org.apache.spark.executor.Executor#LaunchTask 方法  
+
+executorData.executorEndpoint.send(LaunchTask(new SerializableBuffer(serializedTask)))
+1.将task封装成 TaskRunner 
+
+2.加入等待队列 runningTasks 
+
+3.执行线程 TaskRunner
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579168754.png)
+
+
+org.apache.spark.executor.Executor.TaskRunner # run
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579188814.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579197778.png)
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579209183.png)
+
+
+org.apache.spark.scheduler.Task#run
+执行这个类中的run方法
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579225471.png)
+
+
+执行task中的run方法
+//TODO  ShuffleMapTask
+//TODO  ResultTask
+
+org.apache.spark.ShuffleMapTask#ResultTask
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579238547.png)
+
+
+
+org.apache.spark.scheduler#ResultTask 
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579251097.png)
+
+
+其他的就是将task中的一些运行信息直接返回，发送给drver、bolckmanager 等等，有兴趣的去关注一下。。。。。。。。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579269686.png)
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579276501.png)
