@@ -927,6 +927,33 @@ ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧
 ShuffleHandle是不透明的Shuffle句柄，ShuffleManager使用它向Task传递Shuffle信息。由于SortShuffleWriter依赖于ShuffleHandle的实现。
 BaseShuffleHandle有SerializedShuffleHandle与BypassMergeSortShuffleHandle两个子类。
 
+SerializedShuffleHandle用于确定何时选择使用序列化的Shuffle，BypassMergeSortShuffleHandle则用于确定何时选择绕开合并和排序的Shuffle路径。
+
+
+``` scala?linenums
+/**
+ * Subclass of [[BaseShuffleHandle]], used to identify when we've chosen to use the
+ * serialized shuffle.
+ */
+private[spark] class SerializedShuffleHandle[K, V](
+  shuffleId: Int,
+  numMaps: Int,
+  dependency: ShuffleDependency[K, V, V])
+  extends BaseShuffleHandle(shuffleId, numMaps, dependency) {
+}
+
+/**
+ * Subclass of [[BaseShuffleHandle]], used to identify when we've chosen to use the
+ * bypass merge sort shuffle path.
+ */
+private[spark] class BypassMergeSortShuffleHandle[K, V](
+  shuffleId: Int,
+  numMaps: Int,
+  dependency: ShuffleDependency[K, V, V])
+  extends BaseShuffleHandle(shuffleId, numMaps, dependency) {
+}
+```
+
 
 ## Spark扩展功能
 
@@ -1356,3 +1383,4 @@ TransportClientFactory构造器中的各参数如下:
 - pooledAllocator：汇集ByteBuf但对线程缓存禁用的分配器。
 
 [SparkSubmit]![提交流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1544603278966.png)
+
