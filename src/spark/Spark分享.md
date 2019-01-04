@@ -465,6 +465,121 @@ org.apache.spark.scheduler.TaskSetManager#resourceOffer
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578665753.png)
 
+org.apache.spark.scheduler.TaskSetManager#getAllowedLocalityLevel
+
+
+``` scala?linenums
+/**
+  * 根据当前的等待时间，根据延迟调度获取我们可以启动任务的级别。
+  *
+ */
+private def getAllowedLocalityLevel(curTime: Long): TaskLocality.TaskLocality = {
+  // Remove the scheduled or finished tasks lazily
+
+  // 判断task是否可以被调度
+  def tasksNeedToBeScheduledFrom(pendingTaskIds: ArrayBuffer[Int]): Boolean = {
+    var indexOffset = pendingTaskIds.size
+
+    // 循环
+    while (indexOffset > 0) {
+      // 索引递减
+      indexOffset -= 1
+      // 获得task索引
+      val index = pendingTaskIds(indexOffset)
+      // 如果对应task不存在任何运行实例，且未执行成功，可以调度，返回true
+      if (copiesRunning(index) == 0 && !successful(index)) {
+        return true
+      } else {
+        // 从pendingTaskIds中移除
+        pendingTaskIds.remove(indexOffset)
+      }
+    }
+    false
+  }
+
+  // Walk through the list of tasks that can be scheduled at each location and returns true
+  // if there are any tasks that still need to be scheduled. Lazily cleans up tasks that have
+  // already been scheduled.
+  def moreTasksToRunIn(pendingTasks: HashMap[String, ArrayBuffer[Int]]): Boolean = {
+    val emptyKeys = new ArrayBuffer[String]
+
+    // 循环pendingTasks
+    val hasTasks = pendingTasks.exists {
+      case (id: String, tasks: ArrayBuffer[Int]) =>
+
+        // 判断task是否可以被调度
+        if (tasksNeedToBeScheduledFrom(tasks)) {
+          true
+        } else {
+          emptyKeys += id
+          false
+        }
+    }
+    // The key could be executorId, host or rackId
+    // 移除数据
+    emptyKeys.foreach(id => pendingTasks.remove(id))
+    hasTasks
+  }
+
+
+  // 从当前索引currentLocalityIndex开始，循环myLocalityLevels
+  while (currentLocalityIndex < myLocalityLevels.length - 1) {
+
+
+    // 是否存在待调度task，根据不同的Locality Level，调用moreTasksToRunIn()方法从不同的数据结构中获取，
+    // NO_PREF直接看pendingTasksWithNoPrefs是否为空
+    val moreTasks = myLocalityLevels(currentLocalityIndex) match {
+
+      case TaskLocality.PROCESS_LOCAL => moreTasksToRunIn(pendingTasksForExecutor)
+
+      case TaskLocality.NODE_LOCAL => moreTasksToRunIn(pendingTasksForHost)
+
+      case TaskLocality.NO_PREF => pendingTasksWithNoPrefs.nonEmpty
+
+      case TaskLocality.RACK_LOCAL => moreTasksToRunIn(pendingTasksForRack)
+
+    }
+
+    // 不存在可以被调度的task
+    if (!moreTasks) {
+      // This is a performance optimization: if there are no more tasks that can
+      // be scheduled at a particular locality level, there is no point in waiting
+      // for the locality wait timeout (SPARK-4939).
+
+      // 记录lastLaunchTime
+      lastLaunchTime = curTime
+      logInfo(s"No tasks for locality level ${myLocalityLevels(currentLocalityIndex)}, " +
+        s"so moving to locality level ${myLocalityLevels(currentLocalityIndex + 1)}")
+
+      // 位置策略索引加1
+      currentLocalityIndex += 1
+
+    } else if (curTime - lastLaunchTime >= localityWaits(currentLocalityIndex)) {
+      // Jump to the next locality level, and reset lastLaunchTime so that the next locality
+      // wait timer doesn't immediately expire
+
+      // 更新localityWaits
+      lastLaunchTime += localityWaits(currentLocalityIndex)
+      logInfo(s"Moving to ${myLocalityLevels(currentLocalityIndex + 1)} after waiting for " +
+        s"${localityWaits(currentLocalityIndex)}ms")
+
+      // 位置策略索引加1
+      currentLocalityIndex += 1
+
+
+    } else {
+
+      // 返回当前位置策略级别
+      return myLocalityLevels(currentLocalityIndex)
+    }
+
+  }
+  // 返回当前位置策略级别
+  myLocalityLevels(currentLocalityIndex)
+}
+```
+在确定allowedLocality后，我们就需要调用dequeueTask()方法，出列task，进行调度。代码如下：
+
 
 
 
