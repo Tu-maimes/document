@@ -920,7 +920,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
 
 #### Shuffle管理器
 
-ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧密，所以将它视为计算引擎的一部分。根据ShuffleManager的名字，就知道它的主要功能是对Shuffle进行管理。
+ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧密，所以将它视为计算引擎的一部分。根据ShuffleManager的名字，就知道它的主要功能是对Shuffle进行管理。(由于Hash的Shuffle在Shuffle过程中随着map任务数量或者reduce任务数量的增加，基于Hash的Shuffle在性能上的表现相比基于Sort的Shuffle越来越差，因此Spark2.0.0版本移除了HashShuffleManager。)
 
 
 
