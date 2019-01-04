@@ -50,3 +50,202 @@ DAGSchedulerEventProcessLoop是DAGScheduler内部的事件循环处理器，用�
 ## Task任务的提交
 
 
+一个Spark Application分为stage级别和task级别的调度， task来源于stage，所有本文先从stage提交开始讲解task任务提交。
+
+
+![架构图](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572547027.png)
+
+
+Standalone模式提交运行流程图：
+
+
+
+![Standalone模式提交运行流程图](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572577374.png)
+
+
+
+
+![TaskSchedulerderImpl的调度流程](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546497529110.png)
+
+ 1. 代表DAGScheduler调用TaskScheduler的submitTasks方法向TaskScheduler提交TaskSet。
+ 2. 代表TaskScheduler接收到TaskSet后，创建对此TaskSet进行管理的TaskSetManager，并将此TaskSetManager通过调度池构造器添加到根调度池中。
+ 3. 代表TaskScheduler调用SchedulerBackend的reviveOffers方法给Task提供资源。
+ 4. SchedulerBackend向RpcEndpoint发送ReviveOffers消息。
+ 5. RpcEndpoint将调用TaskScheduler的resourceOffers方法给Task提供资源。
+ 6. TaskScheduler调用根调度池的getSortedTaskSetQueue方法对所有TaskSetManager按照调度算法进行排序后，对TaskSetmanager管理的TaskSet按照“最大本地性”的原则选择其中的Task,最后为Task创建尝试执行信息、对Task进行序列化、生成TaskDescription等。
+
+
+首先写一个WordCount代码（这个代码，为了观察多个Shuffle操作，我写了两个reducebykey 函数）
+源代码：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572632480.png)
+
+
+直接执行代码，查看spark执行程序时，将代码划分stage生成的DAG流程图
+
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572650152.png)
+
+
+可知： WordCount 在stage划分的时候，划分为三个stage 
+即在代码中如下标识：
+
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572696563.png)
+
+
+讲TaskScheduler ，先从DAGScheduler中提交任务开始吧，其中在stage划分task的时候，涉及到一些优化算法。
+org.apache.spark.scheduler.DAGScheduler#handleMapStageSubmitted
+这个方法主要有三个部分：
+1. 创建finalStage
+
+``` scala?linenums
+finalStage = getOrCreateShuffleMapStage(dependency, jobId)
+```
+
+2. 创建ActiveJob
+
+``` scilab?linenums
+val job = new ActiveJob(jobId, finalStage, callSite, listener, properties)
+```
+
+3. 提交stage
+
+``` scala?linenums
+submitStage(finalStage)
+```
+
+
+直接看第三步 submitStage
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572819448.png)
+
+
+
+
+这个是提交stage方法。
+里面是一个递归方法，举例：
+在代码中， 划分为三个stage：
+stage0  ---> stage1     ---> stage2
+ submitStage(stage: Stage) 这个方法先传入的是 finalStage（stage2）
+在方法里面循环递归， 分别寻找stage的父stage， 即 stage2 找到 stage1 ， stage1找到stage0
+stage0 没有父stage 即走 提交方法：
+submitMissingTasks(stage: Stage, jobId: Int)
+好，接下来，我们看submitMissingTasks
+可以看到入参： ShuffleMapStage 0 和 jobId 0
+ 找出当前stage的所有分区中，还没计算完分区的stage
+ 
+ 
+ 
+ ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572869602.png)
+ 
+ 
+ 
+ ShuffleMapStage
+stage.findMissingPartitions获取需要计算的分区，不同的stage有不同的实现：
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572896923.png)
+
+
+
+ResultStage
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572923068.png)
+
+
+
+计算 分区的最佳位置 ：  taskIdToLocations
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572943576.png)
+
+计算最佳位置的核心方法： getPreferredLocsInternal  (递归方法)
+
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572963275.png)
+
+
+这个开始传入的RDD：3，
+rdd：3找不到最佳位置， 找到rdd：3的父级rdd：2，
+rdd2，找不到最佳位置，找到rdd2的父级rdd1
+rdd1有最佳位置，直接返回： 具体的机器地址：
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546572994482.png)
+
+
+广播信息：
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546573010555.png)
+
+
+
+为每一个MapStage的分区 创建一个 ShuffleMapTask 或者 ResultTask 
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546573025946.png)
+
+
+将ShuffleMapTask 或者 ResultTask  封装成taskSet，提交Task
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546573052486.png)
+
+
+
+在这里执行的是
+
+``` scala?linenums
+taskScheduler.submitTasks(new TaskSet(
+  tasks.toArray, stage.id, stage.latestInfo.attemptNumber, jobId, properties))
+```
+
+接着调用执行的是：
+
+``` scala?linenums
+org.apache.spark.scheduler.TaskSchedulerImpl#submitTasks
+```
+
+
+这个方法一共干了两件事:
+1. 创建TaskSetManager
+2. 资源调度&运行task
+具体详情请参考注解：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546573414898.png)
+
+直接看
+backend.reviveOffers()
+
+backend 为： 
+
+YarnClusterSchedulerBackend  ==继承=》 YarnSchedulerBackend     ==继承=》 CoarseGrainedSchedulerBackend
+
+所以这个方法执行的是CoarseGrainedSchedulerBackend 中的reviveOffers 方法：
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546573438065.png)
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546573445201.png)
+
+
+
+最终走的是 makeOffers 这个方法
+
+为所有的executor 提供虚拟的资源。。。。。。
+
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546573462936.png)
+
+
+## Task资源调度
+
+
+
+## Task启动
