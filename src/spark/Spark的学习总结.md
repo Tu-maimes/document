@@ -920,7 +920,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
 
 #### Shuffle管理器
 
-
+ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧密，所以将它视为计算引擎的一部分。
 
 
 
