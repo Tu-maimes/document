@@ -581,6 +581,70 @@ private def getAllowedLocalityLevel(curTime: Long): TaskLocality.TaskLocality = 
 在确定allowedLocality后，我们就需要调用dequeueTask()方法，出列task，进行调度。代码如下：
 
 
+``` scala?linenums
+/**
+ * Dequeue a pending task for a given node and return its index and locality level.
+ * Only search for tasks matching the given locality constraint.
+ *
+ * @return An option containing (task index within the task set, locality, is speculative?)
+ */
+private def dequeueTask(execId: String, host: String, maxLocality: TaskLocality.Value)
+  : Option[(Int, TaskLocality.Value, Boolean)] =
+{
+
+  //< dequeueTaskFromList: 该方法获取list中一个可以launch的task，
+  // 同时清除扫描过的已经执行的task。其实它从第二次开始首先扫描的一定是已经运行完成的task，因此是延迟清除
+  // 同一个Executor，通过execId来查找相应的等待的task
+
+  // 首先调用dequeueTaskFromList()方法，对PROCESS_LOCAL级别的task进行调度
+  for (index <- dequeueTaskFromList(execId, host, getPendingTasksForExecutor(execId))) {
+    return Some((index, TaskLocality.PROCESS_LOCAL, false))
+  }
+
+  // 通过主机名找到相应的Task,不过比之前的多了一步判断
+  // PROCESS_LOCAL未调度到task的话，再调度NODE_LOCAL级别
+  if (TaskLocality.isAllowed(maxLocality, TaskLocality.NODE_LOCAL)) {
+    for (index <- dequeueTaskFromList(execId, host, getPendingTasksForHost(host))) {
+      return Some((index, TaskLocality.NODE_LOCAL, false))
+    }
+  }
+
+  // NODE_LOCAL未调度到task的话，再调度NO_PREF级别
+  if (TaskLocality.isAllowed(maxLocality, TaskLocality.NO_PREF)) {
+    // Look for noPref tasks after NODE_LOCAL for minimize cross-rack traffic
+    for (index <- dequeueTaskFromList(execId, host, pendingTasksWithNoPrefs)) {
+      return Some((index, TaskLocality.PROCESS_LOCAL, false))
+    }
+  }
+
+  // NO_PREF未调度到task的话，再调度RACK_LOCAL级别
+  if (TaskLocality.isAllowed(maxLocality, TaskLocality.RACK_LOCAL)) {
+    for {
+      rack <- sched.getRackForHost(host)
+      index <- dequeueTaskFromList(execId, host, getPendingTasksForRack(rack))
+    } {
+      return Some((index, TaskLocality.RACK_LOCAL, false))
+    }
+  }
+
+  // 最好是ANY级别的调度
+  if (TaskLocality.isAllowed(maxLocality, TaskLocality.ANY)) {
+    for (index <- dequeueTaskFromList(execId, host, allPendingTasks)) {
+      return Some((index, TaskLocality.ANY, false))
+    }
+  }
+
+
+  // find a speculative task if all others tasks have been scheduled
+  // 最后没办法了，拖的时间太长了，只能启动推测执行了
+  // 如果所有的class都被调度的话，寻找一个speculative task，同MapReduce的推测执行原理的思想
+  dequeueSpeculativeTask(execId, host, maxLocality).map {
+    case (taskIndex, allowedLocality) => (taskIndex, allowedLocality, true)}
+}
+```
+
+按照PROCESS_LOCAL、NODE_LOCAL、NO_PREF、RACK_LOCAL、ANY的顺序进行调度。
+得到TaskDescription
 
 
 
