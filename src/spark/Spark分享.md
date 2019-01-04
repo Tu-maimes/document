@@ -649,3 +649,10 @@ private def dequeueTask(execId: String, host: String, maxLocality: TaskLocality.
 
 
 ## Task启动
+
+
+
+
+org.apache.spark.scheduler.cluster.CoarseGrainedSchedulerBackend#launchTasks
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546579048623.png)
