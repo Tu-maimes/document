@@ -957,7 +957,36 @@ private[spark] class BypassMergeSortShuffleHandle[K, V](
 ##### MapStatus详解
 
 
+``` scala?linenums
+private[spark] sealed trait MapStatus {
+  /** Location where this task was run.
+    * 运行此任务的位置
+    * */
+  def location: BlockManagerId
 
+  /**
+   * Estimated size for the reduce block, in bytes.
+   *
+   * If a block is non-empty, then this method MUST return a non-zero size.  This invariant is
+   * necessary for correctness, since block fetchers are allowed to skip zero-size blocks.
+    *
+    *
+    * Reduce任务拉取Block的大小
+   */
+  def getSizeForBlock(reduceId: Int): Long
+}
+```
+
+``` scala?linenums
+  def apply(loc: BlockManagerId, uncompressedSizes: Array[Long]): MapStatus = {
+    if (uncompressedSizes.length > 2000) {
+      HighlyCompressedMapStatus(loc, uncompressedSizes)
+    } else {
+      new CompressedMapStatus(loc, uncompressedSizes)
+    }
+  }
+```
+根据上述代码uncompressedSizes.length > 2000来判断分别创建HighlyCompressedMapStatus和CompressedMapStatus这说明对于较大的数据量使用高度压缩的HighlyCompressedMapStatus一般数据量则使用CompressedMapStatus。
 
 
 
