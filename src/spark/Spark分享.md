@@ -252,7 +252,221 @@ TaskSchedulerImpl#resourceOffers
 被集群manager调用以提供slaves上的资源。我们通过按照优先顺序询问活动task集中的task来回应。
 我们通过循环的方式将task调度到每个节点上以便tasks在集群中可以保持大致的均衡。
 
-![](https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1546573628903]]]" )
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546573628903.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578110575.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578147694.png)
+
+
+
+主体流程。如下：
+        1、设置标志位newExecAvail为false，这个标志位是在新的slave被添加时被设置的一个标志，下面在计算任务的本地性规则时会用到；
+        2、循环offers，WorkerOffer为包含executorId、host、cores的结构体，代表集群中的可用executor资源：
+            2.1、更新executorIdToHost，executorIdToHost为利用HashMap存储executorId->host映射的集合；
+            2.2、如果新的slave加入：
+                2.2.1、executorsByHost中添加一条记录，key为host，value为new HashSet[String]()；
+                2.2.2、发送一个ExecutorAdded事件，并由DAGScheduler的handleExecutorAdded()方法处理；
+                2.2.3、新的slave加入时，标志位newExecAvail设置为true；
+            2.3、更新hostsByRack；
+        3、随机shuffle offers（集群中可用executor资源）以避免总是把任务放在同一组workers上执行；
+        4、构造一个task列表，以分配到每个worker，针对每个executor按照其上的cores数目构造一个cores数目大小的ArrayBuffer，实现最大程度并行化；
+        5、获取可以使用的cpu资源availableCpus；
+        6、调用Pool.getSortedTaskSetQueue()方法获得排序好的task集合，即sortedTaskSets；
+        7、循环sortedTaskSets中每个taskSet：
+               7.1、如果存在新加入的slave，则调用taskSet的executorAdded()方法，动态调整位置策略级别，这么做很容易理解，新的slave节点加入了，那么随之而来的是数据有可能存在于它上面，那么这时我们就需要重新调整任务本地性规则；
+        8、循环sortedTaskSets，按照位置本地性规则调度每个TaskSet，最大化实现任务的本地性：
+              8.1、对每个taskSet，调用resourceOfferSingleTaskSet()方法进行任务集调度；
+        9、设置标志位hasLaunchedTask，并返回tasks。
+
+
+接下来我们重点分析一下 一些重要的代码：
+
+返回排序过的TaskSet队列，有FIFO及Fair两种排序规则，默认为FIFO，可通过配置修改
+
+val sortedTaskSets = rootPool.getSortedTaskSetQueue
+
+schedulableQueue为Pool中的一个调度队列，里面存储的是TaskSetManager
+在TaskScheduler的submitTasks()方法中，通过层层调用，最终通过Pool的addSchedulable()方法将之前生成的TaskSetManager加入到schedulableQueue中
+而TaskSetManager包含具体的tasks
+taskSetSchedulingAlgorithm为调度算法，包括FIFO和FAIR两种
+这里针对调度队列， 按照调度算法对其排序， 生成一个序列sortedSchedulableQueue，
+
+FIFO： 先入先出
+FAIR： 公平调度
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578192030.png)
+
+
+首先，创建一个ArrayBuffer，用来存储TaskSetManager，然后，对Pool中已经存储好的TaskSetManager，即schedulableQueue队列，按照taskSetSchedulingAlgorithm调度规则或算法来排序，得到sortedSchedulableQueue，并循环其内的TaskSetManager，通过其getSortedTaskSetQueue()方法来填充sortedTaskSetQueue，最后返回。TaskSetManager的getSortedTaskSetQueue()方法也很简单，追加ArrayBuffer[TaskSetManager]即可，如下：
+我们着重来讲解下这个调度准则或算法taskSetSchedulingAlgorithm，其定义如下：
+FIFO:
+//  FIFO排序类中的比较函数的实现很简单：
+//  Schedulable A和Schedulable B的优先级，优先级值越小，优先级越高
+//  A优先级与B优先级相同，若A对应stage id越小，优先级越高
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578217885.png)
+
+
+公平调度：
+//  结合以上代码，我们可以比较容易看出Fair调度模式的比较逻辑：
+//
+//  正在运行的task个数小于   最小共享核心数的要比不小于的优先级高
+//  若两者正在运行的task个数都小于最小共享核心数，则比较minShare使用率的值，
+//  即runningTasks.toDouble / math.max(minShare, 1.0).toDouble，越小则优先级越高
+//  若minShare使用率相同，则比较权重使用率，即runningTasks.toDouble / s.weight.toDouble，越小则优先级越高
+//  如果权重使用率还相同，则比较两者的名字
+//
+//  对于Fair调度模式，需要先对RootPool的各个子Pool进行排序，再对子Pool中的TaskSetManagers进行排序，
+//  使用的算法都是FairSchedulingAlgorithm.FairSchedulingAlgorithm
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578243915.png)
+
+它的调度逻辑主要如下：
+1. 优先看正在运行的tasks数目是否小于最小共享cores数，如果两者只有一个小于，则优先调度小于的那个，原因是既然正在运行的Tasks数目小于共享cores数，说明该节点资源比较充足，应该优先利用；
+2. 如果不是只有一个的正在运行的tasks数目是否小于最小共享cores数的话，则再判断正在运行的tasks数目与最小共享cores数的比率；
+3. 最后再比较权重使用率，即正在运行的tasks数目与该TaskSetManager的权重weight的比，weight代表调度池对资源获取的权重，越大需要越多的资源。
+
+ 到此为止，获得了排序好的task集合， 如果存在新加入的slave，则调用taskSet的executorAdded()方法，即TaskSetManager的executorAdded()方法，代码如下：
+ 
+ ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578330307.png)
+ 
+ 实际方法： recomputeLocality
+ 
+ ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578345812.png)
+ 
+ 
+ def recomputeLocality() {
+  //currentLocalityIndex = 0 // Index of our current locality level in validLocalityLevels
+  // 它是有效位置策略级别中的索引，指示当前的位置信息。也就是我们上一个task被launched所使用的Locality Level。
+
+  // 首先获取之前的位置Level
+  // currentLocalityIndex为有效位置策略级别中的索引，默认为0
+  val previousLocalityLevel = myLocalityLevels(currentLocalityIndex)
+
+  // 计算有效的位置Level
+  myLocalityLevels = computeValidLocalityLevels()
+
+  // 获得位置策略级别的等待时间
+  localityWaits = myLocalityLevels.map(getLocalityWait)
+
+  // 设置当前使用的位置策略级别的索引
+  currentLocalityIndex = getLocalityIndex(previousLocalityLevel)
+}
+
+
+先看这个：
+val previousLocalityLevel = myLocalityLevels(currentLocalityIndex)
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578385441.png)
+ 
+ 确定在我们的任务集TaskSet中应该使用哪种位置Level，以便我们做延迟调度
+computeValidLocalityLevels
+ 
+ ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578403508.png)
+ 
+ 这里，我们先看下其中几个比较重要的数据结构。在TaskSetManager中，存在如下几个数据结构：
+// 每个executor上即将被执行的tasks的映射集合
+private val pendingTasksForExecutor = new HashMap[String, ArrayBuffer[Int]]
+
+// Set of pending tasks for each host. Similar to pendingTasksForExecutor,
+// but at host level.
+
+// 每个host上即将被执行的tasks的映射集合
+private val pendingTasksForHost = new HashMap[String, ArrayBuffer[Int]]
+
+// Set of pending tasks for each rack -- similar to the above.
+// 每个rack上即将被执行的tasks的映射集合
+private val pendingTasksForRack = new HashMap[String, ArrayBuffer[Int]]
+
+// Set containing pending tasks with no locality preferences.
+// 存储所有没有位置信息的即将运行tasks的index索引的集合
+private[scheduler] var pendingTasksWithNoPrefs = new ArrayBuffer[Int]
+
+// Set containing all pending tasks (also used as a stack, as above).
+// 存储所有即将运行tasks的index索引的集合
+private val allPendingTasks = new ArrayBuffer[Int]
+ 
+这些数据结构，存储了task与不同位置的载体的对应关系。在TaskSetManager对象被构造时，有如下代码被执行：
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578469756.png)
+
+添加一个任务的索引到所有相关的pending-task索引列表
+它是根据task的preferredLocations，来决定该往哪个数据结构存储的。
+最终，将task的位置信息，存储到不同的数据结构中，方便后续任务调度的处理。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578486308.png)
+ 
+ 我们再回来：
+ 
+ 
+ ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578509795.png)
+ 
+ 
+ 看这句
+获得位置策略级别的等待时间
+localityWaits = myLocalityLevels.map(getLocalityWait)
+
+
+可以通过 SparkConf 进行调整：
+new SparkConf() 
+.set(“spark.locality.wait”, “10”)
+
+默认值： spark.locality.wait，默认为3s
+PROCESS_LOCAL ： spark.locality.wait.process   默认为3s
+NODE_LOCAL：spark.locality.wait.node
+RACK_LOCAL: spark.locality.wait.rack
+
+最后：
+ 
+ ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578535380.png)
+ 
+ ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578546627.png)
+ 
+ 
+ 再回到方法：
+
+org.apache.spark.scheduler.TaskSchedulerImpl#resourceOffers
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578563955.png)
+
+
+org.apache.spark.scheduler.TaskSchedulerImpl#resourceOfferSingleTaskSet
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578580258.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578610247.png)
+
+
+该方法的主体流程如下：
+        1、标志位launchedTask初始化为false，用它来标记是否有task被成功分配或者launched；
+        2、循环shuffledOffers，即每个可用executor：
+             2.1、获取其executorId和host；
+             2.2、如果executor上可利用cpu数目大于每个task需要的数目，则继续task分配；
+             2.3、调用TaskSetManager的resourceOffer()方法，处理返回的每个TaskDescription：
+                2.3.1、分配task成功，将task加入到tasks对应位置（注意，tasks为一个空的，根据shuffledOffers和其可用cores生成的有一定结构的列表）；
+                2.3.2、更新taskIdToTaskSetManager、taskIdToExecutorId、executorIdToTaskCount、executorsByHost、availableCpus等数据结构；
+                2.3.3、确保availableCpus(i)不小于0；
+                2.3.4、标志位launchedTask设置为true；
+       3、返回launchedTask。
+
+org.apache.spark.scheduler.TaskSetManager#resourceOffer
+
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578637950.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578646919.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578656415.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1546578665753.png)
+
+
+
 
 
 ## Task启动
