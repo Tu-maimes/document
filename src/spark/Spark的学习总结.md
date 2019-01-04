@@ -924,7 +924,7 @@ ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧
 
 ##### ShuffleHandle 详解
 
-ShuffleHandle是不透明的Shuffle句柄，ShuffleManager使用它向Task传递Shuffle信息。
+ShuffleHandle是不透明的Shuffle句柄，ShuffleManager使用它向Task传递Shuffle信息。由于SortShuffleWriter依赖于ShuffleHandle的实现。
 
 
 
