@@ -246,6 +246,13 @@ YarnClusterSchedulerBackend  ==继承=》 YarnSchedulerBackend     ==继承=》 
 
 ## Task资源调度
 
+TaskSchedulerImpl#resourceOffers
+这个方法有点长，具体如注解
+
+被集群manager调用以提供slaves上的资源。我们通过按照优先顺序询问活动task集中的task来回应。
+我们通过循环的方式将task调度到每个节点上以便tasks在集群中可以保持大致的均衡。
+
+![](https://markdown.xiaoshujiang.com/img/spinner.gif "[[[1546573628903]]]" )
 
 
 ## Task启动
