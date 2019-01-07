@@ -9,6 +9,8 @@ renderNumberedHeading: true
 [toc!?direction=lr]
 
 
+[Logstash的介绍](https://www.cnblogs.com/cjsblog/p/9459781.html)
+
 Logstash管道有两个必需的元素，输入和输出，以及一个可选元素过滤器。输入插件从数据源那里消费数据，过滤器插件根据你的期望修改数据，输出插件将数据写入目的地。
 
 
