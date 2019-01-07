@@ -49,6 +49,6 @@ logstash -e'input {stdin {}}输出{stdout {}}'
 }
 ```
 
- 7. 
+ 7. Ctrl+C可以停止！
 
 
