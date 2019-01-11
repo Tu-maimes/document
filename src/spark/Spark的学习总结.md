@@ -920,6 +920,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
 
 #### AppendOnlyMap的实现分析
 
+Spark提供了AppendOnlyMap来对null值进行缓存，AppendOnlyMap还是在内存中对任务结果进行聚合运算的利器。
 
 #### Shuffle管理器
 
