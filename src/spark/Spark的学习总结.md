@@ -930,6 +930,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
 
 #### 外部排序器
 
+Spark中的外部排序器用于对map任务的输出数据在map端或者reduce端进行排序。Spark中有两个外部排序器，分别是ExternalSorter和ShuffleExternalSorter。
 
 #### Shuffle管理器
 
