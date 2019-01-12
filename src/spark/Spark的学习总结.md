@@ -925,7 +925,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
  1. AppendOnlyMap会对元素在内存中进行更新或聚合，而PartitionedPairBuffer只起到数据缓冲的作用。
  2. AppendOnlyMap的行为更像map，元素以散列的方式放入到data数组，而PartitionedPairBuffer的行为更像collection，元素都是从data数组的起始索引0和1开始连续放入的。
  3. AppendOnlyMap没有继承SizeTracker,因而不支持采样和大小估算，而PartitionedPairBuffer天 生就继承自SizeTracker，所以支持采样和大小估算。好在AppendOnlyMap继承SizeTracker的子类SizeTrackingAppendOnlyMap。
- 4. AppendOnlyMap没有继承WritablePartitionedPairCollection
+ 4. AppendOnlyMap没有继承WritablePartitionedPairCollection,因而不支持基于内存进行有效排序的迭代器，也不可以创建将集合内容按照字节写入磁盘的WritableParitionedIterator.
 
 
 
