@@ -932,6 +932,11 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
 
 Spark中的外部排序器用于对map任务的输出数据在map端或者reduce端进行排序。Spark中有两个外部排序器，分别是ExternalSorter和ShuffleExternalSorter。
 
+##### ExternalSorter详解
+
+
+
+
 #### Shuffle管理器
 
 ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧密，所以将它视为计算引擎的一部分。根据ShuffleManager的名字，就知道它的主要功能是对Shuffle进行管理。(由于Hash的Shuffle在Shuffle过程中随着map任务数量或者reduce任务数量的增加，基于Hash的Shuffle在性能上的表现相比基于Sort的Shuffle越来越差，因此Spark2.0.0版本移除了HashShuffleManager。)
