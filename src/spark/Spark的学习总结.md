@@ -918,9 +918,14 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
 计算引擎由内存管理器（MemoryManager）、Tungsten、任务内存管理器（TaskMemory-Manager）、Task、外部排序器（ExternalSorter）、Shuffle（ShuffleManager）等组成。MemoryManager除了对存储体系中的存储内存提供支持和管理外，还为计算引擎中的执行内存提供支持和管理。Tungsten除用于存储外，也可以用于计算或者执行。TaskMemoryManager对分配给单个Task的内存资源进行更细粒度的管理和控制.ExternalSorter用于在map端或reduce端对shuffleMapTask计算得到的中间结果进行排序、聚合等操作。ShuffleManager用于将各个分区对应的ShuffleMapTask产生的中间结果持久化到磁盘,并在reduce端按照分区远程拉取ShuffleMapTask产生的中间结。
 
 
-#### AppendOnlyMap的实现分析
+#### AppendOnlyMap与PartitionedPairBuffer的区别
 
-Spark提供了AppendOnlyMap来对null值进行缓存，AppendOnlyMap还是在内存中对任务结果进行聚合运算的利器。
+在map任务 的输出数据写入磁盘前，将数据零时存放在内存中的两种数据结构在底层都是使用数组存放元素，两者都有相似的容量增长实现，都有生成访问底层data数组的迭代器方法，它们二者的主要区别如下：
+
+ 1. AppendOnlyMap会对元素在内存中进行更新或聚合，而PartitionedPairBuffer只起到数据缓冲的作用。
+ 2. AppendOnlyMap的行为更像map，元素以散列的方式放入到data数组，而PartitionedPairBuffer
+
+
 
 #### Shuffle管理器
 
