@@ -928,6 +928,8 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
  4. AppendOnlyMap没有继承WritablePartitionedPairCollection,因而不支持基于内存进行有效排序的迭代器，也不可以创建将集合内容按照字节写入磁盘的WritableParitionedIterator。而ParitionedPairBuffer天生就继承自WritablePartitionedPairCollection。好在AppendOnlyMap继承了WritablePartitionedPairCollection的子类PartitionedAppendOnlyMap。
 
 
+#### 外部排序器
+
 
 #### Shuffle管理器
 
