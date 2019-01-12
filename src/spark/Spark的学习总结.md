@@ -923,7 +923,7 @@ TaskSchuster给Task分配资源实际是通过SchedulerBackend来完成的，Sch
 在map任务 的输出数据写入磁盘前，将数据零时存放在内存中的两种数据结构在底层都是使用数组存放元素，两者都有相似的容量增长实现，都有生成访问底层data数组的迭代器方法，它们二者的主要区别如下：
 
  1. AppendOnlyMap会对元素在内存中进行更新或聚合，而PartitionedPairBuffer只起到数据缓冲的作用。
- 2. AppendOnlyMap的行为更像map，元素以散列的方式放入到data数组，而PartitionedPairBuffer
+ 2. AppendOnlyMap的行为更像map，元素以散列的方式放入到data数组，而PartitionedPairBuffer的行为更像collection，元素都是从data数组的起始索引0和1开始连续放入的。
 
 
 
