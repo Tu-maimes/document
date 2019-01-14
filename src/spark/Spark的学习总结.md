@@ -935,6 +935,10 @@ Spark中的外部排序器用于对map任务的输出数据在map端或者reduce
 ##### ExternalSorter详解
 ExternalSorter是SorterShuffleManager的底层组件，它提供了很多功能，包括将map任务的输出存储到JVM的堆中，如果指定了聚合函数，则还会对数据进行聚合，使用分区计算器首先将key分组到各个分区中，然后使用自定义比较器对每个分区中的键进行可选的排序；可以将每个分区输出到单个文件的不同字节范围中，便于reduce端的Shuffle获取。
 
+##### ShuffleExternalSorter详解
+
+
+
 #### Shuffle管理器
 
 ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧密，所以将它视为计算引擎的一部分。根据ShuffleManager的名字，就知道它的主要功能是对Shuffle进行管理。(由于Hash的Shuffle在Shuffle过程中随着map任务数量或者reduce任务数量的增加，基于Hash的Shuffle在性能上的表现相比基于Sort的Shuffle越来越差，因此Spark2.0.0版本移除了HashShuffleManager。)
