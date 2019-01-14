@@ -937,7 +937,7 @@ ExternalSorter是SorterShuffleManager的底层组件，它提供了很多功能�
 
 ##### ShuffleExternalSorter详解
 
-ShuffleExternalSorter是专门用于对Shuffle数据进行排序的外部排序器，用于将map任务的输出存储到Tungsten中；
+ShuffleExternalSorter是专门用于对Shuffle数据进行排序的外部排序器，用于将map任务的输出存储到Tungsten中；在记录超过限制时，将数据溢出到磁盘。
 
 #### Shuffle管理器
 
