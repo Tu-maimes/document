@@ -941,6 +941,9 @@ ShuffleExternalSorter是专门用于对Shuffle数据进行排序的外部排序�
 
 ShuffleExternalSorter对map端输出的缓存处理的实现与ExternalSorter非常相似，它们都将记录插入到内存。不同之处在于，ExternalSorter除了简单的插入外，还有聚合的实现，而ShuffleExternalSorter没有；ExternalSorter使用的是JVM的堆内存，而ShuffleExternalSorter使用的是Tungsten的内存(即有可能使用JVM的堆内存，也有可能使用操作系统的内存)。
 
+![检查内存是否够使用](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1547519148872.png)
+
+
 #### Shuffle管理器
 
 ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧密，所以将它视为计算引擎的一部分。根据ShuffleManager的名字，就知道它的主要功能是对Shuffle进行管理。(由于Hash的Shuffle在Shuffle过程中随着map任务数量或者reduce任务数量的增加，基于Hash的Shuffle在性能上的表现相比基于Sort的Shuffle越来越差，因此Spark2.0.0版本移除了HashShuffleManager。)
