@@ -957,6 +957,10 @@ ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧
 
 反序列化排序:用于处理所有其他情况。
 
+
+#####  序列化排序模式中的几个优化
+
+
 ##### ShuffleHandle 详解
 
 ShuffleHandle是不透明的Shuffle句柄，ShuffleManager使用它向Task传递Shuffle信息。由于SortShuffleWriter依赖于ShuffleHandle的实现。
