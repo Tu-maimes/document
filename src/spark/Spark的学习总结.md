@@ -948,6 +948,13 @@ ShuffleExternalSorter对map端输出的缓存处理的实现与ExternalSorter非
 
 ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧密，所以将它视为计算引擎的一部分。根据ShuffleManager的名字，就知道它的主要功能是对Shuffle进行管理。(由于Hash的Shuffle在Shuffle过程中随着map任务数量或者reduce任务数量的增加，基于Hash的Shuffle在性能上的表现相比基于Sort的Shuffle越来越差，因此Spark2.0.0版本移除了HashShuffleManager。)
 
+
+##### 序列化的排序三种情况
+
+ 1. shuffle依赖项没有指定聚合或输出顺序
+ 2. shuffle序列化器支持序列化值的重新定位
+ 3. shuffle生成的输出分区少于16777216个
+
 ##### ShuffleHandle 详解
 
 ShuffleHandle是不透明的Shuffle句柄，ShuffleManager使用它向Task传递Shuffle信息。由于SortShuffleWriter依赖于ShuffleHandle的实现。
