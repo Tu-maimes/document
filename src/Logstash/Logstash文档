@@ -36,7 +36,7 @@ export PATH=$PATH:$JAVA_HOME/bin:$LOGSTASH_HOME/bin
  6. 运行第一个程序测试：
 
 ``` bash
-logstash -e'input {stdin {}}输出{stdout {}}'
+logstash -e'input {stdin {}} output {stdout {}}'
 ```
 启动后再命令行输入Hello Word! 回车，在控制台会显示
 
