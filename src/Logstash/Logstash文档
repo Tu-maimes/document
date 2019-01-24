@@ -186,4 +186,9 @@ exclude =>“* .gz”
 
 在read模式下，完成文件时应执行什么操作。如果删除指定那么该文件将被删除。如果指定了log，则文件的完整路径将记录到file_completed_log_path设置中指定的文件中 。如果log_and_delete指定，则执行上述两个操作。
 
+ 8. file_completed_log_path
 
+- 值类型是字符串
+- 此设置没有默认值
+
+应该将完全读取的文件路径添加到哪个文件中。只有当file_completed_action是log或log_and_delete时，才将此路径指定到文件。重要提示:此文件仅追加到-它可以变得非常大。你负责文件的轮换
