@@ -70,3 +70,5 @@ logstash -e'input {stdin {}} output {stdout {}}'
  3. 带状或带状读取是先读取文件A，然后读取文件B，然后读取文件C，如此循环，再读取文件A，直到读取所有文件
 
 带状读取是通过更改file_chunk_count或者file_chunk_size指定的。如果您希望所有文件中的一些事件尽可能早地出现在Kibana中，那么绑定和排序可能非常有用。
+
+### 该插件的两种模式Tail模式与Read模式
