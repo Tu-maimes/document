@@ -246,3 +246,7 @@ exclude =>“* .gz”
 
 您还可以配置多个路径。请参阅[Logstash配置页面](https://www.elastic.co/guide/en/logstash/6.5/configuration-file-structure.html#array)的示例。
 
+ 15. sincedb_clean_after
+- 值类型是number或string_duration
+- 此设置的默认值为“2周”。
+- 如果指定了数字，则将其解释为天数，并且可以是十进制，例如0.5是12小时。
