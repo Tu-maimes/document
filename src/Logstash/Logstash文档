@@ -51,4 +51,5 @@ logstash -e'input {stdin {}} output {stdout {}}'
 
  7. Ctrl+C可以停止！
 
+# 常用插件
 
