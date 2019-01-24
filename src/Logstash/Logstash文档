@@ -248,7 +248,7 @@ exclude =>“* .gz”
 
  15. sincedb_clean_after
 - 值类型是number或string_duration
-- 此设置的默认值为“15 seconds”。
+- 此设置的默认值为“2 weeks”。
 - 如果指定了数字，则将其解释为天数，并且可以是十进制，例如0.5是12小时。
 
 sincedb记录现在有一个与之关联的最后一个活动时间戳。如果在过去N天内未在跟踪文件中检测到任何更改，则其sincedb跟踪记录将过期，并且不会保留。此选项有助于防止inode回收问题。
@@ -259,3 +259,7 @@ sincedb记录现在有一个与之关联的最后一个活动时间戳。如果�
 - 此设置没有默认值
 
 将写入磁盘的sincedb数据库文件的路径（跟踪受监视日志文件的当前位置）。默认情况下会将sincedb文件写入<path.data>/plugins/inputs/file 注意：它必须是文件路径而不是目录路径
+
+ 17. sincedb_write_interval
+ - 值类型是number或string_duration
+ - 
