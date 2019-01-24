@@ -245,3 +245,4 @@ exclude =>“* .gz”
 如果您使用类似/var/log/**/*.log的模式，将对所有*执行/var/log的递归搜索。日志文件。路径必须是绝对的，不能是相对的。
 
 您还可以配置多个路径。请参阅[Logstash配置页面](https://www.elastic.co/guide/en/logstash/6.5/configuration-file-structure.html#array)的示例。
+
