@@ -192,3 +192,5 @@ exclude =>“* .gz”
 - 此设置没有默认值
 
 应该将完全读取的文件路径添加到哪个文件中。只有当file_completed_action是log或log_and_delete时，才将此路径指定到文件。重要提示:此文件仅追加到-它可以变得非常大。你负责文件的轮换
+
+ 9. file_sort_by
