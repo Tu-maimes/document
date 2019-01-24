@@ -961,10 +961,9 @@ ShuffleManager本身依赖于存储体系，但由于其功能与计算更为紧
 #####  序列化排序模式中的几个优化
 
  1. 它的排序作用于序列化的二进制数据，而不是Java对象，这减少了内存消耗和GC开销。这种优化要求记录序列化器具有某些属性，以便在不需要反序列化的情况下重新排序序列化的记录。
-
-
-
-
+ 2. 它使用一个专门的高效缓存排序器([[ShuffleExternalSorter]])，对压缩的记录指针和分区id数组进行排序。通过在排序数组中对每条记录只使用8字节的空间，可以将更多的数组放入缓存中
+ 3. 溢出合并过程操作属于同一分区的序列化记录块，并且在合并期间不需要反序列化记录。
+ 4. 当溢出压缩编解码器支持压缩数据的连接时，溢出合并只需连接序列化和压缩溢出分区，以生成最终的输出分区。这允许使用高效的数据复制方法，如NIO的' transferTo '，并避免在合并期间分配解压缩或复制缓冲区的需要。
 
 ##### ShuffleHandle 详解
 
@@ -1031,6 +1030,10 @@ private[spark] sealed trait MapStatus {
   }
 ```
 根据上述代码uncompressedSizes.length > 2000来判断分别创建HighlyCompressedMapStatus和CompressedMapStatus这说明对于较大的数据量使用高度压缩的HighlyCompressedMapStatus一般数据量则使用CompressedMapStatus。
+
+
+##### ShuffleBlockFetcherIterator解析
+
 
 
 
