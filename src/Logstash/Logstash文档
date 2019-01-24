@@ -195,3 +195,5 @@ exclude =>“* .gz”
 
  9. file_sort_by
 - 值可以是任何的：last_modified，path
+- 默认是last_modified
+
