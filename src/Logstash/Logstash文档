@@ -85,3 +85,6 @@ logstash -e'input {stdin {}} output {stdout {}}'
 
 
 ### 对监视文件读取的当前位置上
+
+
+
