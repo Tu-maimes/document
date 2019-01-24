@@ -1034,7 +1034,7 @@ private[spark] sealed trait MapStatus {
 
 ##### ShuffleBlockFetcherIterator解析
 
-ShuffleBlockFetcherIterator
+ShuffleBlockFetcherIterator中提供了很多方法，本节将对最为重要的初始化、划分本地与远程Block、获取远端Block、获取本地Block等方法进行介绍。
 
 
 
