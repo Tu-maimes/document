@@ -220,4 +220,16 @@ exclude =>“* .gz”
 
 此输入在任何时候消耗的最大file_handles数是多少。如果需要处理的文件多于此数字，请使用close_older关闭某些文件。这不应该设置为OS可以执行的最大值，因为其他LS插件和OS进程需要文件句柄。内部设置默认值4095。
 
- 1. List item
+ 13. mode
+
+- 值可以值Tail或者read
+- 默认值为tail
+
+您希望文件输入在什么模式下运行。删除几个文件或读取许多内容完整的文件。读取模式现在支持gzip文件处理。如果指定“read”，则忽略以下其他设置：
+
+ 1. start_position （始终从头开始读取文件）
+ 2. close_older（达到EOF时文件会自动关闭）
+如果指定“read”，则注意以下设置：
+ 1. ignore_older （不处理旧文件）
+ 2. file_completed_action （处理文件时应采取什么行动）
+ 3. file_completed_log_path （应该将完成的文件路径记录到哪个文件）
