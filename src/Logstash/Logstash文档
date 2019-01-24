@@ -235,3 +235,13 @@ exclude =>“* .gz”
  - file_completed_log_path （应该将完成的文件路径记录到哪个文件）
 
 
+  14. path 
+
+-  这是必须设置
+-  值类型是数组
+-  此设置没有默认值
+
+要用作输入的文件的路径。您可以在这里使用文件名模式，例如/var/log/*.log。
+如果您使用类似/var/log/**/*.log的模式，将对所有*执行/var/log的递归搜索。日志文件。路径必须是绝对的，不能是相对的。
+
+您还可以配置多个路径。请参阅[Logstash配置页面](https://www.elastic.co/guide/en/logstash/6.5/configuration-file-structure.html#array)的示例。
