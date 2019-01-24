@@ -113,3 +113,27 @@ Sincedb文件是四列、五列或六列的文本文件:
 
 
 文件输入未在远程文件系统（如NFS，Samba，s3fs-fuse等）上进行全面测试，但偶尔会测试NFS。远程FS客户端给出的文件大小用于控制在任何给定时间读取的数据量，以防止读取已分配但尚未填充的内存。由于我们在标识符中使用设备major和minor来跟踪文件的“最后读取”位置，并且在重新装入设备主要和次要可以更改时，sincedb记录可能在重新安装时不匹配。读取模式可能不适用于远程文件系统，因为客户端发现时的文件大小可能与远程端的文件大小不同，这是由于远程客户端复制过程中的延迟。
+
+### 文件输入配置选项
+
+|设置|输入类型|是否必须|
+|-|-|-|
+|close_older|number or string_duration|NO|
+|delimiter|string|NO|
+|discover_interval|number|NO|
+|exclude|array|NO|
+|file_chunk_count|number|NO|
+|file_chunk_size|number|NO|
+|file_completed_action|string, one of ["delete", "log", "log_and_delete"]|NO|
+|file_completed_log_path|string|NO|
+|file_sort_by|string, one of ["last_modified", "path"]|NO|
+|file_sort_direction|string, one of ["asc", "desc"]|NO|
+|ignore_older|number or string_duration|NO|
+|max_open_files|number|NO|
+|mode|string, one of ["tail", "read"]|NO|
+|path|array|Yes|
+|sincedb_clean_after|number or string_duration|NO|
+|sincedb_path|string|NO|
+|sincedb_write_interval|number or string_duration|NO|
+|start_position|string, one of ["beginning", "end"]|NO|
+|stat_interval|number or string_duration|NO|
