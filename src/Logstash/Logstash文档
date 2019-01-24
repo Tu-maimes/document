@@ -53,5 +53,8 @@ logstash -e'input {stdin {}} output {stdout {}}'
 
 # 常用插件
 
+## File input plugin
+
+
 
 
