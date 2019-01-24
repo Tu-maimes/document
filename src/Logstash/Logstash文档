@@ -203,3 +203,11 @@ exclude =>“* .gz”
 
 - 值可以是任何的：asc；desc
 - 默认是asc
+
+在排序“监视”文件时，在升序和降序之间进行选择。如果最早的数据首先是重要的，那么默认值last_modified+ asc是好的。如果最新的数据首先更重要，那么选择last_modified+ desc。如果对文件完整路径使用特殊命名约定，则可能 path+ asc将有助于控制文件处理的顺序。
+
+ 11. ignore_older
+
+- 值类型是number或string_duration
+- 此设置没有默认值。
+
