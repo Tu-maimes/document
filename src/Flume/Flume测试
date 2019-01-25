@@ -1,0 +1,12 @@
+---
+title: Flume测试 
+tags: 作者:汪帅
+grammar_cjkRuby: true
+grammar_mindmap: true
+renderNumberedHeading: true
+---
+
+[toc!?direction=lr]
+
+ Flume测试在多个agent监控一个文件夹上传到HDFS写入同一个文件时会出现如下情况：
+ 
