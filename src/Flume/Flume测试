@@ -10,3 +10,4 @@ renderNumberedHeading: true
 
  Flume测试在多个agent监控一个文件夹上传到HDFS写入同一个文件时会出现如下情况：
  
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1548383042455.png)
