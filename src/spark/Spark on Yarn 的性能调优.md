@@ -16,4 +16,5 @@ renderNumberedHeading: true
  3. 通过长期的观察运行状态，设置合理的数据副本数能够更好的做到数据的本地性。
  4. PROCESS_LOCAL:进程本地化。代码与数据在同一个进程中，也就是在同一个Executor中；计算数据的Task由Executor执行，数据在Executor的BlockManager中：性能最好。
  5. NODE_LOCAL:节点本地化：代码和数据在同一个节点中，数据作为一个HDFSblock块，就在节点上，而Task在节点上某个Executor中运行：或者是数据和Task在一个节点上的不同Executor中；数据需要在进程间进行传输。也就是说，数据虽然在同一个Worker中，但不是同一个JVM中。这隐含着进程间移动数据的开销。
+ 6. NO_PREF：数据没有局部性首选位置，它能从任何位置同等访问。对于Task来说，数据从哪里获取都是一样的。
 	
