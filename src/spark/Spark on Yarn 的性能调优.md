@@ -122,3 +122,5 @@ YARN-Client模式通常只会在测试环境中。
 ### 调优方案
 
 YARN-Cluster模式下JVM栈内存溢出问题的调优方案如下。
+
+在Spark-Submit脚本中设置PermGen。
