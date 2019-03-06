@@ -58,5 +58,5 @@ YARN-Client模式适合调试Spark程序，能在控制台输出调试信息，Y
 在YARN上运行会产生一些复杂情况：
 
  1. 一个常见的问题是YARN Resource Manager 对 Spark的申请资源的限制。
- 2. 一个通用的问题是单个YARN Container的可用资源是固定的。单个Container里面资源有限，即使分配多个Container，当Spark应用在一个YARN Container里面超过了可用内存，就会出现OOM问题。
+ 2. 一个通用的问题是单个YARN Container的可用资源是固定的。单个Container里面资源有限，即使分配多个Container，当Spark应用在一个YARN Container里面超过了可用内存，就会出现OOM问题。在这种情况下，YARN将终结容器并抛出错误，而且问题的底层原因很难追踪。
 
