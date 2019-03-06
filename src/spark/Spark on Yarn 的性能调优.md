@@ -8,8 +8,9 @@ renderNumberedHeading: true
 
 [toc!?direction=lr]
 
+## 运行环境Jar包管理及数据本地性原理调优实践
 
-## 运行环境Jar包管理及数据本地性原理
+### 运行环境Jar包管理及数据本地性原理
 
  1. 在YARN上运行Spark需要在Spark-env.sh或环境变量中设置中配置`HADOOP_CONF_DIR`或者`YARN_CONF_DIR`目录指向Hadoop的配置文件。
  2. 在Spark-default。conf中配置Spark.YARN.jars指向hdfs上的Spark需要的jar包。如果不配置该参数，每次启动Spark程序会将Driver端的SPARK_HOME打包上传分发到各个节点。`spark.yarn.jars.hdfs hdfs://sparklibpath/*`
@@ -24,7 +25,7 @@ renderNumberedHeading: true
 	通常，读取数据要尽量使用数据以PROCESS_LOCAL或者NODE_LOCAL方式读取。其中，PROCESS_LOCAL还和Cache有关，如果RDD经常用，应将该RDD Cache带内存中。注意，由于Cache是Lazy级别的，所以必须通过Action的触发，才能真正地将该RDD Cache到内存中。
 	
 
-## 运行环境jar包管理及数据本地性调优实践
+### 运行环境jar包管理及数据本地性调优实践
 
  1. 启动Spark程序时，其他节点会自动下载Jar包并进行缓存，下次启动时如果包没有变化，则会直接读取本地缓存的包，缓存清理间隔在YARN-site.xml通过以下参数配置。`yarn.nodemanager.locallzer.cache.cleanip.interval-ms`
  2. 参数配置的优先级：SparkConf > Spark-Submit=Spark-shell>配置文件(conf/Spark-defaults.conf)
