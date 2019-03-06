@@ -83,3 +83,5 @@ YARN队列资源不足引起的Spark应用程序失败解决方案。
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1551855194687.png)
 这个异常的信息很明显是内存被用完了，提示建议考虑增加Spark.YARN.Executor.memoryOverhead的配置。
 
+### 调优方案
+
