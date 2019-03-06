@@ -25,3 +25,6 @@ renderNumberedHeading: true
 	
 
 ## 运行环境jar包管理及数据本地性调优实践
+
+ 1. 启动Spark程序时，其他节点会自动下载Jar包并进行缓存，下次启动时如果包没有变化，则会直接读取本地缓存的包，缓存清理间隔在YARN-site.xml通过以下参数配置。`yarn.nodemanager.locallzer.cache.cleanip.interval-ms`
+ 2. 参数配置的优先级：
