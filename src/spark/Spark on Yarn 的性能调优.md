@@ -92,3 +92,5 @@ Spark on YARN 模式下Executor经常被杀死的调优方案可考虑：
  3. 增加该Job的spark.yarn.Executor.memoryoverhead值。
 
 ## YARN-Client模式下网卡流量激增的原因及调优方案
+
+### 原因剖析
