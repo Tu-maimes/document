@@ -61,3 +61,7 @@ YARN-Client模式适合调试Spark程序，能在控制台输出调试信息，Y
  2. 一个通用的问题是单个YARN Container的可用资源是固定的。单个Container里面资源有限，即使分配多个Container，当Spark应用在一个YARN Container里面超过了可用内存，就会出现OOM问题。在这种情况下，YARN将终结容器并抛出错误，而且问题的底层原因很难追踪。
 
 ## YARN队列资源不足引起的Spark应用程序失败的原因及调优方案
+
+### 失败的原因剖析
+
+ResourceManager会接收你提交的请求吗？YARN一般把自己的资源分成不同的类型，我们提交的时候会专门提交到分配给Spark的那一组资源。
