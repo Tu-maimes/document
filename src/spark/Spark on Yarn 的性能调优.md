@@ -70,3 +70,4 @@ ResourceManager会接收你提交的请求吗？YARN一般把自己的资源分�
 
 ### 调优方案
 
+YARN队列资源不足引起的Spark应用程序失败解决方案。
