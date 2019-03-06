@@ -45,3 +45,4 @@ renderNumberedHeading: true
 ### Spark on YARN 的两种不同类型模型优劣分析
 
 按照Spark应用程序中的Driver分布方式的不同，Spark on YARN 有两种模式：YARN-Client模式、YARN-Cluster模式。
+不论是在Spark-Shell或者Spark-Submit中，Driver都运行在启动Spark应用的机器上。
