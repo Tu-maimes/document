@@ -98,3 +98,5 @@ Spark on YARN 模式下Executor经常被杀死的调优方案可考虑：
 YARN集群分成两种节点：
 - ResourceManager负责资源的调度。
 - NodeManager负责资源的分配、应用程序执行。
+
+通过Spark-Submit脚本使用YARN-Client方式提交，这种模式其实会在本地启动Driver程序。
