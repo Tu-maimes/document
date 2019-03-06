@@ -37,5 +37,5 @@ renderNumberedHeading: true
  SparkConf.set("Spark.locality.wait.process","3s")
  SparkConf.set("Spark.locality.wait.rack","3s")
 ```
-在测试时采用Client模式运行，查看Task的数据本地化的级别，以及整个Spark作业所用的时间。
+在测试时采用Client模式运行，查看Task的数据本地化的级别，适当的调节等待时间，以及整个Spark作业所用的时间。
  4. 
