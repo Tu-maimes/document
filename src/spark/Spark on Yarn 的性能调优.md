@@ -52,3 +52,6 @@ renderNumberedHeading: true
 另一种方式，Driver自动运行在YARN Container(容器)里，客户端可以从集群中断开或者用于其他作业。这叫作YARN-Cluster模式。
 
 YARN-Client模式适合调试Spark程序，能在控制台输出调试信息，YARN-Cluster模式适合企业生产环境。
+
+### Spark on YARN 的两种不同类型调优实践
+
