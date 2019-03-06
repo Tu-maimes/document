@@ -125,4 +125,9 @@ YARN-Cluster模式下JVM栈内存溢出问题的调优方案如下。
 
  1. 在Spark-Submit脚本中设置PermGen。
 `-conf Spark.Driver.extraJavaOptions="-XX:PermSize=128M -XX:MaxPermSize=256M"`
+
+建议：解决方法就是在Spark的conf目录中的spark-defaults.conf里，增加对Driver的JVM配置
+
+`spark.driver.extraJavaOptions -XX:PermSize=128M -XX:MaxPermSize=256M`
+   
  2. 如果使用Spark SQL，SQL中使用大量的or语句，也可能会报出JVM stack overflow，JVM栈内存溢出，此时可以 吧复杂的SQL简化为多个简单的SQL进行处理。
