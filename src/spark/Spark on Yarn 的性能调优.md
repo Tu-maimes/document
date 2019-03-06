@@ -110,3 +110,7 @@ YARN-Client模式通常只会在测试环境中。
 
  1. 是否需要添加YARN集群增加一些网络带宽。
  2. 使用YARN-Cluster模式后，就不是本地机器运行Driver负责Task调度了。YARN集群中，有某个节点会运行Driver进程，负责Task调度。
+
+## YARN-Cluster模式下JVM栈内存溢出的原因及调优方案
+
+### 原因剖析
