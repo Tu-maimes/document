@@ -11,5 +11,9 @@ renderNumberedHeading: true
 
 ## 运行环境Jar包管理及数据本地性原理
 
- 1. 在YARN上运行Spark需要在Spark-env.sh或环境变量中设置中配置HADOOP_CONF_DIR或者YARN_CONF_DIR目录指向Hadoop的配置文件。
- 2. 在Spark-default。conf中配置Spark.YARN.jars指向hdfs上的Spark需要的jar包。如果不配置该参数，每次启动Spark程序会将Driver端的SPARK_HOME打包上传分发到各个节点。
+ 1. 在YARN上运行Spark需要在Spark-env.sh或环境变量中设置中配置`HADOOP_CONF_DIR`或者`YARN_CONF_DIR`目录指向Hadoop的配置文件。
+ 2. 在Spark-default。conf中配置Spark.YARN.jars指向hdfs上的Spark需要的jar包。如果不配置该参数，每次启动Spark程序会将Driver端的SPARK_HOME打包上传分发到各个节点。`spark.yarn.jars.hdfs hdfs://sparklibpath/*`
+ 3. 通过长期的观察运行状态，设置合理的数据副本数能够更好的做到数据的本地性。
+ 4. PROCESS_LOCAL:进程本地化。代码与数据在同一个进程中，也就是在同一个Executor中；计算数据的Task由Executor执行，数据在Executor的BlockManager中：性能最好。
+ 5. NODE_LOCAL:节点本地化：代码和数据在同一个节点中，数据作为一个HDFSblock块，就在节点上，而Task在节点上某个Executor中运行：或者是数据和Task在一个节点上的不同Executor中；数据需要在进程间进行传输。
+	
