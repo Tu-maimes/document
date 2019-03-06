@@ -89,3 +89,4 @@ Spark on YARN 模式下Executor经常被杀死的调优方案可考虑：
 
  1. 移除RDD缓存操作
  2. 增加该Job的Spark.storage.memoryFraction系数值。
+ 3. 增加该Job的spark.yarn.Executor.memoryoverhead值
