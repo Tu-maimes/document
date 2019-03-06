@@ -100,3 +100,4 @@ YARN集群分成两种节点：
 - NodeManager负责资源的分配、应用程序执行。
 
 通过Spark-Submit脚本使用YARN-Client方式提交，这种模式其实会在本地启动Driver程序。
+我们将写的Saprk程序打成Jar包，使用Spark-Submit提交，将Jar包中的main类通过JVM命令启动。JVM的进程其实就是Driver进程，Driver进程启动后，执行我们写的main函数。
