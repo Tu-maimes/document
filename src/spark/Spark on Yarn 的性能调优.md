@@ -118,3 +118,5 @@ YARN-Client模式通常只会在测试环境中。
 有些Spark作业在YARN-Client模式下是可以运行的，但在YARN-Cluster模式下，会报出JVM的PermGen(永久代)的内存溢出(OOM)。
 
 出现以上问题的原因是：YARN-Client模式下，Driver运行在本地机器上，Spark使用JVM的PermGen的配置，是本地的默认配置128M；但在YARN-Cluster模式下，Driver运行在集群的某个节点上，Spark使用的JVM的PermGen是没有经过配置的，默认是82MB，故有时会出现PermGen Out Of Memory error Log。
+
+### 调优方案
