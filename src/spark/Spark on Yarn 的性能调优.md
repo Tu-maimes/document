@@ -20,4 +20,5 @@ renderNumberedHeading: true
  7. RACK_LOCAL:机架本地化。数据在不同的服务器上，但在相同的机架。数据需要通过网络在节点之间进行传输。
  8. ANY：数据在不同的服务器及机架上面。这种方式性能最差。
 	
-	Spark 应用程序本身包含代码和数据两个部分，单机版一般情况下很少考虑到数据的本地性的问题，因为数据就在本地。但基本的程序，数据的本地性有PROCESS_LOCAL和NODE_LOCAL之分，但也应尽量让数据处于PROCESS_LOCAL级别。通常，读取数据要尽量使用数据以PROCESS_LOCAL或者NODE_LOCAL方式读取。其中，PROCESS_LOCAL还和Cache有关，如果RDD经常用，应将该RDD Cache带内存中。注意，由于Cache是Lazy级别的，所以必须通过Action的触发，才能真正地将该RDD Cache到内存中。
+	Spark 应用程序本身包含代码和数据两个部分，单机版一般情况下很少考虑到数据的本地性的问题，因为数据就在本地。但基本的程序，数据的本地性有PROCESS_LOCAL和NODE_LOCAL之分，但也应尽量让数据处于PROCESS_LOCAL级别。
+	通常，读取数据要尽量使用数据以PROCESS_LOCAL或者NODE_LOCAL方式读取。其中，PROCESS_LOCAL还和Cache有关，如果RDD经常用，应将该RDD Cache带内存中。注意，由于Cache是Lazy级别的，所以必须通过Action的触发，才能真正地将该RDD Cache到内存中。
