@@ -114,3 +114,5 @@ YARN-Client模式通常只会在测试环境中。
 ## YARN-Cluster模式下JVM栈内存溢出的原因及调优方案
 
 ### 原因剖析
+
+有些Spark作业在YARN-Client模式下是可以运行的，但在YARN-Cluster模式下，会报出JVM的PermGen(永久代)的内存溢出(OOM).
