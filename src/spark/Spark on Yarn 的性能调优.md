@@ -22,6 +22,7 @@ renderNumberedHeading: true
  8. ANY：数据在不同的服务器及机架上面。这种方式性能最差。
 	
 	Spark 应用程序本身包含代码和数据两个部分，单机版一般情况下很少考虑到数据的本地性的问题，因为数据就在本地。但基本的程序，数据的本地性有PROCESS_LOCAL和NODE_LOCAL之分，但也应尽量让数据处于PROCESS_LOCAL级别。
+	
 	通常，读取数据要尽量使用数据以PROCESS_LOCAL或者NODE_LOCAL方式读取。其中，PROCESS_LOCAL还和Cache有关，如果RDD经常用，应将该RDD Cache带内存中。注意，由于Cache是Lazy级别的，所以必须通过Action的触发，才能真正地将该RDD Cache到内存中。
 	
 
@@ -45,4 +46,7 @@ renderNumberedHeading: true
 ### Spark on YARN 的两种不同类型模型优劣分析
 
 按照Spark应用程序中的Driver分布方式的不同，Spark on YARN 有两种模式：YARN-Client模式、YARN-Cluster模式。
+
 不论是在Spark-Shell或者Spark-Submit中，Driver都运行在启动Spark应用的机器上。在这种情形下，YARN Application Master 仅负责从YARN中请求资源，这就是YARN-Client模式。
+
+另一种方式，Driver自动运行在YARN Container(容器)里，客户端可以从集群中断开或者用于其他作业。这叫作YARN-Cluster模式。
