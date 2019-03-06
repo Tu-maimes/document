@@ -88,3 +88,4 @@ YARN队列资源不足引起的Spark应用程序失败解决方案。
 Spark on YARN 模式下Executor经常被杀死的调优方案可考虑：
 
  1. 移除RDD缓存操作
+ 2. 增加该Job的Spark.storage.memoryFraction系数值。
