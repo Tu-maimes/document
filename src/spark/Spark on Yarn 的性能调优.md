@@ -95,3 +95,4 @@ Spark on YARN 模式下Executor经常被杀死的调优方案可考虑：
 
 ### 原因剖析
 
+YARN集群分成两种节点：
