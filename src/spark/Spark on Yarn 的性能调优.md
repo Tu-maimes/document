@@ -55,3 +55,7 @@ YARN-Client模式适合调试Spark程序，能在控制台输出调试信息，Y
 
 ### Spark on YARN 的两种不同类型调优实践
 
+在YARN上运行会产生一些复杂情况：
+
+ 1. 一个常见的问题是YARN Resource Manager 对 Spark的申请资源的限制。
+
