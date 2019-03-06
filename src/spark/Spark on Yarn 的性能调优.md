@@ -106,3 +106,4 @@ ApplicationMaster(ExecutorLauncher)负责Executor的申请：Driver负责Job和S
 
 ### 调优方案
 
+YARN-Client模式通常只会在测试环境中。
