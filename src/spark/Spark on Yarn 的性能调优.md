@@ -143,3 +143,7 @@ GC方式，如果是yarn-client模式，默认读取的是spark-class文件中�
 -Xmx，-Xms，如果是yarn-client模式，则默认读取spark-env文件中的SPARK_EXECUTOR_MEMORY值，-Xmx，-Xms值一样大小；如果是yarn-cluster模式，则读取的是spark-default.conf文件中的spark.executor.extraJavaOptions对应的JVM参数值。
 PermSize，两种模式都是读取的是spark-default.conf文件中的spark.executor.extraJavaOptions对应的JVM参数值。
 GC方式，两种模式都是读取的是spark-default.conf文件中的spark.executor.extraJavaOptions对应的JVM参数值。
+
+### Executor数目及所占CPU个数：
+
+如果是yarn-client模式，Executor数目由spark-env中的SPARK_EXECUTOR_INSTANCES指定，每个实例的数目由SPARK_EXECUTOR_CORES指定；如果是yarn-cluster模式，Executor的数目由spark-submit工具的--num-executors参数指定，默认是2个实例，而每个Executor使用的CPU数目由--executor-cores指定，默认为1核。
