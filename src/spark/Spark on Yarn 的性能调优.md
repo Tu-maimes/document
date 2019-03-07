@@ -126,8 +126,15 @@ YARN-Cluster模式下JVM栈内存溢出问题的调优方案如下。
  1. 在Spark-Submit脚本中设置PermGen。
 `-conf Spark.Driver.extraJavaOptions="-XX:PermSize=128M -XX:MaxPermSize=256M"`
 
-建议：解决方法就是在Spark的conf目录中的spark-defaults.conf里，增加对Driver的JVM配置
+建议使用如下：解决方法就是在Spark的conf目录中的spark-defaults.conf里，增加对Driver的JVM配置
 
 `spark.driver.extraJavaOptions -XX:PermSize=128M -XX:MaxPermSize=256M`
    
  2. 如果使用Spark SQL，SQL中使用大量的or语句，也可能会报出JVM stack overflow，JVM栈内存溢出，此时可以 吧复杂的SQL简化为多个简单的SQL进行处理。
+
+### Driver的JVM参数：
+
+-Xmx，-Xms，如果是yarn-client模式，则默认读取spark-env文件中的SPARK_DRIVER_MEMORY值，-Xmx，-Xms值一样大小；如果是yarn-cluster模式，则读取的是spark-default.conf文件中的spark.driver.extraJavaOptions对应的JVM参数值。
+PermSize，如果是yarn-client模式，则是默认读取spark-class文件中的JAVA_OPTS="-XX:MaxPermSize=256m $OUR_JAVA_OPTS"值；如果是yarn-cluster模式，读取的是spark-default.conf文件中的spark.driver.extraJavaOptions对应的JVM参数值。
+GC方式，如果是yarn-client模式，默认读取的是spark-class文件中的JAVA_OPTS；如果是yarn-cluster模式，则读取的是spark-default.conf文件中的spark.driver.extraJavaOptions对应的参数值。
+以上值最后均可被spark-submit工具中的--driver-java-options参数覆盖。
