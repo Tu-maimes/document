@@ -8,4 +8,13 @@ renderNumberedHeading: true
 
 [toc!?direction=lr]
 
+## Shuffle对性能消耗的原理详解
 
+### Spark Shuffle过程中影响性能的操作：
+
+ 1. 磁盘I/O
+ 2. 网络I/O
+ 3. 压缩
+ 4. 解压缩
+ 5. 序列化
+ 6. 反序列化
