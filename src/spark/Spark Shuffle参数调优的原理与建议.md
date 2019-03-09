@@ -21,3 +21,26 @@ renderNumberedHeading: true
 
 调优是一个动态的过程，需要根据业务数据的特性和硬件设备来综合调优。
 
+[Spark的配置参数官网链接](http://spark.apache.org/docs/latest/configuration.html)
+
+|属性参数|默认值|含义|
+|---|---|---|
+|spark.reducer.maxSizeInFlight|48MB|由于每个输出都需要创建一个缓冲区来接收它，因此每个reduce任务的内存开销都是固定的，所以要保持较小的内存，除非您有大量的内存|
+|spark.reducer.maxReqsInFlight|Int.MaxValue|这种配置限制了在任何给定点获取块的远程请求的数量。当集群中的主机数量增加时，可能会导致到一个或多个节点的大量入站连接，从而导致工作人员在负载下失败。通过允许它限制获取请求的数量，可以缓解这种情况。|
+|spark.reducer.maxBlocksInFlightPerAddress|Int.MaxValue|这种配置限制了从给定主机端口为每个reduce任务获取的远程块的数量。当一次获取或同时从给定地址请求大量块时，可能会导致服务执行器或节点管理器崩溃。当启用外部洗牌时，这对于减少节点管理器上的负载特别有用。您可以通过将其设置为一个较低的值来缓解这个问题。|
+|spark.maxRemoteBlockSizeFetchToMem|Int.MaxValue - 512|当块的大小(以字节为单位)超过这个阈值时，远程块将被取到磁盘。这是为了避免占用太多内存的巨大请求。默认情况下，这只对块大于 2GB启用，因为这些块不能直接获取到内存中，无论有什么资源可用。但是它可以被降低到一个更低的值。为了避免在较小的块上使用太多的内存。注意，此配置将同时影响shuffle获取和块管理器远程块获取。对于启用外部洗牌服务的用户，此功能只能在外部洗牌服务比Spark 2.2更新时使用。|
+|spark.shuffle.compress|true|是否压缩map输出文件。压缩将使用 spark.io.compression.codec。|
+|spark.shuffle.file.buffer|32KB|每个shuffle文件输出流的内存缓冲区大小。这些缓冲区减少了在创建中间shuffle文件时进行的磁盘搜索和系统调用的次数。|
+|spark.shuffle.io.maxRetries|3|（仅限Netty）如果将此设置为非零值，在IO相关异常导致获取数据失败，将自动重试。重试将有助于保障长时间GC停顿或瞬时网络连接问题情况下Shuffle的稳定性|
+|spark.shuffle.io.numConnectionsPerPeer|1|（仅限Netty）重新使用主机之间的连接，以减少大型群集的连接建立。对于具有许多硬盘和少量主机的集群，这可能导致并发性不足以使所有磁盘饱和，因此用户可能会考虑增加此值。|
+|spark.shuffle.io.preferDirectBufs|ture|（仅限Netty）非堆外缓冲区用于在Shuffle和缓存块传输过程中减少垃圾回收。对于非堆内存严格限制的环境，用户可能希望将其关闭，以强制Netty的所有分配都在堆上|
+|spark.shuffle.io.retryWait|5S|（仅限Netty）在重试提取之间等待多长时间。默认情况下，重试导致的最大延迟为15秒，计算方式为maxRetries * retryWait。|
+|spark.shuffle.service.enabled|false|启用外部Shuffle服务。此服务保留由Executor写入的Shuffle文件，以便Executors可以安全地删除。如果spark.dynamicAllocation.enabled为“true”，则必须启用此选项 。必须设置外部随机服务才能启用它。|
+|spark.shuffle.service.port|7337|外部Shuffle服务运行的端口|
+|spark.shuffle.service.index.cache.size|100M|缓存Shuffle服务的索引文件的内存大小|
+|spark.shuffle.maxChunksBeingTransferred|Long.MAX_VALUE|允许在随机服务上同时传输的最大块数。请注意，当达到最大数量时，将关闭新的传入连接。客户端将根据shuffle重试配置重试（请参阅spark.shuffle.io.maxRetries和 spark.shuffle.io.retryWait），如果达到这些限制，任务将因提取失败而失败。|
+|spark.shuffle.sort.bypassMergeThreshold|200|（高级）在基于排序的shuffle manager中，如果没有map端聚合，并且最多有这么多reduce分区，则避免合并排序数据|
+|spark.shuffle.spill.compress|true|是否压缩在Shuffle期间溢出的数据。压缩将使用 spark.io.compression.codec。|
+|spark.shuffle.accurateBlockThreshold|100 * 1024 * 1024|以字节为单位的阈值，高于该阈值可准确记录HighlyCompressedMapStatus中随机块的大小。这有助于通过避免在获取shuffle块时低估shuffle块大小来防止OOM。|
+|spark.shuffle.registration.timeout|5000|超时(以毫秒为单位)，用于注册到外部洗牌服务|
+|spark.shuffle.registration.maxAttempts|3|当我们未能注册到外部shuffle服务时，我们将重试maxAttempts次。|
