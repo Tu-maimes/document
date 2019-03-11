@@ -259,9 +259,6 @@ Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据�
 参数说明：该参数代表了Executor内存中，分配给Shuffle Read Task 进行聚合操作的内存比例，默认是20%
 如果内存充足，而且很少使用持久化操作，建议调高这个比例，给Shuffle Read 的聚合操作更多内存，以避免由于内存不足导致聚合过程中频繁读写磁盘。将存储Mapper端的输出结果存储在JVM的堆空间中，这个空间的大小取决于Spark.Shuffle.memoryFraction和Spark.Shuffle.safetyFraction这两个参数。
 
-
- 
-
 ``` scala?linenums
 /**
     * Return the total amount of memory available for the execution region, in bytes.
