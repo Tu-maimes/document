@@ -225,3 +225,4 @@ spark.io.compression.codec参数用来压缩内部数据，如：RDD分区、广
 
 #### spark.shuffle.file.buffer
 
+在ShuffleMapTask端通常也会增大Map任务的写磁盘的缓存，默认是32KB。Spark.Shuffle.file.buffler参数用于设置Shuffle write Task的BufferedOutputStream的Buffer缓冲大小。将数据写入磁盘文件之前，先写入buffer缓冲中，待缓冲写满之后，才会溢写到磁盘。可以视集群资源来提高此参数，从而减少Shuffle Writer 过程中溢写磁盘文件的次数，也就减少磁盘IO次数，进而提升性能。
