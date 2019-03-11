@@ -25,9 +25,9 @@ renderNumberedHeading: true
 
 |属性参数|默认值|含义|
 |---|---|---|
-|spark.reducer.maxSizeInFlight|48MB|由于每个输出都需要创建一个缓冲区来接收它，因此每个reduce任务的内存开销都是固定的，所以要保持较小的内存，除非您有大量的内存|
-|spark.reducer.maxReqsInFlight|Int.MaxValue|这种配置限制了在任何给定点获取块的远程请求的数量。当集群中的主机数量增加时，可能会导致到一个或多个节点的大量入站连接，从而导致工作人员在负载下失败。通过允许它限制获取请求的数量，可以缓解这种情况。|
-|spark.reducer.maxBlocksInFlightPerAddress|Int.MaxValue|这种配置限制了从给定主机端口为每个reduce任务获取的远程块的数量。当一次获取或同时从给定地址请求大量块时，可能会导致服务执行器或节点管理器崩溃。当启用外部洗牌时，这对于减少节点管理器上的负载特别有用。您可以通过将其设置为一个较低的值来缓解这个问题。|
+|==spark.reducer.maxSizeInFlight #E91E63==|48MB|由于每个输出都需要创建一个缓冲区来接收它，因此每个reduce任务的内存开销都是固定的，所以要保持较小的内存，除非您有大量的内存|
+|==spark.reducer.maxReqsInFlight==|Int.MaxValue|这种配置限制了在任何给定点获取块的远程请求的数量。当集群中的主机数量增加时，可能会导致到一个或多个节点的大量入站连接，从而导致工作人员在负载下失败。通过允许它限制获取请求的数量，可以缓解这种情况。|
+|==spark.reducer.maxBlocksInFlightPerAddress==|Int.MaxValue|这种配置限制了从给定主机端口为每个reduce任务获取的远程块的数量。当一次获取或同时从给定地址请求大量块时，可能会导致服务执行器或节点管理器崩溃。当启用外部洗牌时，这对于减少节点管理器上的负载特别有用。您可以通过将其设置为一个较低的值来缓解这个问题。|
 |spark.maxRemoteBlockSizeFetchToMem|Int.MaxValue - 512|当块的大小(以字节为单位)超过这个阈值时，远程块将被取到磁盘。这是为了避免占用太多内存的巨大请求。默认情况下，这只对块大于 2GB启用，因为这些块不能直接获取到内存中，无论有什么资源可用。但是它可以被降低到一个更低的值。为了避免在较小的块上使用太多的内存。注意，此配置将同时影响shuffle获取和块管理器远程块获取。对于启用外部洗牌服务的用户，此功能只能在外部洗牌服务比Spark 2.2更新时使用。|
 |spark.shuffle.compress|true|是否压缩map输出文件。压缩将使用 spark.io.compression.codec。|
 |spark.shuffle.file.buffer|32KB|每个shuffle文件输出流的内存缓冲区大小。这些缓冲区减少了在创建中间shuffle文件时进行的磁盘搜索和系统调用的次数。|
@@ -44,3 +44,14 @@ renderNumberedHeading: true
 |spark.shuffle.accurateBlockThreshold|100 * 1024 * 1024|以字节为单位的阈值，高于该阈值可准确记录HighlyCompressedMapStatus中随机块的大小。这有助于通过避免在获取shuffle块时低估shuffle块大小来防止OOM。|
 |spark.shuffle.registration.timeout|5000|超时(以毫秒为单位)，用于注册到外部洗牌服务|
 |spark.shuffle.registration.maxAttempts|3|当我们未能注册到外部shuffle服务时，我们将重试maxAttempts次。|
+
+
+
+
+
+### Spark 压缩算法的比较
+
+[压缩算法的比较](https://infoq.cn/article/2015/01/zstandard-compression-algorithm)
+
+
+https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
