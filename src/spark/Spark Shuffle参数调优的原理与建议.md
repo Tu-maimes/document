@@ -66,7 +66,7 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 该参数用于设置ShuffleManager的类型。Tungsten-Sort与Sort类似，但是使用了Tungsten计划中的堆外内存管理机制，内存使用效率更高。从源码中可用看到目前版本只有Sort与Tungsten-Sort两个选项可以选择，曾经的Hash-Based Shuffle算法在新版本中已经被废弃。SortShuffleManager默认对数据进行排序，因此如果用户的业务逻辑中没有排序可以通过设置`spark.shuffle.sort.bypassMergeThreshold`参数来避免不必要的排序操作，同时提供较好的磁盘读写性能。
 
-#### spark.reducer.maxReqsInFlight
+#### spark.reducer.maxReqsInFlight与spark.reducer.maxBlocksInFlightPerAddress
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552280842089.png)
 
@@ -125,5 +125,7 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
     remoteRequests
   }
 ```
+
+#### spark.maxRemoteBlockSizeFetchToMem
 
 ![spark.maxRemoteBlockSizeFetchToMem](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552282855711.png)
