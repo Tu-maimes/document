@@ -305,3 +305,8 @@ BlockManager.scala 中客户端读取其他Executor上的Shuffle文件有两个�
 
 Spark系统在运行包含Shuffle过程的应用时，Executor进程除了运行Task，还要负责Shuffle的读写数据，给其他Executor提供Shuffle数据。当Executor进程任务过重，导致GC不能为其他Executor提供Shuffle数据时，会影响任务运行。
 External Shuffle Service 是长期存在于NodeManager进程中的一个辅助服务。通过该服务抓取Shuffle数据，减少Executor的压力，在ExecutorGC的时候也不会影响其他Executor的任务运行。
+
+#### spark.shuffle.sort.bypassMergeThreshold
+
+参数说明：当ShuffleManager为SortShuffleManager时，如果Shuffle Read Task 的数量小于这个阀值，则Shuffle Write 过程中不会进行排序操作，而是直接按照未经优化的HashShuffleManager方式去写数据，但是最后会将每个Task产生的所有临时磁盘文件都合并成一个文件，并会创建单独的索引文件。
+调优建议：当使用SortShuffleManager时的确不需要排序操作，那么建议将这个参数调大一些，大于Shuffle Read Task 的数量。那么，此时就会自动启用bypass机制，map-side就不会进行排序了，减少了排序的性能开销。但是，这种方式下，依然会产生大量的磁盘文件，因此Shuffle writer 性能有带提高。
