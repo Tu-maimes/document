@@ -291,4 +291,5 @@ Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据�
     (systemMaxMemory * memoryFraction * safetyFraction).toLong
   }
 ```
+默认的执行内存计算公式：spark.shuffle.memoryFraction(0.2) *  spark.shuffle.safetyFraction(0.8)=0.16 
 
