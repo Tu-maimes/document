@@ -300,3 +300,6 @@ BlockManager.scala 中客户端读取其他Executor上的Shuffle文件有两个�
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552294015673.png)
 
 必须首先把Spark.dynamicAllocation.enabled设置为true，才可以启动这个外部ShuffleService。NodeManager中一个长期运行的辅助任务，用于提升Shuffle计算性能。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552294948214.png)
+
