@@ -321,3 +321,5 @@ spark.shuffle.spill.compress设置为true通常都是合理的，因为如果使
 
 总之，在Shuffle过程中数据是否应该压缩，取决于CPU、磁盘、网络的实际能力和负载。
 
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552298703990.png)
+
