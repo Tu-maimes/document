@@ -222,3 +222,6 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 spark.io.compression.codec参数用来压缩内部数据，如：RDD分区、广播变量和Shuffle输出等数据。从如下源码中可知默认的压缩方式是lz4
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552284233060.png)
+
+#### spark.shuffle.file.buffer
+
