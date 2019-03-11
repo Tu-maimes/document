@@ -304,3 +304,4 @@ BlockManager.scala 中客户端读取其他Executor上的Shuffle文件有两个�
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552294948214.png)
 
 Spark系统在运行包含Shuffle过程的应用时，Executor进程除了运行Task，还要负责Shuffle的读写数据，给其他Executor提供Shuffle数据。当Executor进程任务过重，导致GC不能为其他Executor提供Shuffle数据时，会影响任务运行。
+External Shuffle Service 是长期存在于NodeManager进程中的一个辅助服务。通过该服务抓取Shuffle数据，减少Executor的压力，在ExecutorGC的时候也不会影响其他Executor的任务运行。
