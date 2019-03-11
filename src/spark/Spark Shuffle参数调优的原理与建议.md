@@ -317,5 +317,7 @@ External Shuffle Service 是长期存在于NodeManager进程中的一个辅助�
 
 #### spark.shuffle.spill.compress
 
+spark.shuffle.spill.compress设置为true通常都是合理的，因为如果使用千兆一下的网卡，网络带宽往往最容易成为瓶颈。目前Saprk的任务调度实现中，以Shuffle划分Stage，下一个Stage的任务要等待上一个Stage的任务全部完成后，才能开始执行，所以Shuffle数据的传输和CPU计算任务之间通常是不会重叠的。这样Shuffle数据传输量的大小和所需时间就直接会影响到整个任务的完成速度。因此在CPU负载的影响远大于磁盘和网络带宽的影响的场合，也可能将Spark.Shuffle.compress设置为flase才是最佳的方案。
 
+总之，在Shuffle过程中数据是否应该压缩，取决于CPU、磁盘、网络的实际能力和负载。
 
