@@ -251,3 +251,5 @@ Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据�
 #### spark.shuffle.io.preferDirectBufs
 
 堆外缓存可以有效减少垃圾回收和缓存复制。对于堆外内存紧张的用户来说，可以考虑禁用这个选项。以迫使所有孽畜都分配在堆上。
+
+
