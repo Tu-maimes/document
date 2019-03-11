@@ -290,3 +290,8 @@ Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据�
 ```
 默认的执行内存计算公式：spark.shuffle.memoryFraction(0.2) *  spark.shuffle.safetyFraction(0.8)=0.16  也就是说，是JVM HeaoSize的16% 通过 spark.shuffle.memoryFraction可以调整Spill的触发条件，即Shuffle占用内存的大小，进而调整Spill的频率和GC的行为。总的来说，如果Spill太过频繁，可以适当增加spark.shuffle.memoryFraction的大小，增加用于Shuffle的内存，减少Spill的次数。
 
+
+#### spark.shuffle.service.enabled
+
+spark.shuffle.service.enabled默认值是false。如果这个配置为true，BlockManager实例生成时，需要读取Spark.Shuffle.service.port配置
+
