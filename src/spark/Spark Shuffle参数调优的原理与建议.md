@@ -243,6 +243,6 @@ Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据�
 
 #### spark.shuffle.io.numConnectionsPerPeer
 
-重新使用主机之间的连接，以减少大型集群的连接建立，对于具有多个硬盘和少量主机的集群，这可能导致并发性不足，以使所有磁盘饱和。
+重新使用主机之间的连接，以减少大型集群的连接建立，对于具有多个硬盘和少量主机的集群，这可能导致并发性不足，以使所有磁盘饱和。此参数用于获取数据的两个节点之间的并发连接数。
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552287764826.png)
