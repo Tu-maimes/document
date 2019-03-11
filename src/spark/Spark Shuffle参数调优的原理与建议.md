@@ -293,5 +293,5 @@ Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据�
 
 #### spark.shuffle.service.enabled
 
-spark.shuffle.service.enabled默认值是false。如果这个配置为true，BlockManager实例生成时，需要读取Spark.Shuffle.service.port配置
+spark.shuffle.service.enabled默认值是false。如果这个配置为true，BlockManager实例生成时，需要读取Spark.Shuffle.service.port配置的Shuffle端口，同时对应BlockManager的ShuffleClient不再是默认的BlockTransferService实例，而是ExternalShuffleClient实例。
 
