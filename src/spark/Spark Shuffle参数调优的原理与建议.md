@@ -256,4 +256,5 @@ Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据�
 
 #### spark.shuffle.memoryFraction
 
-Spark.Shuffle.memoryFraction参数的默认值是20%
+参数说明：该参数代表了Executor内存中，分配给Shuffle Read Task 进行聚合操作的内存比例，默认是20%
+
