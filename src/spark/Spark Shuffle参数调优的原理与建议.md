@@ -125,3 +125,5 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
     remoteRequests
   }
 ```
+
+![spark.maxRemoteBlockSizeFetchToMem](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552282855711.png)
