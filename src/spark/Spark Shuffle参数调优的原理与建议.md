@@ -230,8 +230,12 @@ spark.io.compression.codec参数用来压缩内部数据，如：RDD分区、广
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552286322444.png)
 
 
-#### spark.shuffle.io.maxRetries
+#### spark.shuffle.io.maxRetries与 spark.shuffle.io.retryWait
 
 
 Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据时，因某种网络异常导致拉取失败，是会自动进行重试的。如果在指定的次数内拉取还是没有成功，就可能导致作业执行失败。
 调优建议：对于那些包含了特别耗时的Shuffle操作时，建议增加最大的重试次数，以避免由于JVM的Full GC或者网络不稳定等因素导致的数据拉取失败。对于超大的数据量时可以提升集群的稳定性。
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552287095270.png)
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552287142481.png)
