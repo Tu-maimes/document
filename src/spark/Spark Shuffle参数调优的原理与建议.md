@@ -28,7 +28,7 @@ renderNumberedHeading: true
 |==spark.reducer.maxSizeInFlight #F44336==|48MB|由于每个输出都需要创建一个缓冲区来接收它，因此每个reduce任务的内存开销都是固定的，所以要保持较小的内存，除非您有大量的内存|
 |==spark.reducer.maxReqsInFlight==|Int.MaxValue|这种配置限制了在任何给定点获取块的远程请求的数量。当集群中的主机数量增加时，可能会导致到一个或多个节点的大量入站连接，从而导致工作人员在负载下失败。通过允许它限制获取请求的数量，可以缓解这种情况。|
 |==spark.reducer.maxBlocksInFlightPerAddress==|Int.MaxValue|这种配置限制了从给定主机端口为每个reduce任务获取的远程块的数量。当一次获取或同时从给定地址请求大量块时，可能会导致服务执行器或节点管理器崩溃。当启用外部洗牌时，这对于减少节点管理器上的负载特别有用。您可以通过将其设置为一个较低的值来缓解这个问题。|
-|==spark.maxRemoteBlockSizeFetchToMem==|Int.MaxValue|当块的大小(以字节为单位)超过这个阈值时，远程块将被取到磁盘。这是为了避免占用太多内存的巨大请求。默认情况下，这只对块大于 2GB启用，因为这些块不能直接获取到内存中，无论有什么资源可用。但是它可以被降低到一个更低的值。为了避免在较小的块上使用太多的内存。注意，此配置将同时影响shuffle获取和块管理器远程块获取。对于启用外部洗牌服务的用户，此功能只能在外部洗牌服务比Spark 2.2更新时使用。|
+|==spark.maxRemoteBlockSizeFetchToMem==|Long.MaxValue|当块的大小(以字节为单位)超过这个阈值时，远程块将被取到磁盘。这是为了避免占用太多内存的巨大请求。默认情况下，这只对块大于 2GB启用，因为这些块不能直接获取到内存中，无论有什么资源可用。但是它可以被降低到一个更低的值。为了避免在较小的块上使用太多的内存。注意，此配置将同时影响shuffle获取和块管理器远程块获取。对于启用外部洗牌服务的用户，此功能只能在外部洗牌服务比Spark 2.2更新时使用。|
 |==spark.shuffle.compress #F44336==|true|是否压缩map输出文件。压缩将使用 spark.io.compression.codec。|
 |==spark.shuffle.file.buffer #F44336==|32KB|每个shuffle文件输出流的内存缓冲区大小。这些缓冲区减少了在创建中间shuffle文件时进行的磁盘搜索和系统调用的次数。|
 |==spark.shuffle.io.maxRetries #9C27B0==|3|（仅限Netty）如果将此设置为非零值，在IO相关异常导致获取数据失败，将自动重试。重试将有助于保障长时间GC停顿或瞬时网络连接问题情况下Shuffle的稳定性|
@@ -64,5 +64,64 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552274797735.png)
 
-该参数用于设置ShuffleManager的类型。Tungsten-Sort与Sort类似，但是使用了Tungsten计划中的堆外内存管理机制，内存使用效率更高。从源码中可用看到目前版本只有Sort与Tungsten-Sort两个选项可以选择，曾经的Hash-Based Shuffle算法在新版本中已经被废弃。
+该参数用于设置ShuffleManager的类型。Tungsten-Sort与Sort类似，但是使用了Tungsten计划中的堆外内存管理机制，内存使用效率更高。从源码中可用看到目前版本只有Sort与Tungsten-Sort两个选项可以选择，曾经的Hash-Based Shuffle算法在新版本中已经被废弃。SortShuffleManager默认对数据进行排序，因此如果用户的业务逻辑中没有排序可以通过设置`spark.shuffle.sort.bypassMergeThreshold`参数来避免不必要的排序操作，同时提供较好的磁盘读写性能。
 
+#### spark.reducer.maxReqsInFlight
+
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552280842089.png)
+
+``` scala?linenums
+ private[this] def splitLocalRemoteBlocks(): ArrayBuffer[FetchRequest] = {
+    // 远程请求长度不超过maxBytesInFlight / 5;
+    // 让它们小于maxBytesInFlight的原因是允许从最多5个节点进行多个并行获取，而不是阻塞从一个节点读取输出.
+    val targetRequestSize = math.max(maxBytesInFlight / 5, 1L)
+    logDebug("最大飞行的字节数: " + maxBytesInFlight + ", 目标要求的大小: " + targetRequestSize
+      + ", maxBlocksInFlightPerAddress: " + maxBlocksInFlightPerAddress)
+
+    // 分割本地块和远程块。为了限制飞行中的数据量，将远程块进一步划分为最多maxBytesInFlight大小的fetchrequest.
+    val remoteRequests = new ArrayBuffer[FetchRequest]
+
+    // 轨道总块数(包括零大小块)
+    var totalBlocks = 0
+    for ((address, blockInfos) <- blocksByAddress) {
+      totalBlocks += blockInfos.size
+      if (address.executorId == blockManager.blockManagerId.executorId) {
+        // 过滤掉零大小的块
+        localBlocks ++= blockInfos.filter(_._2 != 0).map(_._1)
+        numBlocksToFetch += localBlocks.size
+      } else {
+        val iterator = blockInfos.iterator
+        var curRequestSize = 0L
+        var curBlocks = new ArrayBuffer[(BlockId, Long)]
+        while (iterator.hasNext) {
+          val (blockId, size) = iterator.next()
+          // 跳过空块
+          if (size > 0) {
+            curBlocks += ((blockId, size))
+            remoteBlocks += blockId
+            numBlocksToFetch += 1
+            curRequestSize += size
+          } else if (size < 0) {
+            throw new BlockException(blockId, "消极的块大小 " + size)
+          }
+          //  满足当中的任意一个条件就创建一个新的请求
+          if (curRequestSize >= targetRequestSize ||
+              curBlocks.size >= maxBlocksInFlightPerAddress) {
+            // 添加这个获取请求
+            remoteRequests += new FetchRequest(address, curBlocks)
+            logDebug(s"创建获取请求的 $curRequestSize at $address "
+              + s"with ${curBlocks.size} blocks")
+            curBlocks = new ArrayBuffer[(BlockId, Long)]
+            curRequestSize = 0
+          }
+        }
+        // 添加最后的请求
+        if (curBlocks.nonEmpty) {
+          remoteRequests += new FetchRequest(address, curBlocks)
+        }
+      }
+    }
+    logInfo(s"从$totalBlocks 块中获取 $numBlocksToFetch 非空块")
+    remoteRequests
+  }
+```
