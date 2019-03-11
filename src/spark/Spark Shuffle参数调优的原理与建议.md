@@ -315,5 +315,7 @@ External Shuffle Service 是长期存在于NodeManager进程中的一个辅助�
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552297036002.png)
 
-#### spark.shuffle.spill
+#### spark.shuffle.spill.compress
+
+
 
