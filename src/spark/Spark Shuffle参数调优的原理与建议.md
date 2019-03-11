@@ -133,3 +133,86 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 #### spark.shuffle.compress
 
+``` scala?linenums
+ /**
+     * 合并零个或多个泄漏文件在一起，选择最快的合并策略基于泄漏的数量和IO压缩编解码器.
+     *
+     * @return 合并文件中的分区长度。
+     */
+    private long[] mergeSpills(SpillInfo[] spills, File outputFile) throws IOException {
+        //  是否开启shuffle的压缩机制
+        final boolean compressionEnabled = sparkConf.getBoolean("spark.shuffle.compress", true);
+        // 解压缩的编码器
+        final CompressionCodec compressionCodec = CompressionCodec$.MODULE$.createCodec(sparkConf);
+        // 快速合并启用机制
+        final boolean fastMergeEnabled =
+                sparkConf.getBoolean("spark.shuffle.unsafe.fastMergeEnabled", true);
+        // 支持快速合并
+        final boolean fastMergeIsSupported = !compressionEnabled ||
+                CompressionCodec$.MODULE$.supportsConcatenationOfSerializedStreams(compressionCodec);
+        // 是否启用加密
+        final boolean encryptionEnabled = blockManager.serializerManager().encryptionEnabled();
+        try {
+            if (spills.length == 0) {
+                new FileOutputStream(outputFile).close(); // 创建一个空文件
+                return new long[partitioner.numPartitions()];
+            } else if (spills.length == 1) {
+                // 在这里，我们不需要执行任何指标更新，因为写入这个输出文件的字节已经被计算为写入的随机字节.
+                Files.move(spills[0].file, outputFile);
+                return spills[0].partitionLengths;
+            } else {
+                final long[] partitionLengths;
+                // There are multiple spills to merge, so none of these spill files' lengths were counted
+                // towards our shuffle write count or shuffle write time. If we use the slow merge path,
+                // then the final output file's size won't necessarily be equal to the sum of the spill
+                // files' sizes. To guard against this case, we look at the output file's actual size when
+                // computing shuffle bytes written.
+                //有多个溢出要合并，所以这些溢出文件的长度都没有计入我们的随机写入计数或随机写入时间。
+                // 如果我们使用缓慢的合并路径，那么最终输出文件的大小不一定等于溢出文件大小的总和。
+                // 为了防止这种情况，我们在计算写入的随机字节时查看输出文件的实际大小
+                // We allow the individual merge methods to report their own IO times since different merge
+                // strategies use different IO techniques.  We count IO during merge towards the shuffle
+                // shuffle write time, which appears to be consistent with the "not bypassing merge-sort"
+                // branch in ExternalSorter.
+                //由于不同的合并策略使用不同的IO技术，我们允许各个合并方法报告它们自己的IO时间。
+                // 我们将合并过程中的IO计算到shuffle写入时间中，这似乎与ExternalSorter中的“不绕过合并排序”分支一致。
+
+                // 启用快速合并并且支持快速合并
+                if (fastMergeEnabled && fastMergeIsSupported) {
+                    // 两种不同的合并策略
+
+
+                    // 压缩被禁用，或者使用我们正在使用IO压缩编解码器，该编解码器支持对串联的压缩流进行解压，
+                    // 因此我们可以执行快速溢出合并，而不需要解释溢出的字节.
+                    // 启用NIO模式不采用加密
+                    if (transferToEnabled && !encryptionEnabled) {
+                        logger.debug("使用基于传输的快速合并");
+                        partitionLengths = mergeSpillsWithTransferTo(spills, outputFile);
+                    } else {
+                        logger.debug("使用基于文件流的快速合并");
+                        partitionLengths = mergeSpillsWithFileStream(spills, outputFile, null);
+                    }
+                } else {
+                    logger.debug("使用慢合并");
+                    partitionLengths = mergeSpillsWithFileStream(spills, outputFile, compressionCodec);
+                }
+                // When closing an UnsafeShuffleExternalSorter that has already spilled once but also has
+                // in-memory records, we write out the in-memory records to a file but do not count that
+                // final write as bytes spilled (instead, it's accounted as shuffle write). The merge needs
+                // to be counted as shuffle write, but this will lead to double-counting of the final
+                // SpillInfo's bytes.
+                //当关闭一个已经溢出一次但也有内存中的记录的UnsafeShuffleExternalSorter时，
+                // 我们将内存中的记录写入文件，但不将最终的写入计算为溢出字节(相反，它被认为是随机写入)。
+                // 合并需要作为随机写入进行计数，但这将导致对最后sp伊利诺伊州fo字节的重复计数
+                writeMetrics.decBytesWritten(spills[spills.length - 1].file.length());
+                writeMetrics.incBytesWritten(outputFile.length());
+                return partitionLengths;
+            }
+        } catch (IOException e) {
+            if (outputFile.exists() && !outputFile.delete()) {
+                logger.error("Unable to delete output file {}", outputFile.getPath());
+            }
+            throw e;
+        }
+    }
+```
