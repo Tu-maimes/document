@@ -70,6 +70,8 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552280842089.png)
 
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552355367496.png)
+
 ``` scala?linenums
  private[this] def splitLocalRemoteBlocks(): ArrayBuffer[FetchRequest] = {
     // 远程请求长度不超过maxBytesInFlight / 5;
