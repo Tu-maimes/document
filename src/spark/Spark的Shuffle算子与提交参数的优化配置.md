@@ -216,9 +216,10 @@ Executor的内存主要分为三块：
 
   --conf spark.default.parallelism=1000 \
 
-  --conf spark.storage.memoryFraction=0.5 \
-
+  --conf spark.storage.memoryFraction=0.6 \
+  --conf spark.storage.safetyFraction=0.9 \
   --conf spark.shuffle.memoryFraction=0.3 \
+  --conf spark.shuffle.safetyFraction=0.7 \
 ```
 
 
