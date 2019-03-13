@@ -6,7 +6,7 @@ grammar_mindmap: true
 renderNumberedHeading: true
 ---
 
-[toc!?direction=lr]
+[toc]
 
 ## Shuffle对性能消耗的原理详解
 
@@ -58,7 +58,7 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 
 
-### Spark配置参数的源码详解(Spark2.3)
+## Spark配置参数的源码详解(Spark2.3)
 
 #### spark.shuffle.manager 
 
