@@ -68,6 +68,9 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 #### spark.reducer.maxReqsInFlight与spark.reducer.maxBlocksInFlightPerAddress
 
+参数说明：该参数用于设置Shuffle Read Task的Buffer大小，这个Buffer决定了每次能够拉取多少数据。主机之间的连接数。
+调优建议：如果作业的资源充足可以适当调大，不足可以调小资源。如果是具有多个硬盘和少量主机的集群，可能会导致并发性不足，可以考虑增加连接数。
+
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552280842089.png)
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552355367496.png)
