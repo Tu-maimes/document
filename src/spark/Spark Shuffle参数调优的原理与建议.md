@@ -140,6 +140,8 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 #### spark.shuffle.compress与spark.shuffle.unsafe.fastMergeEnabled、spark.file.transferTo  
 
+在Shuffle过程中数据量和网络传输会非常大，会造成大量内存消耗、磁盘IO消耗、网络IO消耗。Mapper端进行了压缩，就会减少Shuffle过程中下一个Stage向上一个Stage抓数据的网络开销，减轻Shuffle的压力。
+
 ``` scala?linenums
  /**
      * 合并零个或多个泄漏文件在一起，选择最快的合并策略基于泄漏的数量和IO压缩编解码器.
