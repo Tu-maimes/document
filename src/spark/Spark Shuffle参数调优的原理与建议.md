@@ -133,10 +133,12 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 #### spark.maxRemoteBlockSizeFetchToMem
 
+参数说明：每次请求拉取的数据最大多少时可以直接放到内存中，不保存到磁盘。
+
 ![spark.maxRemoteBlockSizeFetchToMem](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552282855711.png)
 
 
-#### spark.shuffle.compress
+#### spark.shuffle.compress与spark.shuffle.unsafe.fastMergeEnabled、spark.file.transferTo  
 
 ``` scala?linenums
  /**
