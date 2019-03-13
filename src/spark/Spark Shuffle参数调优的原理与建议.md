@@ -256,43 +256,6 @@ Shuffle Read Task从Shuffle Write Task 所在节点拉取属于自己的数据�
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552288911953.png)
 
-#### spark.shuffle.memoryFraction
-
-参数说明：该参数代表了Executor内存中，分配给Shuffle Read Task 进行聚合操作的内存比例，默认是20%
-如果内存充足，而且很少使用持久化操作，建议调高这个比例，给Shuffle Read 的聚合操作更多内存，以避免由于内存不足导致聚合过程中频繁读写磁盘。将存储Mapper端的输出结果存储在JVM的堆空间中，这个空间的大小取决于Spark.Shuffle.memoryFraction和Spark.Shuffle.safetyFraction这两个参数。
-
-``` scala?linenums
-/**
-    * Return the total amount of memory available for the execution region, in bytes.
-    *
-    * 默认情况下返回可用于执行区域的总内存(以字节为单位)。
-    */
-  private def getMaxExecutionMemory(conf: SparkConf): Long = {
-    val systemMaxMemory = conf.getLong("spark.testing.memory", Runtime.getRuntime.maxMemory)
-
-    // 判断是否小于最小内存，为真则抛出异常
-    if (systemMaxMemory < MIN_MEMORY_BYTES) {
-      throw new IllegalArgumentException(s"System memory $systemMaxMemory must " +
-        s"be at least $MIN_MEMORY_BYTES. Please increase heap size using the --driver-memory " +
-        s"option or spark.driver.memory in Spark configuration.")
-    }
-    // 判断执行内存是否小于系统提供的最大内存
-    if (conf.contains("spark.executor.memory")) {
-      val executorMemory = conf.getSizeAsBytes("spark.executor.memory")
-      if (executorMemory < MIN_MEMORY_BYTES) {
-        throw new IllegalArgumentException(s"Executor memory $executorMemory must be at least " +
-          s"$MIN_MEMORY_BYTES. Please increase executor memory using the " +
-          s"--executor-memory option or spark.executor.memory in Spark configuration.")
-      }
-    }
-    val memoryFraction = conf.getDouble("spark.shuffle.memoryFraction", 0.2)
-    val safetyFraction = conf.getDouble("spark.shuffle.safetyFraction", 0.8)
-    (systemMaxMemory * memoryFraction * safetyFraction).toLong
-  }
-```
-默认的执行内存计算公式：spark.shuffle.memoryFraction(0.2) *  spark.shuffle.safetyFraction(0.8)=0.16  也就是说，是JVM HeaoSize的16% 通过 spark.shuffle.memoryFraction可以调整Spill的触发条件，即Shuffle占用内存的大小，进而调整Spill的频率和GC的行为。总的来说，如果Spill太过频繁，可以适当增加spark.shuffle.memoryFraction的大小，增加用于Shuffle的内存，减少Spill的次数。
-
-
 #### spark.shuffle.service.enabled
 
 spark.shuffle.service.enabled默认值是false。如果这个配置为true，BlockManager实例生成时，需要读取Spark.Shuffle.service.port配置的Shuffle端口，同时对应BlockManager的ShuffleClient不再是默认的BlockTransferService实例，而是ExternalShuffleClient实例。
