@@ -80,7 +80,6 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
  3. 网卡特性
  4. linux内核
  5. TCP网络协议
- 6. 网卡特性
 
 ### JVM层
 
