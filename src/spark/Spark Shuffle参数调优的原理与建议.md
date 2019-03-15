@@ -133,7 +133,7 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 #### spark.maxRemoteBlockSizeFetchToMem
 
-参数说明：每次请求拉取的数据最大多少时可以直接放到内存中，不保存到磁盘。
+参数说明：Shuffle请求远程数据块大小超过此阀值，就会被强行落盘，防止过多的并发请求把内存占满。
 
 ![spark.maxRemoteBlockSizeFetchToMem](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552282855711.png)
 
