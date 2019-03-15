@@ -282,6 +282,8 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
  1. 在ShuffleMapTask端通常也会增大Map任务的写磁盘的缓存，默认是32KB。Spark.Shuffle.file.buffler参数用于设置Shuffle write Task的BufferedOutputStream的Buffer缓冲大小。将数据写入磁盘文件之前，先写入buffer缓冲中，待缓冲写满之后，才会溢写到磁盘。可以视集群资源来提高此参数，从而减少Shuffle Writer 过程中溢写磁盘文件的次数，也就减少磁盘IO次数，进而提升性能。
  2. Shuffle数据在溢写磁盘时的Buffer缓冲大小。
 
+调优建议：如果作业可用的内存资源较为充足的话，可以适当增加这个参数的大小（比如64k），从而减少shuffle write过程中溢写磁盘文件的次数，也就可以减少磁盘IO次数，进而提升性能。在实践中发现，合理调节该参数，性能会有1%~5%的提升。
+
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552290554624.png)
 
 
