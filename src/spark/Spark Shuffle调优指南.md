@@ -57,13 +57,43 @@ renderNumberedHeading: true
 https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 
-## 调优指南
+## Shuffle调优指南
 
+### 系统架构无法避免Shuffle
 
+ 1. 本质：分布式网络应用无法避免Shuffle。
+ 2. Spark集群规模
+ 3. IO模型   异步    同步
+ 4. 线程模型       具有能够支持即时处理的线程
+ 5. Shuffle关键点       Shuffle应用本身类型         分布式网络通信
 
+### 序列化
 
+ 1. 序列化要小    
+ 2. 反序列化要快
+ 3. 序列化是资源消耗     序列化的消耗    网络资源的消耗
 
+### 底层释放能力
 
+ 1. 操作系统
+ 2. 文件句柄数
+ 3. 网卡特性
+ 4. linux内核
+ 5. TCP网络协议
+ 6. 网卡特性
+
+### JVM层
+
+ 1. 控制资源
+ 2. 控制SHuffle资源
+
+### Spark层面
+
+ 1. Spark应用本身能力
+ 2. 序列化
+ 3. 压缩
+ 4. 通信问题  
+ 5. 控制如何使用Netty
 
 ## Spark配置参数的源码详解(Spark2.3)
 
