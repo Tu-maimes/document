@@ -69,7 +69,7 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 #### spark.reducer.maxReqsInFlight与spark.reducer.maxBlocksInFlightPerAddress
 
-参数说明：该参数设置了reduce任务拉取map上的Task结果数据，每次拉取到的数据需要一个堆外内存的缓冲区来存放结果，如果没有充足的内存就尽可能把这个调小一点，相反堆外内存充裕，调大写就能节省GC时间。限制了每个主机reduce可以被多少台远程主机拉取文件块，调低这个参数可以有效减轻node manager的负载。
+参数说明：限制远程机器拉取本机器文件块的请求数，随着集群增大，需要对此做出限制，否则可能会使本机负载过大而挂掉。限制了每个主机reduce可以被多少台远程主机拉取文件块，调低这个参数可以有效减轻node manager的负载。
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552280842089.png)
 
