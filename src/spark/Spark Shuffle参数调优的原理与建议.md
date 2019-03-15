@@ -278,6 +278,8 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 BlockManager.scala 中客户端读取其他Executor上的Shuffle文件有两个方式：一种方式是在spark.shuffle.service.enabled 设置为true时，创建shuffleClient为ExternalShuffleClient；另一种方式是在spark.shuffle.service.enabled设置为false时，创建shuffleClient为BlockTransferService，直接读取其他Executors的数据。
 
+调优建议：
+
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552294015673.png)
 
 必须首先把Spark.dynamicAllocation.enabled设置为true，才可以启动这个外部ShuffleService。NodeManager中一个长期运行的辅助任务，用于提升Shuffle计算性能。
