@@ -267,7 +267,7 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 #### spark.shuffle.io.preferDirectBufs
 
-堆外缓存可以有效减少垃圾回收和缓存复制。对于堆外内存紧张的用户来说，可以考虑禁用这个选项。以迫使所有数据都分配在堆上。
+参数说明：堆外缓存可以有效减少垃圾回收和缓存复制。对于堆外内存紧张的用户来说，可以考虑禁用这个选项。以迫使所有数据都分配在堆上。
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1552288911953.png)
 
