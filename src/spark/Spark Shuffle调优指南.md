@@ -91,7 +91,26 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
  1. Spark应用本身能力
  2. 序列化
  3. 压缩
- 4. 通信问题  
+
+spark.shuffle.compress
+spark.shuffle.spill.compress 
+spark.shuffle.accurateBlockThreshold
+
+
+ Spark在通信层面主要控制的参数
+
+ 1. spark.reducer.maxSizeInFlight
+ 2. spark.reducer.maxReqsInFlight 
+ 3. spark.reducer.maxBlocksInFlightPerAddress
+ 4. spark.maxRemoteBlockSizeFetchToMem
+ 5. spark.shuffle.io.numConnectionsPerPeer
+ 6. spark.shuffle.io.maxRetries
+ 7. spark.shuffle.io.retryWait
+ 8. spark.shuffle.registration.timeout
+ 9. spark.shuffle.registration.maxAttempts
+ 10. spark.shuffle.maxChunksBeingTransferred
+ 11. spark.shuffle.service.enabled 
+ 
  5. 控制如何使用Netty
 
 
