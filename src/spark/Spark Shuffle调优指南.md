@@ -98,6 +98,7 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 缓存空间(Storge) : 计算公式是 spark.executor.memory x spark.storage.safetyFraction x spark.storage.memoryFraction 。也就是Heap Size x  90% x 60% ； Heap Size x 54% 。一个应用程序可以缓存多少数据是由 safetyFraction 和 memoryFraction 这两个参数共同决定的。
 
 Unroll空间：计算公式是spark.executor.memory x spark.storage.safetyFraction x spark.storage.memoryFraction x spark.storage.unrollFraction 。 也就是Heap Size x 90% x 60% x 20%；Heap Size x 10.8% 。你可能把数据序列化后的数据放在内存中，当你使用数据时，你需要把序列化的数据进行反序列化。
+对cache缓存数据的影响是由于Unroll 是一个优先级较高的操作，进行Unroll操作的时候会占用cache的空间，而且又可以挤掉缓存在内存中的数据(如果该数据的缓存级别是MEMORY_ONLY 的话，数据可能会丢失)
 
 
 
