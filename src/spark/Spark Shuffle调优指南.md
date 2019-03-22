@@ -100,6 +100,17 @@ Kryo serialization: 相较于 Java serialization 的方式，速度更快，空�
   可以在Saprk-default.conf设置全局参数，也可以在代码的初始化时对SaprkConf设置。该参数会同时作用于机器之间数据的shuffle操作以及序列化rdd到磁盘、内存。
   Saprk不将Kyro设置成默认的序列化方式是因为需要对类进行注册，官方强烈建议在一些网络数据传输很大的应用中使用kyro序列化。
 
+``` scala?linenums
+val conf = new SparkConf()
+conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+conf.registerKryoClasses(Array(classOf[MyClass1],classOf[MyClass2]))
+val sc = new SparkContext(conf)
+```
+如果你需要系列化的对象比较大，可以增加参数spark.kryoserializer.buffer所设置的值。
+
+
+  
+
  3. 压缩
 
 spark.shuffle.compress
