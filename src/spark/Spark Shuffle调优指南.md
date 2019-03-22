@@ -122,10 +122,14 @@ spark.shuffle.accurateBlockThreshold
 spark.io.compression.codec
  
  官方提供了四种压缩方式：
- - lz4      (默认值)
- - lzf
- - snappy
- - zstd
+|压缩方式|默认值|类名全路径|
+|---|---|---|
+|lz4|true|org.apache.spark.io.LZ4CompressionCodec|
+|lzf|false|org.apache.spark.io.LZFCompressionCodec|
+|snappy|false|org.apache.spark.io.SnappyCompressionCodec|
+|zstd|false|org.apache.spark.io.ZStdCompressionCodec|
+
+具体调优就是CPU和压缩率的权衡取舍以及网络、磁盘的能力和负载。对于RDD Cache的场合来说，绝大多数场合都是内存操作或者本地操作，所以CPU负载问题可能比IO问题更加突出。
  
 
 以下三个参数的默认值均为32K，在压缩时用到的块的大小，降低这个块的大小也会降低Shuffle内存的使用率。
