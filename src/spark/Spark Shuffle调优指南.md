@@ -103,6 +103,7 @@ Kryo serialization: 相较于 Java serialization 的方式，速度更快，空�
 ``` scala?linenums
 val conf = new SparkConf()
 conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+conf.set("spark.kryo.registrationRequired", "true")
 conf.registerKryoClasses(Array(classOf[MyClass1],classOf[MyClass2]))
 val sc = new SparkContext(conf)
 ```
