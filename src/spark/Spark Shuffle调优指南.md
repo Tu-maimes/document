@@ -109,7 +109,7 @@ Spark2.0以后新型 JVM Heap 分成三个部分：Reserved Memory 、User
  
  Reserved Memory ：默认都是300MB，这个数字一般都是固定不变的，在系统运行的时候Java Heap 的大小至少为 Heap Reserved Memory x 1.5 即 300MB x 1.5 = 450MB的JVM配置。 
 
-SparkMemory空间：默认是占HeapSize的60%，这个参数也是可以配置的，spark.memory.fraction来配置。
+SparkMemory空间：默认是占HeapSize的60%，这个参数也是可以配置的，spark.memory.fraction来配置，系统框架运行时需要使用的空间，这是从两部分构成的，分别是StorageMemory和ExecutionMemory，默认情况下Storage和Execution各占该空间的50%。
 
 UserMemory：Saprk程序产生的临时数据或者是自己维护的一些数据结构也需要给予它一部分的存储空间，可以认为这是程序运行时用户可以主导的空间，叫用户操作空间。它占用的空间是(Java Heap - Reserved Memory) x 25%(默认是25%，可以有参数供调优)，这样设计可以让用户操作时所需要的空间与系统框架运行时所需的空间分离开。有时在处理数据时单个Task内部所有算子使用的数据空间的大小大于此配置时就会出现OOM。
 
