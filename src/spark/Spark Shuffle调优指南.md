@@ -111,7 +111,6 @@ val sc = new SparkContext(conf)
 
 如果你没有注册需要序列化的class，Kyro依然可以正常工作，但会但会存储每个对象的全类名(full class name),这样的使用方式往往比默认的 Java serialization 还要浪费更多的空间。
 可以设置spark.kryo.registrationRequired 参数为 true，使用kyro时如果在应用中有类没有进行注册则会报错，通过报错把对应的类进行注册。
-
   
 
  3. 压缩
@@ -119,6 +118,11 @@ val sc = new SparkContext(conf)
 spark.shuffle.compress
 spark.shuffle.spill.compress 
 spark.shuffle.accurateBlockThreshold
+
+以下三个参数的默认值均为32K，在压缩时用到的块的大小，降低这个块的大小也会降低Shuffle内存的使用率。
+spark.io.compression.lz4.blockSize
+spark.io.compression.snappy.blockSize
+spark.io.compression.zstd.bufferSize
 
 
  Spark在通信层面主要控制的参数
