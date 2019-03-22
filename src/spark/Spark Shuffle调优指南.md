@@ -95,12 +95,18 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 安全空间()：计算公式 spark.executor.memory  x  spark.storage.safetyFraction 。 也就是Heap Size x 90% 。
 
-缓存空间(Storge) : 计算公式是 spark.executor.memory x spark.storage.safetyFraction x spark.storage.memoryFraction 。也就是Heap Size x  90% x 60% ； Heap Size x 54% 。一个应用程序可以缓存多少数据是由 safetyFraction 和 memoryFraction 这两个参数共同决定的。
+缓存空间(Storage) : 计算公式是 spark.executor.memory x spark.storage.safetyFraction x spark.storage.memoryFraction 。也就是Heap Size x  90% x 60% ； Heap Size x 54% 。一个应用程序可以缓存多少数据是由 safetyFraction 和 memoryFraction 这两个参数共同决定的。
 
 Unroll空间：计算公式是spark.executor.memory x spark.storage.safetyFraction x spark.storage.memoryFraction x spark.storage.unrollFraction 。 也就是Heap Size x 90% x 60% x 20%；Heap Size x 10.8% 。你可能把数据序列化后的数据放在内存中，当你使用数据时，你需要把序列化的数据进行反序列化。
 对cache缓存数据的影响是由于Unroll 是一个优先级较高的操作，进行Unroll操作的时候会占用cache的空间，而且又可以挤掉缓存在内存中的数据(如果该数据的缓存级别是MEMORY_ONLY 的话，数据可能会丢失)。
 
 Shuffle空间 ： 计算公式是 spark.executor.memory x spark.shuffle.memoryFraction x spark.shuffle.safteyFraction 。 在Shuffle空间中也会默认80%的安全空间比例，所以应该是Heap Size x 20% x 80%；Heap Size x 16% 。 从内存的角度讲，你需要从远程抓取数据，抓取数据是一个Shuffle的过程，比如说你需要对数据进行排序，显现在这个过程中需要内存空间。
+
+- UnifiedMemoryManager
+
+Spark2.0以后新型 JVM Heap 分成三个部分：Reserved Memory 、User
+ Memory 、Spark Memory。
+
 
 
 spark.shuffle.manager
