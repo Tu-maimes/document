@@ -119,6 +119,15 @@ spark.shuffle.compress
 spark.shuffle.spill.compress 
 spark.shuffle.accurateBlockThreshold
 
+spark.io.compression.codec
+ 
+ 官方提供了四种压缩方式：
+ - lz4
+ - lzf
+ - snappy
+ - zstd
+ 
+
 以下三个参数的默认值均为32K，在压缩时用到的块的大小，降低这个块的大小也会降低Shuffle内存的使用率。
 spark.io.compression.lz4.blockSize
 spark.io.compression.snappy.blockSize
