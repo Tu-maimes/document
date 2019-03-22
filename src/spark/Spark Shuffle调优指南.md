@@ -89,6 +89,8 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
  2. 控制SHuffle资源有两种情况分为StaticMemoryManagement与UnifiedMemoryManager。在Spark2.0以后版本中默认使用的是UnifiedMemoryManager。
 
+spark.memory.useLegacyMode此参数控制是使用统一内存管理还是使用静态内存的管理，默认是false。
+
 - StaticMemoryManagement
 
 采用静态内存管理的策略时，Spark会定义一个安全空间，在默认情况下只会使用Java堆上的90%作为安全空间，在单个Executor的角度来讲，就是Heap Size x 90% (如果你的内存空间Heap非常大的话，可以尝试调高为95%)，在安全空间中也会划分三个不同的空间：一个是Storage空间、一个是Unroll空间和一个是Shuffle空间。
@@ -151,10 +153,6 @@ spark-submit \
 spark-1.0-jar-with-dependencies.jar \
 /tmp/ljy/data/infos /tmp/ljy/data/shopings 10
 ```
-
-
-
-
 
 spark.shuffle.manager
 spark.shuffle.io.preferDirectBufs
