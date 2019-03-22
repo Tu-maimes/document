@@ -122,7 +122,7 @@ spark.shuffle.accurateBlockThreshold
 spark.io.compression.codec
  
  官方提供了四种压缩方式：
- - lz4
+ - lz4      (默认值)
  - lzf
  - snappy
  - zstd
