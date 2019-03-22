@@ -87,7 +87,10 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
 [Spark Shuffle中JVM内存使用及配置内幕详情](https://www.cnblogs.com/jcchoiling/p/6494652.html)
 
- 2. 控制SHuffle资源有两种情况分为StaticMemoryManagement与Unified Memory Manager
+ 2. 控制SHuffle资源有两种情况分为StaticMemoryManagement与UnifiedMemoryManager。在Spark2.0以后版本中默认使用的是UnifiedMemoryManager。
+
+- StaticMemoryManagement
+
 
 
 
