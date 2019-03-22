@@ -85,11 +85,21 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 
  1. 控制资源
  2. 控制SHuffle资源
+spark.shuffle.manager
+spark.shuffle.io.preferDirectBufs
 
 ### Spark层面
 
  1. Spark应用本身能力
  2. 序列化
+
+序列化在分布式系统中扮演着重要的角色，优化Spark程序时，首当其冲的就是对序列化方式的优化。Spark为使用者提供两种序列化方式：
+Java serialization: 默认的序列化方式。
+Kryo serialization: 相较于 Java serialization 的方式，速度更快，空间占用更小，但并不支持所有的序列化格式，同时使用的时候需要注册class。spark-sql中默认使用的是kyro的序列化方式。
+ 配置：
+  可以在Saprk-default.conf设置全局参数，也可以在代码的初始化时对SaprkConf设置。该参数会同时作用于机器之间数据的shuffle操作以及序列化rdd到磁盘、内存。
+  Saprk不将Kyro设置成默认的序列化方式是因为需要对类进行注册，官方强烈建议在一些网络数据传输很大的应用中使用kyro序列化。
+
  3. 压缩
 
 spark.shuffle.compress
