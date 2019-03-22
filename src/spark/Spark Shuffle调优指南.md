@@ -102,6 +102,33 @@ Unroll空间：计算公式是spark.executor.memory x spark.storage.safetyFracti
 
 Shuffle空间 ： 计算公式是 spark.executor.memory x spark.shuffle.memoryFraction x spark.shuffle.safteyFraction 。 在Shuffle空间中也会默认80%的安全空间比例，所以应该是Heap Size x 20% x 80%；Heap Size x 16% 。 从内存的角度讲，你需要从远程抓取数据，抓取数据是一个Shuffle的过程，比如说你需要对数据进行排序，显现在这个过程中需要内存空间。
 
+Spark在使用静态内存管理资源时对于内存的优化示例：
+
+``` shell?linenums
+spark-submit \
+--master yarn \
+--deploy-mode cluster \
+--class com.rm1024.TotalPriceTop10 \
+--driver-memory 3g \
+--num-executors 8 \
+--executor-memory 5g \
+--executor-cores 1 \
+--queue default \
+--conf spark.default.parallelism=1000 \
+--conf spark.storage.memoryFraction=0.6 \
+--conf spark.storage.safetyFraction=0.9 \
+--conf spark.shuffle.memoryFraction=0.3 \
+--conf spark.shuffle.safetyFraction=0.7 \
+spark-1.0-jar-with-dependencies.jar \
+/tmp/ljy/data/infos /tmp/ljy/data/shopings 10
+```
+
+
+
+
+
+
+
 - UnifiedMemoryManager
 
 Spark2.0以后新型 JVM Heap 分成三个部分：Reserved Memory 、User
