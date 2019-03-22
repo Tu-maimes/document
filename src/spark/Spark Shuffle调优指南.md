@@ -109,6 +109,9 @@ Spark2.0以后新型 JVM Heap 分成三个部分：Reserved Memory 、User
  
  Reserved Memory ：默认都是300MB，这个数字一般都是固定不变的，在系统运行的时候Java Heap 的大小至少为 Heap Reserved Memory x 1.5 即 300MB x 1.5 = 450MB的JVM配置。 
 
+SparkMemory空间：默认是占HeapSize的60%，这个参数也是可以配置的，spark.memory.fraction来配置。
+
+UserMemory：
 
 
 spark.shuffle.manager
