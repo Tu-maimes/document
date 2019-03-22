@@ -108,6 +108,7 @@ val sc = new SparkContext(conf)
 ```
 如果你需要系列化的对象比较大，可以增加参数spark.kryoserializer.buffer所设置的值。
 
+如果你没有注册需要序列化的class，Kyro依然可以正常工作，但会但会存储每个对象的全类名(full class name),这样的使用方式往往比默认的 Java serialization 还要浪费更多的空间。
 
   
 
