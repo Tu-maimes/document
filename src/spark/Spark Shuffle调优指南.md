@@ -92,7 +92,9 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 - StaticMemoryManagement
 
 采用静态内存管理的策略时，Spark会定义一个安全空间，在默认情况下只会使用Java堆上的90%作为安全空间，在单个Executor的角度来讲，就是Heap Size x 90% (如果你的内存空间Heap非常大的话，可以尝试调高为95%)，在安全空间中也会划分三个不同的空间：一个是Storage空间、一个是Unroll空间和一个是Shuffle空间。
-spark.executor.memory  *  spark.storage.safetyFraction
+
+安全空间()：计算公式 spark.executor.memory  x  spark.storage.safetyFraction 。 也就是Heap Size x 90% 。
+缓存空间(Storge) : 计算公式是 spark.executor.memory x spark.storage.safetyFraction x spark.storage.memoryFraction 。
 
 
 
