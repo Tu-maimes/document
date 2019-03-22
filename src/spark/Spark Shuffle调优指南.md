@@ -117,8 +117,8 @@ spark-submit \
 --conf spark.default.parallelism=1000 \
 --conf spark.storage.memoryFraction=0.6 \
 --conf spark.storage.safetyFraction=0.9 \
---conf spark.shuffle.memoryFraction=0.3 \
---conf spark.shuffle.safetyFraction=0.7 \
+--conf spark.shuffle.memoryFraction=0.4 \
+--conf spark.shuffle.safetyFraction=0.8 \
 spark-1.0-jar-with-dependencies.jar \
 /tmp/ljy/data/infos /tmp/ljy/data/shopings 10
 ```
