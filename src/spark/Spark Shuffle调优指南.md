@@ -84,6 +84,9 @@ https://blog.csdn.net/zhuiqiuuuu/article/details/78130382
 ### JVM层
 
  1. 控制资源
+
+[Spark Shuffle中JVM内存使用及配置内幕详情](https://www.cnblogs.com/jcchoiling/p/6494652.html)
+
  2. 控制SHuffle资源
 spark.shuffle.manager
 spark.shuffle.io.preferDirectBufs
