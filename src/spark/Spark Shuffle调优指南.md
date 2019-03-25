@@ -215,7 +215,7 @@ spark-submit \
 --executor-memory 5g \
 --executor-cores 1 \
 --queue default \
---spark.io.compression.lz4.blockSize 64k \
+--conf spark.io.compression.lz4.blockSize 64k \
 spark-1.0-jar-with-dependencies.jar \
 /tmp/ljy/data/infos /tmp/ljy/data/shopings 10
 ```
