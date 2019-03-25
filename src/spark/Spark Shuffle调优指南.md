@@ -208,17 +208,19 @@ spark.io.compression.zstd.bufferSize
 
 4. Spark在通信层面主要控制的参数
 
-- spark.reducer.maxSizeInFlight
-- spark.reducer.maxReqsInFlight 
-- spark.reducer.maxBlocksInFlightPerAddress
-- spark.maxRemoteBlockSizeFetchToMem
-- spark.shuffle.io.numConnectionsPerPeer
-- spark.shuffle.io.maxRetries
-- spark.shuffle.io.retryWait
-- spark.shuffle.registration.timeout
-- spark.shuffle.registration.maxAttempts
-- spark.shuffle.maxChunksBeingTransferred
-- spark.shuffle.service.enabled 
+|配置参数|调优建议|
+|---|---|
+|spark.reducer.maxSizeInFlight|当集群单台机器有大量内存的时候可以适当的调高此参数来提高Shuffle的请求效率，建议采用默认值|
+|spark.reducer.maxReqsInFlight|linux作为系统，当运行高并发TCP程序时避免单台机器的IO限制导致机器性能下降影响整体的工作效率建议调低此值，此配置一般会用在大型集群，建议采用默认值| 
+|spark.reducer.maxBlocksInFlightPerAddress|linux作为系统，当运行高并发TCP程序时避免单台机器的IO限制导致机器性能下降影响整体的工作效率建议调低此值，此配置一般会用在大型集群，建议采用默认值|
+|spark.maxRemoteBlockSizeFetchToMem|建议采用默认值|
+|spark.shuffle.io.numConnectionsPerPeer|建议采用默认值|
+|spark.shuffle.io.maxRetries|建议采用默认值|
+|spark.shuffle.io.retryWait|在集群任务比较繁重时可以适当的提高此参数以增加集群的稳定性，建议采用默认值|
+|spark.shuffle.registration.timeout|在集群任务比较繁重时可以适当的提高此参数以增加集群的稳定性，建议采用默认值|
+|spark.shuffle.registration.maxAttempts|建议采用默认值|
+|spark.shuffle.maxChunksBeingTransferred|当集群达到一定规模时应考虑降低此参数，避免单台机器出现负载过重影响整体性能建议采用默认值|
+|spark.shuffle.service.enabled|独立的Shuffle服务进程，在进行流处理时建议开启并开启资源的动态分配，在流量的低谷与高峰时对资源的释放建议采用默认值| 
  
  5. 控制如何使用Netty
 
