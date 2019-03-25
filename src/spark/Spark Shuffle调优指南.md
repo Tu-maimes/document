@@ -238,6 +238,24 @@ spark-1.0-jar-with-dependencies.jar \
 |spark.shuffle.service.enabled|独立的Shuffle服务进程，在进行流处理时建议开启并开启资源的动态分配，在流量的低谷与高峰时对资源的释放建议采用默认值| 
  
  5. 控制如何使用Netty
+ 6. 减少对磁盘IO操作
+
+spark.shuffle.file.buffer此参数默认值32K，建议调大此参数以减少对磁盘IO的操作以及对文件的查找。
+
+``` shell?linenums
+spark-submit \
+--master yarn \
+--deploy-mode cluster \
+--class com.rm1024.TotalPriceTop10 \
+--driver-memory 3g \
+--num-executors 8 \
+--executor-memory 5g \
+--executor-cores 1 \
+--queue default \
+--conf spark.shuffle.file.buffer 64k \
+spark-1.0-jar-with-dependencies.jar \
+/tmp/ljy/data/infos /tmp/ljy/data/shopings 10
+```
 
 
 
