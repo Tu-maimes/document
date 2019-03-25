@@ -147,7 +147,6 @@ spark-submit \
 --executor-memory 5g \
 --executor-cores 1 \
 --queue default \
---conf spark.default.parallelism=1000 \
 --conf spark.memory.fraction  0.7 \   降低此值会降低spark.memory同时提高UserMemory内存 
 --conf spark.memory.storageFraction 0.5 \ 此参数会有关Shuffle与cache的内存比例，根据Shuffle与cacheRdd的业务来调优
 spark-1.0-jar-with-dependencies.jar \
@@ -207,19 +206,19 @@ spark.io.compression.snappy.blockSize
 spark.io.compression.zstd.bufferSize
 
 
- Spark在通信层面主要控制的参数
+4. Spark在通信层面主要控制的参数
 
- 1. spark.reducer.maxSizeInFlight
- 2. spark.reducer.maxReqsInFlight 
- 3. spark.reducer.maxBlocksInFlightPerAddress
- 4. spark.maxRemoteBlockSizeFetchToMem
- 5. spark.shuffle.io.numConnectionsPerPeer
- 6. spark.shuffle.io.maxRetries
- 7. spark.shuffle.io.retryWait
- 8. spark.shuffle.registration.timeout
- 9. spark.shuffle.registration.maxAttempts
- 10. spark.shuffle.maxChunksBeingTransferred
- 11. spark.shuffle.service.enabled 
+- spark.reducer.maxSizeInFlight
+- spark.reducer.maxReqsInFlight 
+- spark.reducer.maxBlocksInFlightPerAddress
+- spark.maxRemoteBlockSizeFetchToMem
+- spark.shuffle.io.numConnectionsPerPeer
+- spark.shuffle.io.maxRetries
+- spark.shuffle.io.retryWait
+- spark.shuffle.registration.timeout
+- spark.shuffle.registration.maxAttempts
+- spark.shuffle.maxChunksBeingTransferred
+- spark.shuffle.service.enabled 
  
  5. 控制如何使用Netty
 
