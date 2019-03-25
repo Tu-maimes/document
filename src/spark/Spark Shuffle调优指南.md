@@ -205,6 +205,21 @@ spark.io.compression.lz4.blockSize
 spark.io.compression.snappy.blockSize
 spark.io.compression.zstd.bufferSize
 
+``` shell?linenums
+spark-submit \
+--master yarn \
+--deploy-mode cluster \
+--class com.rm1024.TotalPriceTop10 \
+--driver-memory 3g \
+--num-executors 8 \
+--executor-memory 5g \
+--executor-cores 1 \
+--queue default \
+--spark.io.compression.lz4.blockSize 64k \
+spark-1.0-jar-with-dependencies.jar \
+/tmp/ljy/data/infos /tmp/ljy/data/shopings 10
+```
+
 
 4. Spark在通信层面主要控制的参数
 
