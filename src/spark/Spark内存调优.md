@@ -2,6 +2,8 @@
 title: Spark内存调优 
 tags: spark
 grammar_cjkRuby: true
+grammar_mindmap: true
+renderNumberedHeading: true
 ---
 
 
