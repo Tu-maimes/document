@@ -86,3 +86,17 @@ agent.channels.fileChannel.dataDirs = /data/flume/data
 | --- | --- | --- |
 |MemoryChannel+FileSink	|51|	9608|
 |FileChannel+FileSink|	250	|1960|
+
+#### 写入Kafka性能
+
+|  FlumeConfig   |Time(s)     |  Throughput（events/s）   |
+| --- | --- | --- |
+|KafkaSink+MemoryChannel|	57	|8597|
+|KafkaChannel	|50|	9800|
+|KafkaSink+FileChannel|	830|	590|
+
+#### 写入HDFS性能
+
+|  FlumeConfig   |Time(s)     |  Throughput（events/s）   |
+| --- | --- | --- |
+|FileChannel+HdfsSink	|148|	3311|
