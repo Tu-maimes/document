@@ -60,3 +60,19 @@ apache Flume 是一个从可以收集例如日志，事件等数据资源，并�
 
 ##### Flume配置
 
+1、Source配置:
+> agent.sources.source1.type = spooldir
+> agent.sources.source1.spoolDir=/data/flume/dir
+
+2、MemoryChannel配置
+>agent.channels.memoryChannel.capacity = 1000000
+agent.channels.memoryChannel.transactionCapacity = 1000000
+agent.channels.memoryChannel.type=memory
+
+3、FileChannel配置
+
+> agent.channels.fileChannel.type = file
+agent.channels.fileChannel.checkpointDir = /data/flume/checkpoint
+agent.channels.fileChannel.dataDirs = /data/flume/data
+
+4、
