@@ -7,6 +7,7 @@ renderNumberedHeading: true
 ---
 
 # 核心需求
+
 1、在线黑名单过滤
 2、计算每个BatchDuration中每个User的广告点击量
 3、判断用户点击是否属于黑名单点击
