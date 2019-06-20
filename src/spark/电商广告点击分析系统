@@ -100,3 +100,8 @@ agent.channels.fileChannel.dataDirs = /data/flume/data
 |  FlumeConfig   |Time(s)     |  Throughput（events/s）   |
 | --- | --- | --- |
 |FileChannel+HdfsSink	|148|	3311|
+
+
+## Kafka简介
+
+
