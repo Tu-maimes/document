@@ -160,3 +160,6 @@ Kafka 定位就是一个分布式流处理平台。作为一个流式处理平�
 
 #### 分区数
 
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561031339014.png)
+
+总结：从测试结果来看，分区数越多，单线程生产者的吞吐量越小。
