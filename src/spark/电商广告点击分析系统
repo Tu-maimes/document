@@ -6,7 +6,7 @@ grammar_mindmap: true
 renderNumberedHeading: true
 ---
 
-# 需求分析
+# 需求
 1、在线黑名单过滤
 3、计算每个BatchDuration中每个User的广告点击量
 4、判断用户点击是否属于黑名单点击
