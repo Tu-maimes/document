@@ -104,4 +104,8 @@ agent.channels.fileChannel.dataDirs = /data/flume/data
 
 ## Kafka简介
 
-
+Kafka 是一款开源的、轻量级的 、分布式、可分区和具有复制备份的 (Replicated)、基于ZooKeeper 协调管理的分布式流平台的功能强大的消息系统 。 
+Kafka 定位就是一个分布式流处理平台。作为一个流式处理平台，必须满足以下三个关键特性：
+- 能够允许发布和订阅流数据。
+- 存储流数据时提供相应的容错机制。
+- 当流数据到达时能被及时处理。
