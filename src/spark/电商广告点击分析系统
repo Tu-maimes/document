@@ -75,4 +75,14 @@ agent.channels.memoryChannel.type=memory
 agent.channels.fileChannel.checkpointDir = /data/flume/checkpoint
 agent.channels.fileChannel.dataDirs = /data/flume/data
 
-4、
+4、JVM配置
+
+>JAVA_OPTS="-Xms256m -Xmx256m -Xss256k -Xmn128m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:-UseGCOverheadLimit"
+
+
+#### 写入文件性能
+
+|  FlumeConfig   |Time(s)     |  Throughput（events/s）   |
+| --- | --- | --- |
+|MemoryChannel+FileSink	|51|	9608|
+|FileChannel+FileSink|	250	|1960|
