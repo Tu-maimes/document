@@ -276,7 +276,7 @@ SparkStreaming使用NoReceivers方式读取Kafka数据
 	4、端到端的语义：确保每个记录有效接收和转换一次，但不保证转换以后的数据只输出一次。
 	
 
-### Kafka偏移量存储
+### Kafka偏移量存储![Spark流处理](https://www.github.com/Tu-maimes/document/raw/master/小书匠/Spark流处理.jpg)
 
 - 检查点
 - Kafka本身
@@ -286,3 +286,4 @@ SparkStreaming使用NoReceivers方式读取Kafka数据
 # 电商广告点击系统架构
 
 
+![架构图](https://www.github.com/Tu-maimes/document/raw/master/小书匠/Spark流处理.jpg)
