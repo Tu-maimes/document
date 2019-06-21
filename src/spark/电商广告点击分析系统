@@ -220,3 +220,5 @@ Kafka 定位就是一个分布式流处理平台。作为一个流式处理平�
 
 ### SparkStreaming简介
 
+Spark Streaming是核心Spark API的扩展，可实现实时数据流的可扩展，高吞吐量，容错流处理。数据可以从许多来源（如Kafka，Flume，Kinesis或TCP套接字）中提取，并且可以使用以高级函数表示的复杂算法进行处理map，例如reduce，join和window。最后，处理后的数据可以推送到文件系统，数据库和实时仪表板。
+
