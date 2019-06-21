@@ -102,6 +102,18 @@ agent.channels.fileChannel.dataDirs = /data/flume/data
 |FileChannel+HdfsSink	|148|	3311|
 
 
+
+## Logstash简介
+
+
+
+
+
+
+
+
+
+
 ## Kafka简介
 
 Kafka 是一款开源的、轻量级的 、分布式、可分区和具有复制备份的 (Replicated)、基于ZooKeeper 协调管理的分布式流平台的功能强大的消息系统 。 
