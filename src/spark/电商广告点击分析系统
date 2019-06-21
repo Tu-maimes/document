@@ -281,3 +281,8 @@ SparkStreaming使用NoReceivers方式读取Kafka数据
 - 检查点
 - Kafka本身
 - 自定义存储
+
+
+# 电商广告点击系统架构
+
+
