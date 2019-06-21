@@ -111,7 +111,10 @@ Logstash是一个开源数据收集引擎，具有实时管道功能。Logstash�
 
 ![系统架构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561103172868.png)
 
-
+ Logstash的事件（logstash将数据流中等每一条数据称之为一个event）处理流水线有三个主要角色完成：inputs –> filters –> outputs：
+- inpust：必须，负责产生事件（Inputs generate events），常用：File、syslog、redis、beats（如：Filebeats）
+- filters：可选，负责数据处理与转换（filters modify them），常用：grok、mutate、drop、clone、geoip
+- outpus：必须，负责数据输出（outputs ship them elsewhere），常用：elasticsearch、file、graphite、statsd
 
 
 
