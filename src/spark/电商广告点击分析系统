@@ -224,7 +224,13 @@ Spark Streaming是核心Spark API的扩展，可实现实时数据流的可扩�
 
 ![SparkStreaming体系架构](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561083559745.png)
 
+
+#### 容错语义
+
+
+
 #### 容错机制
+
 
 #### 检查点
 
