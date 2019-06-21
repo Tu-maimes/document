@@ -105,7 +105,8 @@ agent.channels.fileChannel.dataDirs = /data/flume/data
 
 ## Logstash简介
 
-Logstash是一个开源数据收集引擎，具有实时管道功能。Logstash可以动态地将来自不同数据源的数据统一起来，并将数据标准化到你所选择的目的地。
+Logstash是一个开源数据收集引擎，具有实时管道功能。Logstash可以动态地将来自不同数据源的数据统一起来，并将数据标准化到你所选择的目的地。Logstash常用于日志关系系统中做日志采集设备与Elasticsearch、Kibana、FileBeat一起使用被称为ELK。
+
 
 
 
