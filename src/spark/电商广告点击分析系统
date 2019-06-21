@@ -160,59 +160,59 @@ Kafka 定位就是一个分布式流处理平台。作为一个流式处理平�
 
 结论：向一个拥有6个分区、1个副本的Topic中，发送500万条消息记录时，随着线程数的增加，每秒发送的消息记录会逐渐增加。在线程数为25时，每秒发送的消息记录达到最佳值，随后再增加线程数，每秒发送的消息记录数反而会减少。
 
-#### 分区数
+##### 分区数
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561031339014.png)
 
 总结：从测试结果来看，分区数越多，单线程生产者的吞吐量越小。
 
-#### 副本数
+##### 副本数
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561079067158.png)
 
 总结：从测试结果来看，副本数越多，吞吐量越小。
 
-#### Broker数量
+##### Broker数量
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561079171982.png)
 
 总结：从测试结果来看，增加Kafka Broker数量，吞吐量会增加。
 
-#### 同步与异步模式
+##### 同步与异步模式
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561079326258.png)
 
 总结：从测试结果来看，使用异步模式发送消息数据，比使用同步模式发送消息数据，吞吐量是同步模式的3倍左右。
 
-#### 批处理大小
+##### 批处理大小
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561079604995.png)
 
 总结：从测试的结果来看，发送的消息随着批处理大小增加而增加。当批处理大小增加到3000~5000时，吞吐量达到最佳状态，而后在增加批处理大小，吞吐量的性能会下降。
 
-#### 消息长度的大小
+##### 消息长度的大小
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561080132100.png)
 
 总结：从测试结果来看，随着消息长度的增加，每秒所能发送的消息逐渐减少（nMsg/sec）。但是，每秒发送的消息的总大小（MB/sec),会随着消息长度的增加而增加。
 
-### Kafka消费者测试
+#### Kafka消费者测试
 
 消费者测试，可以从线程数、分区数、副本数等维度来进行测试。
 
-#### 线程数
+##### 线程数
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561080799340.png)
 
 总结：随着线程数的增加，每秒读取的消息记录会逐渐增加。在线程数与消费主题的分区相等时，吞吐量达到最佳值。随后，再增加线程数，新增的线程数将会处于空闲状态，对提升消费者程序的吞吐量没有帮助。
 
-#### 分区数
+##### 分区数
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561081154469.png)
 
 总结：当分区数增加时，如果线程数保持不变，则消费者程序的吞吐量性能会下降。
 
-#### 副本数
+##### 副本数
 
 ![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561081268274.png)
 
@@ -285,5 +285,5 @@ SparkStreaming使用NoReceivers方式读取Kafka数据
 
 # 电商广告点击系统架构
 
-
+本架构主要是通过分布式Flume采集web系统的数据汇聚到Kafka消息系统，以及对数据实现备份。Kafak消息系统中的数据提供给SparkStreaming进行流式处理，处理的结果存储到数据库中供其他系统使用。
 ![架构图](https://www.github.com/Tu-maimes/document/raw/master/小书匠/Spark流处理.jpg)
