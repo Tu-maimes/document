@@ -253,7 +253,7 @@ Spark Streaming是核心Spark API的扩展，可实现实时数据流的可扩�
 ### SparkStreaming与Kafka的集成
 
 Kafka 0.10的Spark Streaming集成它提供简单的并行性，Kafka分区和Spark分区之间的1：1对应关系，以及对偏移和元数据的访问。
-
+[Spark官网集成文档](http://spark.apache.org/docs/latest/streaming-kafka-0-10-integration.html)
 [两种接受方式比较](https://www.cnblogs.com/liugh/articles/6817553.html)
 
 SparkStreaming使用NoReceivers方式读取Kafka数据	
@@ -274,3 +274,7 @@ SparkStreaming使用NoReceivers方式读取Kafka数据
 	2、偏移量：createDirectStream方式不使用Zookeeper存储偏移量。消费的偏移量由Stream本身进行跟踪记录。Kafka的监控依赖于Zookeeper，为了监控Stream的消费信息，通过获取偏移量更新Kafka、Zookeeper的偏移量。
 	3、容错恢复：如果是SparkDirver容错恢复，可以在StreamingContext中启用检查点。消费的偏移量可以从检查点恢复。
 	4、端到端的语义：确保每个记录有效接收和转换一次，但不保证转换以后的数据只输出一次。
+	
+
+### Kafka偏移量存储
+
