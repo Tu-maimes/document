@@ -249,3 +249,6 @@ Spark Streaming是核心Spark API的扩展，可实现实时数据流的可扩�
 
 - 当程序第一次启动时，它将创建一个新的StreamingContext，设置所有流然后调用start（）。
 - 当程序在失败后重新启动时，它将从检查点目录中的检查点数据重新创建StreamingContext。
+
+### SparkStreaming与Kafka的集成
+
