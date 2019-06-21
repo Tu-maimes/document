@@ -110,7 +110,7 @@ Kafka 定位就是一个分布式流处理平台。作为一个流式处理平�
 - 存储流数据时提供相应的容错机制。
 - 当流数据到达时能被及时处理。
 
-
+![](https://www.github.com/Tu-maimes/document/raw/master/小书匠/1561082199202.png)
 
 - 消息生产者(Producer):将消息写入kafka集群。
 - 消息消费者(Consumer):从kafka集群中拉取消息。
