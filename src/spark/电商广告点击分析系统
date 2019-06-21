@@ -278,3 +278,6 @@ SparkStreaming使用NoReceivers方式读取Kafka数据
 
 ### Kafka偏移量存储
 
+- 检查点
+- Kafka本身
+- 自定义存储
