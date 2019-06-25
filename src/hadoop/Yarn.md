@@ -18,4 +18,4 @@ JobHistoryServer是为了缓解JobTracker的内存压力而提出来的。
 
 
 Capacity调度器
-FIFO公平调度器
+FIFO公平调度器    在调度时最重要的是数据的本地性偏好
