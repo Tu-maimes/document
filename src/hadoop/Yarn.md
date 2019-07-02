@@ -33,4 +33,5 @@ NodeManager
 
 - 保持与ResourceManager的同步
 - 跟踪节点的健康状况
-- 
+- 管理各个Container的生命周期，监控每个Container的资源使用情况
+- 管理分布式缓存（对Container所需的JAR、库等文件的本地文件缓存）
