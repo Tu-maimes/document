@@ -34,4 +34,6 @@ NodeManager
 - 保持与ResourceManager的同步
 - 跟踪节点的健康状况
 - 管理各个Container的生命周期，监控每个Container的资源使用情况
-- 管理分布式缓存（对Container所需的JAR、库等文件的本地文件缓存）
+- 管理分布式缓存（对Container所需的JAR、库等文件的本地文件系统缓存）
+- 管理各个Container生成的日志
+- 不同的YARN应用可能需要的辅助服务
