@@ -29,4 +29,4 @@ JobTracker负责工作服务器节点的资源管理，跟踪资源使用率、�
 TaskTracker的职责比较简单——根据JobTracker的命令启动、清楚任务，并周期性地向JobTracker提供任务的状态信息。
 
 
-
+NodeManager
