@@ -43,3 +43,6 @@ Container被杀死：
  - 任务已完成
  - 调度器做出要为其他应用程序或者用户抢占该Container的决策
  - NodeManager监控到这个Container超出了ContainerToken中指定的资源限制
+
+
+NodeStatusUpdater
